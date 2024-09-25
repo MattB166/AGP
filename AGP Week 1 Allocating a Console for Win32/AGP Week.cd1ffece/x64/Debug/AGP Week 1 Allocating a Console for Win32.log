@@ -1,0 +1,5 @@
+﻿  main.cpp
+C:\Users\Matth\Documents\UNI WORK\Year 3\Sem 1\AGP\AGP Week 1 Allocating a Console for Win32\main.cpp(27,12): error C2731: 'wWinMain': function cannot be overloaded
+      C:\Users\Matth\Documents\UNI WORK\Year 3\Sem 1\AGP\AGP Week 1 Allocating a Console for Win32\main.cpp(27,12):
+      see declaration of 'wWinMain'
+  
