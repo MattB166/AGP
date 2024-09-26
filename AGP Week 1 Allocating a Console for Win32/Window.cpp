@@ -17,8 +17,10 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
 	wc.style = CS_HREDRAW | CS_VREDRAW;  ///style of the window class
 	wc.lpfnWndProc = WndProc;  ///Our window procedure function, make sure it handles window creation or calls DefWindowProc(..)
 	wc.hInstance = hInstance;  ///Give our app's handle 
+	wc.hIcon = LoadIcon(NULL, IDI_ASTERISK);  ///Load the icon for the window. IDI_APPLICATION is a default icon that windows provides
+	wc.hCursor = LoadCursor(NULL, IDC_CROSS);  ///Load the different types of cursors that windows provides. IDC_CROSS is a crosshair cursor 
 	wc.lpszClassName = L"WindowClass1";  ///Windows will store our window class with this name
-	wc.hbrBackground = (HBRUSH)(COLOR_HIGHLIGHT);  ///Background color of the win32 app. (not needed for D3D apps)
+	wc.hbrBackground = (HBRUSH)(COLOR_HIGHLIGHTTEXT);  ///Background color of the win32 app. (not needed for D3D apps)
 	//register class with above struct. if it fails, if block will execute
 
 	///ADJUSTING THE WINDOW DIMENSIONS SO THAT THE TOP WINDOWS BAR IS NOT TAKING PIXELS AWAY FROM OUR APP
@@ -114,6 +116,8 @@ void Window::OpenConsole()
 		std::ios::sync_with_stdio(true);
 
 		std::cout << "Hello Console!" << std::endl;
+		
+
 	}
 }
 
@@ -140,12 +144,12 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			DestroyWindow(hWnd);  ///Destroy the window. Note! destroying the window is not the same as destroying/closing the application
 			//destroying the window will post a WM_DESTROY message to the message queue which will lead to postquitmessage(0) being called
 			break;
+		case 'W':
+			//do something when the 'W' key is pressed
+			MessageBox(NULL, L"You need to reset him", L"Will is a whiny bitch", MB_ICONERROR | MB_OK);
+			break;
 		}
-	case 'W':
-		//do something when the 'W' key is pressed
-		MessageBox(NULL, L"You need to reset him", L"Will is a whiny bitch", MB_ICONINFORMATION | MB_OKCANCEL);
-		break;
-
+	
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam); ///let windows handle everything else with default handling 
 
