@@ -36,12 +36,83 @@ HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 	if (FAILED(hr))
 		return hr;
 
+	//get the address of the back buffer
+	ID3D11Texture2D* pBackBufferTexture = nullptr;
+
+	//get the back buffer from the swap chain
+	hr = g_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBufferTexture);
+	if (FAILED(hr))
+		return hr;
+
+	hr = g_dev->CreateRenderTargetView(pBackBufferTexture, NULL, &g_backBuffer);
+	if (FAILED(hr))
+		return hr;
+
+	pBackBufferTexture->Release();
+
+	g_devcon->OMSetRenderTargets(1, &g_backBuffer, NULL);
+
+
+	//set the viewport
+	D3D11_VIEWPORT viewport = {};
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.Width = ScreenWidth;
+	viewport.Height = ScreenHeight;
+	viewport.MinDepth = 0;
+	viewport.MaxDepth = 1;
+	g_devcon->RSSetViewports(1, &viewport);
+
 	return S_OK;
 }
 
 void Renderer::CleanRenderer()
 {
+	if (g_backBuffer) g_backBuffer->Release();
 	if (g_swapChain) g_swapChain->Release();
 	if (g_dev) g_dev->Release();
 	if (g_devcon) g_devcon->Release();
+}
+
+void Renderer::RenderFrame()
+{
+	g_devcon->ClearRenderTargetView(g_backBuffer, clearColour);
+
+	//do 3D rendering on the back buffer here
+	// 
+	//change colour based on asnyc key press
+	/*if (GetAsyncKeyState('A') & 0x8000)
+	{
+		float color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+		g_devcon->ClearRenderTargetView(g_backBuffer, color);
+	}
+	else if (GetAsyncKeyState('S') & 0x8000)
+	{
+		float color[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
+
+		g_devcon->ClearRenderTargetView(g_backBuffer, color);
+	}
+	else if (GetAsyncKeyState('D') & 0x8000)
+	{
+		float color[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+		g_devcon->ClearRenderTargetView(g_backBuffer, color);
+	}
+	else
+	{
+		float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		g_devcon->ClearRenderTargetView(g_backBuffer, color);
+	}*/
+
+
+		//flip the back buffer and the front buffer. display on screen
+		g_swapChain->Present(0, 0);
+
+}
+
+void Renderer::SetClearColour(float r, float g, float b)
+{
+	clearColour[0] = r;
+	clearColour[1] = g;
+	clearColour[2] = b;
+	clearColour[3] = 1.0f;
 }

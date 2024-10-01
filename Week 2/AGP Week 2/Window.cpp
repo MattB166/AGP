@@ -1,6 +1,6 @@
 #include "Window.h"
 #include <iostream>
-
+Renderer* Window::s_renderer = nullptr;
 Window::Window()
 {
 	
@@ -20,7 +20,7 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
 	wc.hIcon = LoadIcon(NULL, IDI_ASTERISK);  ///Load the icon for the window. IDI_APPLICATION is a default icon that windows provides
 	wc.hCursor = LoadCursor(NULL, IDC_CROSS);  ///Load the different types of cursors that windows provides. IDC_CROSS is a crosshair cursor 
 	wc.lpszClassName = L"WindowClass1";  ///Windows will store our window class with this name
-	wc.hbrBackground = (HBRUSH)(COLOR_HIGHLIGHTTEXT);  ///Background color of the win32 app. (not needed for D3D apps)
+	wc.hbrBackground = (HBRUSH)(COLOR_HIGHLIGHT);  ///Background color of the win32 app. (not needed for D3D apps)
 	//register class with above struct. if it fails, if block will execute
 
 	///ADJUSTING THE WINDOW DIMENSIONS SO THAT THE TOP WINDOWS BAR IS NOT TAKING PIXELS AWAY FROM OUR APP
@@ -59,8 +59,9 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
 	return S_OK;
 }
 
-void Window::Run()
+void Window::Run(Renderer* renderer)
 {
+	s_renderer = renderer; 
 	MSG msg; 
 
 	while (true)
@@ -79,8 +80,7 @@ void Window::Run()
 		}
 		else
 		{
-			//run game code here
-			//this is where you would put your game loop
+			renderer->RenderFrame();
 		}
 
 	}
@@ -138,23 +138,38 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		/// Key being pressed down events 
 	case WM_KEYDOWN:
-		switch (wParam)
+		if (s_renderer)
 		{
-		case VK_ESCAPE:  ///VK_ESCAPE is the escape key
-			DestroyWindow(hWnd);  ///Destroy the window. Note! destroying the window is not the same as destroying/closing the application
-			//destroying the window will post a WM_DESTROY message to the message queue which will lead to postquitmessage(0) being called
-			break;
-		case 'W':
-			//do something when the 'W' key is pressed
-			MessageBox(NULL, L"You need to reset him", L"Will is a whiny bitch", MB_ICONERROR | MB_OK);
-			break;
-		}
-	
+			switch (wParam)
+			{
+			case VK_ESCAPE:  ///VK_ESCAPE is the escape key
+				DestroyWindow(hWnd);  ///Destroy the window. Note! destroying the window is not the same as destroying/closing the application
+				//destroying the window will post a WM_DESTROY message to the message queue which will lead to postquitmessage(0) being called
+				MessageBeep(MB_ICONERROR);  ///Make a beep sound
+				break;
+			case 'W':
+				//do something when the 'W' key is pressed
+				MessageBox(NULL, L"You need to reset him", L"Matej is a whiny bitch", MB_ICONERROR | MB_OK);
+				break;
+
+			case 'A':
+				s_renderer->SetClearColour(1.0f, 0.0f, 0.0f);
+				break;
+			case 'S':
+				s_renderer->SetClearColour(0.0f, 1.0f, 0.0f);
+				break;
+			case 'D':
+				s_renderer->SetClearColour(0.0f, 0.0f, 1.0f);
+			}
+
+
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam); ///let windows handle everything else with default handling 
 
 
-	}
+		}
+		}
+		
 
 	return 0;
 }

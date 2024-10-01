@@ -42,10 +42,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	{
 		MessageBox(NULL, L"Renderer Initialization Failed!", L"Error!", MB_ICONERROR | MB_OK);
 	}
-
-	w.Run();
-
 	
+	w.Run(&r);
 
 	r.CleanRenderer();
 
