@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Matth\\Documents\\UNI WORK\\Year 3\\Sem 1\\AGP\\Week 1\\AGP Week 2\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{CD1FFECE-53BD-4431-9C48-F9C90A455441}|AGP Week 2.vcxproj|C:\\Users\\Matth\\Documents\\UNI WORK\\Year 3\\Sem 1\\AGP\\Week 1\\AGP Week 2\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CD1FFECE-53BD-4431-9C48-F9C90A455441}|AGP Week 2.vcxproj|solutionrelative:main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\Matth\\Documents\\UNI WORK\\Year 3\\Sem 1\\AGP\\Week 1\\AGP Week 2\\main.cpp",
+              "RelativeDocumentMoniker": "main.cpp",
+              "ToolTip": "C:\\Users\\Matth\\Documents\\UNI WORK\\Year 3\\Sem 1\\AGP\\Week 1\\AGP Week 2\\main.cpp",
+              "RelativeToolTip": "main.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-01T10:30:07.3Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
