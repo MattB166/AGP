@@ -10,6 +10,7 @@ public:
 	void CleanRenderer();
 	void RenderFrame();
 	void SetClearColour(float r, float g, float b);
+	void ChooseRandomColour();
 
 private:
 	IDXGISwapChain* g_swapChain = NULL;             // the pointer to the swap chain interface - this is a chain of screen buffers that we draw to and "flip" to display on the monitor. 

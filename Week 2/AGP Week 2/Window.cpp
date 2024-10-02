@@ -24,7 +24,7 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
 	//register class with above struct. if it fails, if block will execute
 
 	///ADJUSTING THE WINDOW DIMENSIONS SO THAT THE TOP WINDOWS BAR IS NOT TAKING PIXELS AWAY FROM OUR APP
-	RECT wr = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+	 wr = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 	GetClientRect(hWnd, &wr);  ///Get the client area of the window that was set previously 
 	UINT width = wr.right - wr.left;
 	UINT height = wr.bottom - wr.top;
@@ -56,6 +56,7 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
 	if (hWnd == NULL) return E_FAIL;
 
 	ShowWindow(hWnd, nCmdShow);  ///Show the window
+	cursorPos = { 0, 0 };
 	return S_OK;
 }
 
@@ -82,6 +83,12 @@ void Window::Run(Renderer* renderer)
 		{
 			renderer->RenderFrame();
 		}
+		
+		TrackCursor();
+		LockCursorToWindow();
+
+		
+		
 
 	}
 
@@ -154,6 +161,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			case 'A':
 				s_renderer->SetClearColour(1.0f, 0.0f, 0.0f);
+				SetCursor(LoadCursor(NULL, IDC_HELP)); //changes until move cursor again. so maybe use a different function to permanently change it? 
 				break;
 			case 'S':
 				s_renderer->SetClearColour(0.0f, 1.0f, 0.0f);
@@ -172,4 +180,26 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		
 
 	return 0;
+}
+
+void Window::TrackCursor()
+{
+	GetCursorPos(&cursorPos); ///tracks cursor position
+	ScreenToClient(hWnd, &cursorPos); ///converts cursor position to client area position, so 0,0 is top left of client window 
+	std::cout << "X: " << cursorPos.x << " Y: " << cursorPos.y << std::endl;
+	
+
+
+}
+
+void Window::LockCursorToWindow()
+{
+	//lock cursor to window
+	GetClientRect(hWnd, &wr);
+	if (cursorPos.x < wr.left - 50|| cursorPos.x > wr.right + 50|| cursorPos.y < wr.top - 50|| cursorPos.y > wr.bottom + 50)
+	{
+		POINT p = { (wr.right - wr.left) / 2, (wr.bottom - wr.top) / 2 };
+		ClientToScreen(hWnd, &p);
+		SetCursorPos(p.x,p.y); //reset to last acceptable position instead of centre of window
+	}
 }

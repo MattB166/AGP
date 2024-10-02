@@ -102,7 +102,7 @@ void Renderer::RenderFrame()
 		float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		g_devcon->ClearRenderTargetView(g_backBuffer, color);
 	}*/
-
+	//ChooseRandomColour();  gives me a seizure 
 
 		//flip the back buffer and the front buffer. display on screen
 		g_swapChain->Present(0, 0);
@@ -114,5 +114,13 @@ void Renderer::SetClearColour(float r, float g, float b)
 	clearColour[0] = r;
 	clearColour[1] = g;
 	clearColour[2] = b;
+	clearColour[3] = 1.0f;
+}
+
+void Renderer::ChooseRandomColour()
+{
+	clearColour[0] = (float)(rand() % 100) / 100;
+	clearColour[1] = (float)(rand() % 100) / 100;
+	clearColour[2] = (float)(rand() % 100) / 100;
 	clearColour[3] = 1.0f;
 }
