@@ -17,7 +17,7 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
 	wc.style = CS_HREDRAW | CS_VREDRAW;  ///style of the window class
 	wc.lpfnWndProc = WndProc;  ///Our window procedure function, make sure it handles window creation or calls DefWindowProc(..)
 	wc.hInstance = hInstance;  ///Give our app's handle 
-	wc.hIcon = LoadIcon(NULL, IDI_ASTERISK);  ///Load the icon for the window. IDI_APPLICATION is a default icon that windows provides
+	wc.hIcon = LoadIcon(NULL, IDI_SHIELD);  ///Load the icon for the window. IDI_APPLICATION is a default icon that windows provides
 	wc.hCursor = LoadCursor(NULL, IDC_CROSS);  ///Load the different types of cursors that windows provides. IDC_CROSS is a crosshair cursor 
 	wc.lpszClassName = L"WindowClass1";  ///Windows will store our window class with this name
 	wc.hbrBackground = (HBRUSH)(COLOR_HIGHLIGHT);  ///Background color of the win32 app. (not needed for D3D apps)

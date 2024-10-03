@@ -102,7 +102,7 @@ void Renderer::RenderFrame()
 		float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		g_devcon->ClearRenderTargetView(g_backBuffer, color);
 	}*/
-	//ChooseRandomColour();  gives me a seizure 
+	//ChooseRandomColour();  //gives me a seizure 
 
 		//flip the back buffer and the front buffer. display on screen
 		g_swapChain->Present(0, 0);

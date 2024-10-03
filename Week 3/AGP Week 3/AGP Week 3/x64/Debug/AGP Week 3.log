@@ -1,0 +1,4 @@
+﻿  Renderer.cpp
+C:\Users\5BRAKM58\Downloads\AGP\Week 3\AGP Week 3\Renderer.cpp(62,19): warning C4244: '=': conversion from 'int' to 'FLOAT', possible loss of data
+C:\Users\5BRAKM58\Downloads\AGP\Week 3\AGP Week 3\Renderer.cpp(63,20): warning C4244: '=': conversion from 'int' to 'FLOAT', possible loss of data
+  AGP Week 3.vcxproj -> C:\Users\5BRAKM58\Downloads\AGP\Week 3\AGP Week 3\x64\Debug\AGP Week 3.exe
