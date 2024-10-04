@@ -153,12 +153,12 @@ HRESULT Renderer::InitPipeline()
 {
 
 
-	auto vertexShaderByteCode = DX::ReadData(L"Compiled Shaders/VertexShader.cso");
-	auto pixelShaderByteCode = DX::ReadData(L"Compiled Shaders/PixelShader.cso");
+	auto vertexShaderByteCode = DX::ReadData(L"Compiled Shaders/VertexShader.cso"); //read the compiled vertex shader code
+	auto pixelShaderByteCode = DX::ReadData(L"Compiled Shaders/PixelShader.cso"); //read the compiled pixel shader code
 	
 	
 	//encapsulate both shaders into shader objects 
-   result = g_dev->CreateVertexShader(vertexShaderByteCode.data(), vertexShaderByteCode.size(), NULL, &pVS);
+	result = g_dev->CreateVertexShader(vertexShaderByteCode.data(), vertexShaderByteCode.size(), NULL, &pVS); //create the vertex shader from bytecode
    if (FAILED(result))
    {
 	   OutputDebugString(L"Failed to create vertex shader");
@@ -171,20 +171,23 @@ HRESULT Renderer::InitPipeline()
 	   return result;
    }
 
-   D3DReflect(vertexShaderByteCode.data(), vertexShaderByteCode.size(), IID_ID3D11ShaderReflection, (void**)&vShaderReflection);
+   D3DReflect(vertexShaderByteCode.data(), vertexShaderByteCode.size(), IID_ID3D11ShaderReflection, (void**)&vShaderReflection); //shader reflection is used to retrieve info
+   //about the shader, such as input and output parameters, resources, constants etc.
    vShaderReflection->GetDesc(&desc);
 
    D3D11_SIGNATURE_PARAMETER_DESC* signatureParamDescriptions = new D3D11_SIGNATURE_PARAMETER_DESC[desc.InputParameters]{ 0 };
+   //input paramters of the vertex shader are described in the signature. includes semantic name, semantic index, register, system value type, component type, mask and read write mask
    for (UINT i = 0; i < desc.InputParameters; i++)
    {
 	   vShaderReflection->GetInputParameterDesc(i, &signatureParamDescriptions[i]);
    }
 	//set the shader objects 
-	g_devcon->VSSetShader(pVS, 0, 0);
+   g_devcon->VSSetShader(pVS, 0, 0); //shaders encapsulated in shader objects and set to the device context
 	g_devcon->PSSetShader(pPS, 0, 0);
 
 	//create input layout description
-	D3D11_INPUT_ELEMENT_DESC* ied = new D3D11_INPUT_ELEMENT_DESC[desc.InputParameters]{ 0 };
+	D3D11_INPUT_ELEMENT_DESC* ied = new D3D11_INPUT_ELEMENT_DESC[desc.InputParameters]{ 0 }; //input layout is created
+	//based on the input parameters of the vertex shader. layout describes how the vertex buffer is to be read
 	for (size_t i = 0; i < desc.InputParameters; i++)
 	{
 		ied[i].SemanticName = signatureParamDescriptions[i].SemanticName;
@@ -228,7 +231,7 @@ HRESULT Renderer::InitPipeline()
 		return result;
 	}
 
-	g_devcon->IASetInputLayout(pLayout);
+	g_devcon->IASetInputLayout(pLayout); //input layout is set to the device context, so GPU knows how to read the vertex buffer
 
 	delete[] signatureParamDescriptions;
 	delete[] ied;
@@ -266,4 +269,15 @@ void Renderer::InitGraphics()
 	g_devcon->Unmap(pVBuffer, NULL); // unmap the buffer
 
 	
-}
+
+	/*Order of Operations
+		1.	InitPipeline:
+	•	Sets up shaders.
+		•	Creates and sets the input layout.
+		2.	InitGraphics :
+		•	Creates the vertex buffer and fills it with data.
+		3.	RenderFrame :
+		•	Binds the vertex buffer.
+		•	Sets the primitive topology.
+		•	Issues the draw call.
+}*/
