@@ -75,6 +75,7 @@ HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 
 void Renderer::CleanRenderer()
 {
+	if (pCBuffer) pCBuffer->Release();
 	if (pVBuffer) pVBuffer->Release();
 	if (pVS) pVS->Release();
 	if (pPS) pPS->Release();
@@ -124,6 +125,11 @@ void Renderer::RenderFrame()
 
 	//set primitive topology
 	g_devcon->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST); //triangle list is the primitive topology
+
+	CBUFFER0 cBuffer;
+	cBuffer.pos = XMFLOAT3(0.5f, 0.0f, 0.0f);
+	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);
+	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
 
 	
 	g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
@@ -259,6 +265,16 @@ void Renderer::InitGraphics()
 
 	if (pVBuffer == 0)
 	{
+		return;
+	}
+
+	D3D11_BUFFER_DESC cbd = { };
+	cbd.Usage = D3D11_USAGE_DEFAULT;
+	cbd.ByteWidth = sizeof(CBUFFER0);
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	if (FAILED(g_dev->CreateBuffer(&cbd, NULL, &pCBuffer)))
+	{
+		OutputDebugString(L"Failed to create constant buffer");
 		return;
 	}
 
