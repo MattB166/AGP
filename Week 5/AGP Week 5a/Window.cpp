@@ -173,25 +173,24 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case 'D':
 				s_renderer->MoveCamera(0.25f, 0, 0);
 				//s_renderer->SetClearColour(0.0f, 0.0f, 1.0f);
+				break;
+
+			case VK_LEFT:
+				s_renderer->cam.yaw -= XM_PI / 8;
+				break;
+			case VK_RIGHT:
+				s_renderer->cam.yaw += XM_PI / 8;
+				break;
+			case VK_UP:
+				s_renderer->cam.pitch -= XM_PI / 8;
+				break;
+			case VK_DOWN:
+				s_renderer->cam.pitch += XM_PI / 8;
+				break;
 			}
-
-	case VK_LEFT:
-		
-		s_renderer->RotateCamera(0, -change);
-		break;
-	case VK_RIGHT:
-		s_renderer->RotateCamera(0, change);
-		break;
-	case VK_UP:
-		s_renderer->RotateCamera(-change, 0);
-		break;
-	case VK_DOWN:
-		s_renderer->RotateCamera(change, 0);
-		break;
-
-	default:
+		default:
 		return DefWindowProc(hWnd, message, wParam, lParam); ///let windows handle everything else with default handling 
-
+		break;
 
 		}
 		}

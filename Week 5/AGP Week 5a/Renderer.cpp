@@ -139,8 +139,8 @@ void Renderer::RenderFrame()
 	XMMATRIX world, view;
 
 	XMVECTOR eyepos{ cam.x,cam.y,cam.z };
-	XMVECTOR lookTo{ 0,0,1 };
-	//lookTo{ sin(cam.yaw) * sin(cam.pitch),cos(cam.pitch),cos(cam.yaw) * sin(cam.pitch) }; //look to vector (direction of camera
+	//XMVECTOR lookTo{ 0,0,1 };
+	XMVECTOR lookTo{ sin(cam.yaw) * sin(cam.pitch),cos(cam.pitch),cos(cam.yaw) * sin(cam.pitch) }; //look to vector (direction of camera
 	XMVECTOR up{ 0,1,0 };//world up
 	view = XMMatrixLookToLH(eyepos, lookTo, up);
 
@@ -158,6 +158,8 @@ void Renderer::RenderFrame()
 		•	Far clipping plane – Anything farther away than this will not be rendered.*/
 
 	cBuffer.WVP = world * view * projection;
+
+
 	
 	
 	//cBuffer.WVP = scale * rotation * translation;
@@ -351,6 +353,8 @@ void Renderer::MoveCamera(float x, float y, float z)
 	cam.x += x;
 	cam.y += y;
 	cam.z += z;
+
+
 }
 void Renderer::RotateCamera(float pitch, float yaw)
 {
