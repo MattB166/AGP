@@ -348,12 +348,24 @@ void Renderer::InitGraphics()
 
 
 }
-void Renderer::MoveCamera(float x, float y, float z)
+void Renderer::MoveCamera(float x,float y,float z)
 {
-	cam.x += x;
-	cam.y += y;
-	cam.z += z;
+	XMVECTOR fwd = XMVectorSet(cos(cam.pitch) * sin(cam.yaw), 0.0f, cos(cam.pitch) * cos(cam.yaw), 0.0f);
 
+	fwd = XMVector3Normalize(fwd);
+	XMVECTOR right = XMVectorSet(sin(cam.yaw - XM_PI/2), 0.0f, cos(cam.yaw - XM_PI/2), 0.0f);
+	
+	right = XMVector3Normalize(right);
+
+	XMVECTOR movement = XMVectorScale(fwd, -z);
+	movement = XMVectorAdd(movement, XMVectorScale(right, -x));
+	
+	cam.x += XMVectorGetX(movement);
+	cam.z += XMVectorGetZ(movement);
+
+	cam.pitch += -y;
+
+	//nearly there but it inverts when looking up and down 
 
 }
 void Renderer::RotateCamera(float pitch, float yaw)

@@ -27,6 +27,13 @@ struct Camera
 	float x = 0, y = 0, z = 0;
 	float pitch = XM_PIDIV2, yaw = 0;
 };
+enum Direction
+{
+	MoveLeft,
+	MoveRight,
+	MoveForward,
+	MoveBackward,
+};
 class Renderer
 {
 
@@ -39,7 +46,7 @@ public:
 	void ChooseRandomColour();
 	HRESULT InitPipeline();
 	void InitGraphics();
-	void MoveCamera(float x, float y, float z);
+	void MoveCamera(float x,float y, float z);
 	void RotateCamera(float pitch, float yaw);
 	Camera cam;
 
