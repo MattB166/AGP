@@ -351,19 +351,24 @@ void Renderer::InitGraphics()
 void Renderer::MoveCamera(float x,float y,float z)
 {
 	XMVECTOR fwd = XMVectorSet(cos(cam.pitch) * sin(cam.yaw), 0.0f, cos(cam.pitch) * cos(cam.yaw), 0.0f);
+	//works on a flat plane but inverts when change pitch not when rotate pitch  
+	
 
 	fwd = XMVector3Normalize(fwd);
+	XMVECTOR movement = XMVectorScale(fwd, -z);
+	
 	XMVECTOR right = XMVectorSet(sin(cam.yaw - XM_PI/2), 0.0f, cos(cam.yaw - XM_PI/2), 0.0f);
 	
 	right = XMVector3Normalize(right);
 
-	XMVECTOR movement = XMVectorScale(fwd, -z);
 	movement = XMVectorAdd(movement, XMVectorScale(right, -x));
 	
 	cam.x += XMVectorGetX(movement);
+	//cam.y += XMVectorGetY(movement);
 	cam.z += XMVectorGetZ(movement);
 
 	cam.pitch += -y;
+	//cam.pitch = max(-XM_PI / 2, min(cam.pitch, XM_PI / 2));
 
 	//nearly there but it inverts when looking up and down 
 
