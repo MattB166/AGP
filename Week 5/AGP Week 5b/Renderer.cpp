@@ -69,6 +69,7 @@ HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 
 	InitPipeline();
 	InitGraphics();
+	InitScene();
 
 	return S_OK;
 }
@@ -133,31 +134,31 @@ void Renderer::RenderFrame()
 	//pos.x = sin(fakeTime);
 	//rot.y = fakeTime;
 	//rot.z = fakeTime;
-
-	CBUFFER0 cBuffer;
-	XMMATRIX translation, rotation, scale;
-	XMMATRIX world, view;
-
-	XMVECTOR eyepos{ cam.x,cam.y,cam.z };
-	//XMVECTOR lookTo{ 0,0,1 };
-	XMVECTOR lookTo{ sin(cam.yaw) * sin(cam.pitch),cos(cam.pitch),cos(cam.yaw) * sin(cam.pitch) }; //look to vector (direction of camera
-	XMVECTOR up{ 0,1,0 };//world up
-	view = XMMatrixLookToLH(eyepos, lookTo, up);
-
-	//transform matrices 
-	translation = XMMatrixTranslation(pos.x, pos.y, pos.z);
-	rotation = XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z);
-	scale = XMMatrixScaling(scl.x, scl.y, scl.z);
-	world = scale * rotation * translation;
-
+	XMMATRIX world, view, projection;
 	projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(60),SCREEN_WIDTH / (float)SCREEN_HEIGHT,0.1f, 100);
+	view = cam.GetViewMatrix();
+
+	world = cube1.GetWorldMatrix();
+	CBUFFER0 cBuffer;
+	cBuffer.WVP = world * view * projection;
+
+	//XMMATRIX translation, rotation, scale;
+	//XMVECTOR eyepos{ cam.x,cam.y,cam.z };
+	////XMVECTOR lookTo{ 0,0,1 };
+	//XMVECTOR lookTo{ sin(cam.yaw) * sin(cam.pitch),cos(cam.pitch),cos(cam.yaw) * sin(cam.pitch) }; //look to vector (direction of camera
+	//XMVECTOR up{ 0,1,0 };//world up
+
+	////transform matrices 
+	//translation = XMMatrixTranslation(pos.x, pos.y, pos.z);
+	//rotation = XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z);
+	//scale = XMMatrixScaling(scl.x, scl.y, scl.z);
+
 	/*This function takes 4 parameters:
 	•	Vertical FOV – The angle of the camera’s field of view, in radians.We can convert 60 degrees into radians using the helper function used above.
 		•	Aspect ratio – Scalar value between screen height and width.It’s important to make at least the denominator a float as dividing an integer by another integer will result in another integer, thus, our aspect ratio will evaluate to a 1 in most cases which is wrong(this happened to me many times and always hard to debug).
 		•	Near clipping plane – Anything closer than this will not be rendered.
 		•	Far clipping plane – Anything farther away than this will not be rendered.*/
 
-	cBuffer.WVP = world * view * projection;
 
 
 	
@@ -170,9 +171,21 @@ void Renderer::RenderFrame()
 	//g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
 	g_devcon->DrawIndexed(36, 0, 0); 
 
+	world = cube2.GetWorldMatrix();
+	cBuffer.WVP = world * view * projection;
+	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);
+	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
+	g_devcon->DrawIndexed(36, 0, 0);
+
 		//flip the back buffer and the front buffer. display on screen
 	g_swapChain->Present(0, 0);
 
+}
+
+void Renderer::InitScene()
+{
+	cube2.pos = { 0.7,0.0f,3.0f };
+	cube2.rot = { 0.0f,XMConvertToRadians(45),0.0f};
 }
 
 void Renderer::SetClearColour(float r, float g, float b)

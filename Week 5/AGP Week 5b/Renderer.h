@@ -26,13 +26,37 @@ struct Camera
 {
 	float x = 0, y = 0, z = 0;
 	float pitch = XM_PIDIV2, yaw = 0;
+
+	XMMATRIX GetViewMatrix()
+	{
+		XMVECTOR eyepos = { x,y,z };
+		XMVECTOR camup = { 0,1,0 };
+		XMVECTOR lookat
+		{
+			sin(yaw) * sin(pitch),
+			cos(pitch),
+			cos(yaw) * sin(pitch)
+		};
+		return XMMatrixLookToLH(eyepos, lookat, camup);
+	}
 };
-enum Direction
+
+struct Transform
 {
-	MoveLeft,
-	MoveRight,
-	MoveForward,
-	MoveBackward,
+	XMFLOAT3 pos{ 0,0,2 };
+	XMFLOAT3 rot{ 0,0,0 };
+	XMFLOAT3 scl{ 1,1,1 };
+
+	XMMATRIX GetWorldMatrix()
+	{
+		XMMATRIX translation = XMMatrixTranslation(pos.x, pos.y, pos.z);
+		XMMATRIX rotationX = XMMatrixRotationX(rot.x);
+		XMMATRIX rotationY = XMMatrixRotationY(rot.y);
+		XMMATRIX rotationZ = XMMatrixRotationZ(rot.z);
+		XMMATRIX scale = XMMatrixScaling(scl.x, scl.y, scl.z);
+		XMMATRIX world = scale * rotationX * translation;
+		return world;
+	}
 };
 class Renderer
 {
@@ -42,6 +66,7 @@ public:
 	HRESULT InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth);
 	void CleanRenderer();
 	void RenderFrame();
+	void InitScene();
 	void SetClearColour(float r, float g, float b);
 	void ChooseRandomColour();
 	HRESULT InitPipeline();
@@ -69,6 +94,8 @@ private:
 	XMFLOAT3 rot = { 0,0,0 };
 	XMFLOAT3 scl = { 1,1,1 };
 	XMMATRIX projection; //projection matrix 
+	Transform cube1;
+	Transform cube2;
 
 
 
