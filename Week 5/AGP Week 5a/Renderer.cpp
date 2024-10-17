@@ -350,12 +350,17 @@ void Renderer::InitGraphics()
 }
 void Renderer::MoveCamera(float x,float y,float z)
 {
-	XMVECTOR fwd = XMVectorSet(cos(cam.pitch) * sin(cam.yaw), 0.0f, cos(cam.pitch) * cos(cam.yaw), 0.0f);
-	//works on a flat plane but inverts when change pitch not when rotate pitch  
+	XMVECTOR fwd = XMVectorSet(sin(cam.yaw) * sin(cam.pitch), cos(cam.pitch), cos(cam.yaw) * sin(cam.pitch), 0.0f);
+	//move into lookto struct inside camera class when come to make it 
+	//i.e. struct lookto{x,y,z};
+	// { static_cast<float> sin(cam.yaw) * sin(cam.pitch);
+	//   static_cast<float> cos(cam.pitch);
+	//   static_cast<float> cos(cam.yaw) * sin(cam.pitch); 
+	// }
 	
 
 	fwd = XMVector3Normalize(fwd);
-	XMVECTOR movement = XMVectorScale(fwd, -z);
+	XMVECTOR movement = XMVectorScale(fwd, z);
 	
 	XMVECTOR right = XMVectorSet(sin(cam.yaw - XM_PI/2), 0.0f, cos(cam.yaw - XM_PI/2), 0.0f);
 	
@@ -364,13 +369,20 @@ void Renderer::MoveCamera(float x,float y,float z)
 	movement = XMVectorAdd(movement, XMVectorScale(right, -x));
 	
 	cam.x += XMVectorGetX(movement);
-	//cam.y += XMVectorGetY(movement);
+	cam.y += XMVectorGetY(movement);
 	cam.z += XMVectorGetZ(movement);
 
 	cam.pitch += -y;
-	//cam.pitch = max(-XM_PI / 2, min(cam.pitch, XM_PI / 2));
 
-	//nearly there but it inverts when looking up and down 
+	//need to clamp pitch to prevent camera flipping. might be able to put this somewhere else inside cam class for cleanliness 
+	if (cam.pitch > 90)
+	{
+		cam.pitch = 90;
+	}
+	else if (cam.pitch < -90)
+	{
+		cam.pitch = -90;
+	}  //this clamp needs testing to see if it works correctly 
 
 }
 void Renderer::RotateCamera(float pitch, float yaw)
