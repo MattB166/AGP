@@ -54,7 +54,41 @@ HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 
 	pBackBufferTexture->Release();
 
-	g_devcon->OMSetRenderTargets(1, &g_backBuffer, NULL);
+	//z-buffer description
+	D3D11_TEXTURE2D_DESC zBufferDesc = { 0 };
+	zBufferDesc.Width = ScreenWidth;
+	zBufferDesc.Height = ScreenHeight;
+	zBufferDesc.ArraySize = 1;
+	zBufferDesc.MipLevels = 1;
+	zBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	zBufferDesc.SampleDesc.Count = scd.SampleDesc.Count;
+	zBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	zBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+
+	//create the z-buffer
+	ID3D11Texture2D* zBufferTexture = nullptr;
+	hr = g_dev->CreateTexture2D(&zBufferDesc, NULL, &zBufferTexture);
+	if (FAILED(hr))
+	{
+		OutputDebugString(L"Failed to create z-buffer texture");
+		return hr;
+	}
+
+	//create the z-buffer view
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+	ZeroMemory(&dsvDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+	dsvDesc.Format = zBufferDesc.Format;
+	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	hr = g_dev->CreateDepthStencilView(zBufferTexture, &dsvDesc, &g_ZBuffer);
+	if (FAILED(hr))
+	{
+		OutputDebugString(L"Failed to create depth stencil view");
+		return hr;
+	}
+	zBufferTexture->Release();
+
+
+	g_devcon->OMSetRenderTargets(1, &g_backBuffer, g_ZBuffer);
 
 
 	//set the viewport
@@ -76,6 +110,7 @@ HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 
 void Renderer::CleanRenderer()
 {
+	if (g_ZBuffer) g_ZBuffer->Release();
 	if (pIndexBuffer) pIndexBuffer->Release();
 	if (pCBuffer) pCBuffer->Release();
 	if (pVBuffer) pVBuffer->Release();
@@ -92,6 +127,8 @@ void Renderer::CleanRenderer()
 void Renderer::RenderFrame()
 {
 	g_devcon->ClearRenderTargetView(g_backBuffer,Colors::DarkSlateGray);
+
+	g_devcon->ClearDepthStencilView(g_ZBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	//do 3D rendering on the back buffer here
 	// 
@@ -184,7 +221,7 @@ void Renderer::RenderFrame()
 
 void Renderer::InitScene()
 {
-	cube2.pos = { 0.7,0.0f,3.0f };
+	cube2.pos = { 3.0f,0.0f,3.0f };
 	cube2.rot = { 0.0f,XMConvertToRadians(45),0.0f};
 }
 

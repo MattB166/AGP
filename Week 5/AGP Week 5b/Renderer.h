@@ -88,6 +88,7 @@ private:
 	ID3D11Buffer* pVBuffer = NULL; // the vertex buffer
 	ID3D11Buffer* pCBuffer = NULL; // the constant buffer 
 	ID3D11Buffer* pIndexBuffer = NULL; // the index buffer	
+	ID3D11DepthStencilView* g_ZBuffer = NULL; // the pointer to our depth buffer
 	ID3D11ShaderReflection* vShaderReflection = NULL;
 	D3D11_SHADER_DESC desc;
 	XMFLOAT3 pos = { 0,0,2};
