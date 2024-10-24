@@ -5,6 +5,7 @@
 #include <DirectXColors.h>
 
 
+
 HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 {
 	//Create a struct to hold information about the swap chain
@@ -227,11 +228,18 @@ void Renderer::RenderFrame()
 	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
 	g_devcon->DrawIndexed(36, 0, 0);
 
-	pText->AddText("Hello World", -1, +1, 0.075f); //adds text and sets the position of the text 
-	g_devcon->OMSetBlendState(pAlphaBlendStateEnable, 0, 0xffffffff);
-	pText->RenderText();
-	g_devcon->OMSetBlendState(pAlphaBlendStateDisable, 0, 0xffffffff);
+	//pText->AddText("Hello World", -1, +1, 0.075f); //adds text and sets the position of the text 
+	//g_devcon->OMSetBlendState(pAlphaBlendStateEnable, 0, 0xffffffff);
+	//pText->RenderText();
+	//g_devcon->OMSetBlendState(pAlphaBlendStateDisable, 0, 0xffffffff);    ///old text way 
 
+
+	//draw text  in a better way. use this for UI later on down the line 
+	spriteBatch->Begin();
+	spriteFont->DrawString(spriteBatch.get(), L"Hello, World!", DirectX::XMFLOAT2(100, 50), DirectX::Colors::ForestGreen);
+	spriteFont2->DrawString(spriteBatch.get(), L"Hello, World!", DirectX::XMFLOAT2(10, 10), DirectX::Colors::OrangeRed);
+	spriteBatch->End();
+	g_devcon->OMSetRenderTargets(1, &g_backBuffer, g_ZBuffer); ///messes up depth buffer if not set back to the back buffer 
 	
 		//flip the back buffer and the front buffer. display on screen
 	g_swapChain->Present(0, 0);
@@ -461,6 +469,10 @@ void Renderer::InitGraphics()
 	rsDesc.FillMode = D3D11_FILL_SOLID;
 	g_dev->CreateRasterizerState(&rsDesc, &pRasterState);
 	g_devcon->RSSetState(pRasterState);
+
+	spriteBatch = std::make_unique<DirectX::SpriteBatch>(g_devcon);
+	spriteFont = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/matura_mt_script.spritefont");
+	spriteFont2 = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/comic_sans_ms_16.spritefont");
 
 
 }

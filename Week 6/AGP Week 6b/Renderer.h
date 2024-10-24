@@ -1,6 +1,8 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include "text2D.h"
+#include <SpriteBatch.h>
+#include <SpriteFont.h>
 #include <d3d11shader.h>
 using namespace DirectX;
 #define SCREEN_WIDTH 800
@@ -109,6 +111,13 @@ private:
 	ID3D11BlendState* pAlphaBlendStateDisable = NULL; // the pointer to the alpha blend state
 
 	ID3D11RasterizerState* pRasterState = NULL; // the pointer to the rasterizer state 
+
+	std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
+
+	std::unique_ptr<DirectX::SpriteFont> spriteFont;
+
+	std::unique_ptr<DirectX::SpriteFont> spriteFont2;
+
 
 
 
