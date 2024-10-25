@@ -85,6 +85,7 @@ private:
 	ID3D11DeviceContext* g_devcon = NULL;           // the pointer to our Direct3D device context - used to control the settings and states of the device, and issue rendering commands to the device.
 	ID3D11RenderTargetView* g_backBuffer = NULL;    // the pointer to our back buffer - the final render target that we draw to. this is a 2D texture that is drawn to by the rasterizer stage of the pipeline.
 	float clearColour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	D3D11_VIEWPORT viewport = {};
 	ID3D11VertexShader* pVS = NULL; // the vertex shader
 	ID3D11PixelShader* pPS = NULL; // the pixel shader
 	ID3D11InputLayout* pLayout = NULL; //pointer to input layout 
@@ -92,6 +93,7 @@ private:
 	ID3D11Buffer* pVBuffer = NULL; // the vertex buffer
 	ID3D11Buffer* pCBuffer = NULL; // the constant buffer 
 	ID3D11Buffer* pIndexBuffer = NULL; // the index buffer	
+	ID3D11DepthStencilState* g_DSS = NULL; // the pointer to our depth stencil state
 	ID3D11DepthStencilView* g_ZBuffer = NULL; // the pointer to our depth buffer
 	ID3D11ShaderReflection* vShaderReflection = NULL;
 	D3D11_SHADER_DESC desc;

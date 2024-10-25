@@ -76,6 +76,27 @@ HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 		return hr;
 	}
 
+	//create depth stencil dimensions
+	ID3D11Texture2D* pDepthStencil = nullptr;
+	D3D11_TEXTURE2D_DESC texDesc = {};
+	texDesc.Width = ScreenWidth;
+	texDesc.Height = ScreenHeight;
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	hr = g_dev->CreateTexture2D(&texDesc, NULL, &pDepthStencil);
+
+	D3D11_DEPTH_STENCIL_DESC depth = { };
+	depth.DepthEnable = TRUE;
+	depth.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depth.DepthFunc = D3D11_COMPARISON_LESS;
+
+	hr = g_dev->CreateDepthStencilState(&depth, &g_DSS);
+
 	//create the z-buffer view
 	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
 	ZeroMemory(&dsvDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
@@ -87,6 +108,10 @@ HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 		OutputDebugString(L"Failed to create depth stencil view");
 		return hr;
 	}
+
+	
+
+
 	zBufferTexture->Release();
 
 
@@ -94,7 +119,7 @@ HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 
 
 	//set the viewport
-	D3D11_VIEWPORT viewport = {};
+	 viewport = {};
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.Width = ScreenWidth;
@@ -120,6 +145,7 @@ void Renderer::CleanRenderer()
 	if (pText) delete pText;
 	if (pTexture) pTexture->Release();
 	if (pSampler) pSampler->Release();
+	if (g_DSS) g_DSS->Release();
 	if (g_ZBuffer) g_ZBuffer->Release();
 	if (pIndexBuffer) pIndexBuffer->Release();
 	if (pCBuffer) pCBuffer->Release();
@@ -137,8 +163,12 @@ void Renderer::CleanRenderer()
 void Renderer::RenderFrame()
 {
 	g_devcon->ClearRenderTargetView(g_backBuffer,Colors::DarkSlateGray);
-
 	g_devcon->ClearDepthStencilView(g_ZBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	///these 3 here are what allow us to restore the depth buffer after drawing text. 
+	g_devcon->OMSetDepthStencilState(g_DSS, 1);
+	g_devcon->OMSetRenderTargets(1, &g_backBuffer, g_ZBuffer);
+	g_devcon->RSSetViewports(1, &viewport);
 
 	//do 3D rendering on the back buffer here
 	// 
