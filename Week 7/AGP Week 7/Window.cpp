@@ -84,7 +84,7 @@ void Window::Run(Renderer* renderer)
 			HandleInput(TimeClass::GetDeltaTime());
 			renderer->RenderFrame();
 		}
-		
+		TimeClass::CalculateFrameStats(TimeClass::GetDeltaTime());
 		//TrackCursor();
 		//LockCursorToWindow();
 		TimeClass::Tick();

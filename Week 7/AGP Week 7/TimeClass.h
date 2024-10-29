@@ -9,6 +9,8 @@ public:
 
 	static inline float GetDeltaTime() { return deltaTime; }
 
+	static void CalculateFrameStats(float deltaTime);
+
 private:
 
 	static __int64 countsPerSecond;
@@ -17,6 +19,9 @@ private:
 	static __int64 previousTime;
 	static __int64 currentTime;
 	static float deltaTime;
+	static float elapsedTime;
+	static int frameCount;
+	static float fps;
 
 	TimeClass() = delete;
 	~TimeClass() = delete;
