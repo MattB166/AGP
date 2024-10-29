@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="TestTime.cpp" />
     <ClCompile Include="text2D.cpp" />
     <ClCompile Include="TimeClass.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
@@ -145,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="ReadData.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="TestTime.h" />
     <ClInclude Include="text2D.h" />
     <ClInclude Include="TimeClass.h" />
     <ClInclude Include="WICTextureLoader.h" />

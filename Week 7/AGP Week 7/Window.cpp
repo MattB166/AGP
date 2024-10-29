@@ -64,7 +64,6 @@ void Window::Run(Renderer* renderer)
 {
 	s_renderer = renderer; 
 	MSG msg; 
-	TimeClass::Initialise();
 	while (true)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))  ///Check if there is a message in the message queue
@@ -81,13 +80,15 @@ void Window::Run(Renderer* renderer)
 		}
 		else
 		{
-			HandleInput(TimeClass::GetDeltaTime());
+			HandleInput(TestTime::getDeltaTime());
 			renderer->RenderFrame();
 		}
-		TimeClass::CalculateFrameStats(TimeClass::GetDeltaTime());
+		//TimeClass::CalculateFrameStats(TimeClass::GetDeltaTime());
 		//TrackCursor();
 		//LockCursorToWindow();
-		TimeClass::Tick();
+		//TimeClass::Tick();
+		TestTime::CalculateFrameStats();
+		TestTime::Tick();
 		//std::cout << TimeClass::GetDeltaTime() << std::endl;
 		
 
@@ -207,11 +208,27 @@ void Window::HandleInput(float deltaTime)
 
 	if (kbState.W)
 	{
-        s_renderer->MoveCamera(0.0f, 0.0f, 1.0f * TimeClass::GetDeltaTime());
+        s_renderer->MoveCamera(0.0f, 0.0f, 1.0f * TestTime::getDeltaTime());
 	}
 	if (kbState.S) ////very smooth movement 
 	{
-		s_renderer->MoveCamera(0.0f, 0.0f, -1.0f * TimeClass::GetDeltaTime());
+		s_renderer->MoveCamera(0.0f, 0.0f, -1.0f * TestTime::getDeltaTime());
+	}
+	if (tracker.pressed.T)
+	{
+		TestTime::SetTimeScale(3.0f);
+	}
+	if (tracker.released.T)
+	{
+		TestTime::SetTimeScale(1.0f);
+	}
+	if (tracker.pressed.C)
+	{
+		TestTime::SetTimeScale(0.25f);
+	}
+	if (tracker.released.C)
+	{
+		TestTime::SetTimeScale(1.0f);
 	}
 
 	if (tracker.IsKeyPressed(DirectX::Keyboard::Keys::A)) //requires constant key pressing 

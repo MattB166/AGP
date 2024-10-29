@@ -1,6 +1,6 @@
 #include <Windows.h>
 #include <Keyboard.h>
-#include "TimeClass.h"
+#include "TestTime.h"
 #include "Renderer.h"
 #pragma once
 #define SCREEN_WIDTH 800
@@ -21,7 +21,7 @@ public:
 private:
 	HINSTANCE hInst = NULL;   // Handle to this instance
 	HWND hWnd = NULL;         // Handle to our created window
-	const wchar_t* windowName = L"Week 1 Window Creation with D3D11"; // Name of our window
+	const wchar_t* windowName = L"AGP TUTORIALS"; // Name of our window
 	static Renderer* s_renderer;
 	POINT cursorPos;
 	POINT lastAcceptableCursorPos;
