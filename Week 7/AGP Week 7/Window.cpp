@@ -57,6 +57,9 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
 
 	ShowWindow(hWnd, nCmdShow);  ///Show the window
 	cursorPos = { 0, 0 };
+
+	mouse.SetWindow(hWnd);
+	mouse.SetMode(Mouse::MODE_RELATIVE);
 	return S_OK;
 }
 
@@ -143,7 +146,34 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_ACTIVATEAPP:
 	case WM_INPUT:
 		Keyboard::ProcessMessage(message, wParam, lParam);
+		Mouse::ProcessMessage(message, wParam, lParam);
 		break;
+
+	case WM_MOUSEACTIVATE:
+		return MA_ACTIVATEANDEAT;
+
+	case WM_MOUSEMOVE:
+
+	case WM_LBUTTONDOWN:
+
+	case WM_LBUTTONUP:
+
+	case WM_RBUTTONDOWN:
+
+	case WM_RBUTTONUP:
+
+	case WM_MBUTTONDOWN:
+
+	case WM_MBUTTONUP:
+
+	case WM_MOUSEWHEEL:
+
+	case WM_XBUTTONDOWN:
+
+	case WM_XBUTTONUP:
+
+	case WM_MOUSEHOVER:
+
 
 	case WM_SYSKEYDOWN:
 		if (wParam == VK_RETURN && (lParam & 0x60000000) == 0x20000000)
@@ -201,6 +231,22 @@ void Window::HandleInput(float deltaTime)
 {
 	auto kbState = keyboard.GetState();
 	tracker.Update(kbState);
+	auto mouseState = mouse.GetState();
+	mouseTracker.Update(mouseState);
+
+	float sensitivity = XM_2PI * 0.00025f;
+	s_renderer->RotateCamera(mouseState.y * sensitivity, mouseState.x * sensitivity);
+
+	if (mouseTracker.leftButton == Mouse::ButtonStateTracker::PRESSED)
+	{
+		//reset camera
+		s_renderer->cam.x = 0;
+		s_renderer->cam.y = 0;
+		s_renderer->cam.z = 0;
+		s_renderer->cam.pitch = XM_PIDIV2;
+		s_renderer->cam.yaw = 0;
+	}
+
 	if (kbState.Escape)
 	{
 		PostQuitMessage(0);
@@ -208,11 +254,19 @@ void Window::HandleInput(float deltaTime)
 
 	if (kbState.W)
 	{
-        s_renderer->MoveCamera(0.0f, 0.0f, 1.0f * TestTime::getDeltaTime());
+        s_renderer->MoveCamera(0.0f, 0.0f, 2.0f * TestTime::getDeltaTime());
 	}
 	if (kbState.S) ////very smooth movement 
 	{
-		s_renderer->MoveCamera(0.0f, 0.0f, -1.0f * TestTime::getDeltaTime());
+		s_renderer->MoveCamera(0.0f, 0.0f, -2.0f * TestTime::getDeltaTime());
+	}
+	if (kbState.A)
+	{
+		s_renderer->MoveCamera(-2.0f * TestTime::getDeltaTime(), 0.0f, 0.0f);
+	}
+	if (kbState.D)
+	{
+		s_renderer->MoveCamera(2.0f * TestTime::getDeltaTime(), 0.0f, 0.0f);
 	}
 	if (tracker.pressed.T)
 	{

@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <Keyboard.h>
+#include <Mouse.h>
 #include "TestTime.h"
 #include "Renderer.h"
 #pragma once
@@ -28,6 +29,8 @@ private:
 	RECT wr;
 	Keyboard keyboard; //temporary - will make an input class later 
 	Keyboard::KeyboardStateTracker tracker;
+	Mouse mouse;
+	Mouse::ButtonStateTracker mouseTracker;
 
 
 };
