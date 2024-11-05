@@ -153,7 +153,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return MA_ACTIVATEANDEAT;
 
 	case WM_MOUSEMOVE:
-		s_renderer->RotateCube(0.01f,0.0f,0.0f);
+		//s_renderer->RotateCube(0.01f,0.0f,0.0f);
 
 	case WM_LBUTTONDOWN:
 

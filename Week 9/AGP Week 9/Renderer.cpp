@@ -140,6 +140,7 @@ HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 
 void Renderer::CleanRenderer()
 {
+	delete model;
 	if (pRasterState) pRasterState->Release();
 	if (pAlphaBlendStateDisable) pAlphaBlendStateDisable->Release();
 	if (pAlphaBlendStateEnable) pAlphaBlendStateEnable->Release();
@@ -236,13 +237,15 @@ void Renderer::RenderFrame()
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
 	//g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
-	g_devcon->DrawIndexed(36, 0, 0); 
+	//g_devcon->DrawIndexed(36, 0, 0); 
+	model->Draw();
 
 	world = cube2.GetWorldMatrix();
 	cBuffer.WVP = world * view * projection;
 	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);   //////SECOND CUBE RENDERING 
 	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
-	g_devcon->DrawIndexed(36, 0, 0);
+	//g_devcon->DrawIndexed(36, 0, 0);
+	model->Draw();   ////loads in the model.obj file as the model to be drawn for the second cube 
 
 	//pText->AddText("Hello World", -1, +1, 0.075f); //adds text and sets the position of the text 
 	//g_devcon->OMSetBlendState(pAlphaBlendStateEnable, 0, 0xffffffff);
@@ -264,8 +267,8 @@ void Renderer::RenderFrame()
 
 void Renderer::InitScene()
 {
-	cube2.pos = { 2.0f,0.0f,3.0f };
-	cube2.rot = { XMConvertToRadians(30),XMConvertToRadians(45),0.0f};
+	cube2.pos = { 3.0f,0.0f,3.0f };
+	//cube2.rot = { XMConvertToRadians(30),XMConvertToRadians(45),0.0f};
 	/*cube1.pos = { 0,0,1 };
 	cube1.scl = { 1,1,1 };
 	cube1.rot = { 0.0f,0.0f,XMConvertToRadians(90)};*/
@@ -495,6 +498,8 @@ void Renderer::InitGraphics()
 	spriteBatch = std::make_unique<DirectX::SpriteBatch>(g_devcon);
 	spriteFont = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/matura_mt_script.spritefont");
 	spriteFont2 = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/comic_sans_ms_16.spritefont");
+
+	model = new ObjFileModel{ (char*)"cube.obj",g_dev,g_devcon };
 
 
 }

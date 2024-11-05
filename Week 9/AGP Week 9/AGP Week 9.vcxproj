@@ -136,12 +136,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="objfilemodel.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="TestTime.cpp" />
     <ClCompile Include="TimeClass.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="objfilemodel.h" />
     <ClInclude Include="ReadData.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="TestTime.h" />

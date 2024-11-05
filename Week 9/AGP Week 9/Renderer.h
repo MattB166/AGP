@@ -3,6 +3,7 @@
 #include "text2D.h"
 #include <SpriteBatch.h>
 #include <SpriteFont.h>
+#include "objfilemodel.h"
 #include <d3d11shader.h>
 using namespace DirectX;
 #define SCREEN_WIDTH 800
@@ -120,6 +121,8 @@ private:
 	XMMATRIX projection; //projection matrix 
 	Transform cube1;
 	Transform cube2;
+
+	ObjFileModel* model;
 
 	ID3D11ShaderResourceView* pTexture = NULL; // the pointer to the texture
 	ID3D11SamplerState* pSampler = NULL; // the pointer to the sampler state
