@@ -236,16 +236,16 @@ void Renderer::RenderFrame()
 	g_devcon->PSSetShaderResources(0, 1, &pTexture);
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
-	g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
-	g_devcon->DrawIndexed(36, 0, 0); 
-	//model->Draw();
+	//g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
+	//g_devcon->DrawIndexed(36, 0, 0); 
+	model->Draw();
 
 	world = cube2.GetWorldMatrix();
 	cBuffer.WVP = world * view * projection;
 	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);   //////SECOND CUBE RENDERING 
 	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
-	g_devcon->DrawIndexed(36, 0, 0);
-	//model->Draw();   ////loads in the model.obj file as the model to be drawn for the second cube 
+	//g_devcon->DrawIndexed(36, 0, 0);
+	model->Draw();   ////loads in the model.obj file as the model to be drawn for the second cube 
 
 	//pText->AddText("Hello World", -1, +1, 0.075f); //adds text and sets the position of the text 
 	//g_devcon->OMSetBlendState(pAlphaBlendStateEnable, 0, 0xffffffff);
@@ -539,15 +539,16 @@ void Renderer::RotateCamera(float pitch, float yaw)
 
 	///need to clamp camera to prevent flipping 
 	 //clamp Pitch
-	constexpr float PITCH_LIMIT = XMConvertToRadians(179.0f);
-	if (cam.pitch < -PITCH_LIMIT)
+	constexpr float UPPITCH_LIMIT = XMConvertToRadians(179.0f);
+	constexpr float LOWPITCH_LIMIT = XMConvertToRadians(1.0f);
+	if (cam.pitch < LOWPITCH_LIMIT)
 	{
-		cam.pitch = -PITCH_LIMIT;
+		cam.pitch = LOWPITCH_LIMIT;
 	}
 	else
-		if (cam.pitch > PITCH_LIMIT)
+		if (cam.pitch > UPPITCH_LIMIT)
 		{
-			cam.pitch = PITCH_LIMIT;
+			cam.pitch = UPPITCH_LIMIT;
 		}
 
 
