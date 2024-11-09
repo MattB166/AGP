@@ -269,6 +269,15 @@ void Window::HandleInput(float deltaTime)
 	{
 		s_renderer->MoveCamera(2.0f * TestTime::getDeltaTime(), 0.0f, 0.0f);
 	}
+	if (kbState.Q)
+	{
+		s_renderer->MoveCamera(0.0f, 2.0f * TestTime::getDeltaTime(), 0.0f);
+
+	}
+	if (kbState.E)
+	{
+		s_renderer->MoveCamera(0.0f, -2.0f * TestTime::getDeltaTime(), 0.0f);
+	}
 	if (tracker.pressed.T)
 	{
 		TestTime::SetTimeScale(3.0f);

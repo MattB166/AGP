@@ -236,9 +236,9 @@ void Renderer::RenderFrame()
 	g_devcon->PSSetShaderResources(0, 1, &pTexture);
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
-	//g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
-	//g_devcon->DrawIndexed(36, 0, 0); 
-	model->Draw();
+	g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
+	g_devcon->DrawIndexed(36, 0, 0); 
+	//model->Draw();
 
 	world = cube2.GetWorldMatrix();
 	cBuffer.WVP = world * view * projection;
@@ -268,6 +268,7 @@ void Renderer::RenderFrame()
 void Renderer::InitScene()
 {
 	cube2.pos = { 3.0f,0.0f,3.0f };
+	cube2.scl = { 0.3f,0.3f,0.3f };
 	//cube2.rot = { XMConvertToRadians(30),XMConvertToRadians(45),0.0f};
 	/*cube1.pos = { 0,0,1 };
 	cube1.scl = { 1,1,1 };
@@ -499,7 +500,7 @@ void Renderer::InitGraphics()
 	spriteFont = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/matura_mt_script.spritefont");
 	spriteFont2 = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/comic_sans_ms_16.spritefont");
 
-	model = new ObjFileModel{ (char*)"cube.obj",g_dev,g_devcon };
+	model = new ObjFileModel{ (char*)"Sphere.obj",g_dev,g_devcon };
 
 
 }
@@ -512,16 +513,20 @@ void Renderer::MoveCamera(float x,float y,float z)
 	//   static_cast<float> cos(cam.pitch);
 	//   static_cast<float> cos(cam.yaw) * sin(cam.pitch); 
 	// }
+	fwd = XMVector3Normalize(fwd);
 	
 
-	fwd = XMVector3Normalize(fwd);
 	XMVECTOR movement = XMVectorScale(fwd, z);
 	
 	XMVECTOR right = XMVectorSet(sin(cam.yaw - XM_PI/2), 0.0f, cos(cam.yaw - XM_PI/2), 0.0f);
 	
 	right = XMVector3Normalize(right);
-
 	movement = XMVectorAdd(movement, XMVectorScale(right, -x));
+
+	XMVECTOR up = XMVector3Cross(fwd, right);
+	up = XMVector3Normalize(up);
+	movement = XMVectorAdd(movement, XMVectorScale(up, -y));
+
 	
 	cam.x += XMVectorGetX(movement);
 	cam.y += XMVectorGetY(movement);
