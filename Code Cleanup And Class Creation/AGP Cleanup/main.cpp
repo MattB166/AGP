@@ -1,8 +1,8 @@
 #include <Windows.h>
 #include <d3d11.h>
 #include <iostream>
-#include "Window.h"
-#include "Renderer.h"
+#include "../AGP Cleanup/Source/Window/Window.h"
+#include "../AGP Cleanup/Source/Renderer/Renderer.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600

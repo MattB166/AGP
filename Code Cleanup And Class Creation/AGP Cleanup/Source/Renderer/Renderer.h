@@ -1,10 +1,11 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include "text2D.h"
+#include "../Text/Text2D.h"
 #include <SpriteBatch.h>
 #include <SpriteFont.h>
-#include "objfilemodel.h"
+#include "../ObjectModel/ObjFileModel.h"
 #include <d3d11shader.h>
+#include "../GameObject/GameObject.h"
 #include <DDSTextureLoader.h>
 using namespace DirectX;
 #define SCREEN_WIDTH 800
@@ -80,7 +81,7 @@ struct Transform
 		XMMATRIX rotationY = XMMatrixRotationY(rot.y);
 		XMMATRIX rotationZ = XMMatrixRotationZ(rot.z);
 		XMMATRIX scale = XMMatrixScaling(scl.x, scl.y, scl.z);
-		XMMATRIX world = scale * rotationX * translation;
+		XMMATRIX world = scale * rotationX * rotationY * rotationZ * translation;
 		return world;
 	}
 };
@@ -123,12 +124,14 @@ private:
 	ID3D11DepthStencilView* g_ZBuffer = NULL; // the pointer to our depth buffer
 	ID3D11ShaderReflection* vShaderReflection = NULL;
 	D3D11_SHADER_DESC desc;
-	XMFLOAT3 pos = { 0,0,2 };
+	/*XMFLOAT3 pos = { 0,0,2 };
 	XMFLOAT3 rot = { 0,0,0 };
-	XMFLOAT3 scl = { 1,1,1 };
+	XMFLOAT3 scl = { 1,1,1 };*/
 	XMMATRIX projection; //projection matrix 
 	Transform cube1;
 	Transform cube2;
+	
+
 
 	ObjFileModel* model;
 

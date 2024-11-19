@@ -1,8 +1,8 @@
 #include <Windows.h>
 #include <Keyboard.h>
 #include <Mouse.h>
-#include "TestTime.h"
-#include "Renderer.h"
+#include "../Time/TestTime.h"
+#include "../Renderer/Renderer.h"
 #pragma once
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600

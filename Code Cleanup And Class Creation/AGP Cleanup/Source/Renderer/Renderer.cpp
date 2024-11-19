@@ -1,8 +1,7 @@
 #include "Renderer.h"
-#include "ReadData.h"
+#include "../ReadData/ReadData.h"
 #include <d3dcompiler.h>
 #include <WICTextureLoader.h>	
-#include "TimeClass.h"
 #include <DirectXColors.h>
 
 
@@ -248,12 +247,13 @@ void Renderer::RenderFrame()
 	g_devcon->PSSetShaderResources(0, 1, &pTexture);
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
-	g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
+	//g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
 	g_devcon->DrawIndexed(36, 0, 0); 
 	//model->Draw();
+	
 
 	world = cube2.GetWorldMatrix();
-	cBuffer.WVP = world * view * projection;
+	cBuffer.WVP = world * view * projection;  //done after all objects have been drawn to the screen and lighting has been applied to the objects 
 	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);   //////SECOND CUBE RENDERING 
 	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
 	//g_devcon->DrawIndexed(36, 0, 0);
@@ -384,7 +384,7 @@ void Renderer::InitGraphics()
 	memcpy(ms.pData, v, sizeof(v)); //copy the data
 	g_devcon->Unmap(pVBuffer, NULL); // unmap the buffer
 
-	CreateWICTextureFromFile(g_dev, g_devcon, L"Box.bmp", NULL, &pTexture); /// load texture from file 
+	CreateWICTextureFromFile(g_dev, g_devcon, L"ExternalModels/Box.bmp", NULL, &pTexture); /// load texture from file 
 
 	D3D11_SAMPLER_DESC sampDesc;
 	ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
@@ -435,7 +435,7 @@ void Renderer::InitGraphics()
 	spriteFont = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/matura_mt_script.spritefont");
 	spriteFont2 = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/comic_sans_ms_16.spritefont");
 
-	model = new ObjFileModel{ (char*)"Sphere.obj",g_dev,g_devcon };
+	model = new ObjFileModel{ (char*)"ExternalModels/Sphere.obj",g_dev,g_devcon };
 
 	//skybox
 	D3D11_RASTERIZER_DESC rsDescSkyBox;
@@ -475,7 +475,7 @@ void Renderer::InitGraphics()
 	}
 
 	///create dds texture for skybox
-	CreateDDSTextureFromFile(g_dev, g_devcon, L"SkyBox01.dds", NULL, &pSkyBoxTexture);
+	CreateDDSTextureFromFile(g_dev, g_devcon, L"ExternalModels/SkyBox02.dds", NULL, &pSkyBoxTexture);
 
 	cbd.ByteWidth = sizeof(CBufferSkyBox);
 	if (FAILED(g_dev->CreateBuffer(&cbd, NULL, &pSkyBoxCBuffer)))
@@ -483,7 +483,6 @@ void Renderer::InitGraphics()
 		OutputDebugString(L"Failed to create skybox constant buffer");
 		return;
 	}
-
 
 }
 void Renderer::MoveCamera(float x,float y,float z)
@@ -542,9 +541,9 @@ void Renderer::RotateCamera(float pitch, float yaw)
 }
 void Renderer::RotateCube(float x, float y, float z)
 {
-	cube1.rot.x += x;
+	/*cube1.rot.x += x;
 	cube1.rot.y += y;
-	cube1.rot.z += z;
+	cube1.rot.z += z;*/
 
 }
 HRESULT Renderer::LoadVertexShader(LPCWSTR filename, LPCSTR entrypoint, ID3D11VertexShader** vs, ID3D11InputLayout** il)
