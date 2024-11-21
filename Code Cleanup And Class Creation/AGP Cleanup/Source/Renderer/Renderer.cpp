@@ -373,7 +373,7 @@ void Renderer::InitGraphics()
 	}
 
 
-	D3D11_BUFFER_DESC cbd = { };
+	D3D11_BUFFER_DESC cbd = { };    ///creation of constant buffer 
 	cbd.Usage = D3D11_USAGE_DEFAULT;
 	cbd.ByteWidth = sizeof(CBUFFER0);
 	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -629,7 +629,7 @@ void Renderer::DrawSkyBox()
 	projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(60), SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100);
 	view = cam.GetViewMatrix();
 	cbuf.wvp = translation * view * projection;
-	g_devcon->UpdateSubresource(pSkyBoxCBuffer, 0, 0, &cbuf, 0, 0);
+	g_devcon->UpdateSubresource(pSkyBoxCBuffer, 0, 0, &cbuf, 0, 0); //so every object needs its own constant buffer and have the device context update the constant buffer with the new data
 
 	//set shader resources
 	g_devcon->VSSetConstantBuffers(0, 1, &pSkyBoxCBuffer);

@@ -48,7 +48,7 @@ HRESULT Material::InitMaterial(ID3D11Device* g_dev, LPCSTR entrypoint,  LPCWSTR 
 	}
 
 
-	ID3DBlob* PS, * pErrorBlob;
+	ID3DBlob* PS;
 	result = D3DCompileFromFile(pixelshaderfile, 0, 0, entrypoint, "ps_4_0", 0, 0, &PS, &pErrorBlob);
 	if (FAILED(result))
 	{

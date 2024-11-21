@@ -1,6 +1,5 @@
 #pragma once
 #include <d3d11.h>
-using namespace DirectX;
 class Material
 {
 
@@ -13,6 +12,11 @@ public:
 	void SetSampler(ID3D11SamplerState* sampler, ID3D11Device* g_dev);
 	ID3D11ShaderResourceView* GetTexture() { return p_Texture; }
 	ID3D11SamplerState* GetSampler() { return p_Sampler; }
+	ID3D11VertexShader* GetVertexShader() { return p_VS; }
+	ID3D11PixelShader* GetPixelShader() { return p_PS; } 
+	ID3D11InputLayout* GetInputLayout() { return p_Layout; }
+	ID3D11Buffer* GetCBuffer() { return p_CBuffer; }
+	//set c buffer up once i know what it needs to be 
 
 private:
 	//void LoadVertexShader(LPCWSTR filename, LPCSTR entrypoint);
@@ -20,7 +24,7 @@ private:
 	ID3D11VertexShader* p_VS = NULL;
 	ID3D11PixelShader* p_PS = NULL;
 	ID3D11InputLayout* p_Layout = NULL;
-	ID3D11Buffer* p_CBuffer = NULL;
+	ID3D11Buffer* p_CBuffer = NULL;  ///how do i use this?? 
 
 	ID3D11ShaderResourceView* p_Texture = NULL;
 	ID3D11SamplerState* p_Sampler = NULL;
