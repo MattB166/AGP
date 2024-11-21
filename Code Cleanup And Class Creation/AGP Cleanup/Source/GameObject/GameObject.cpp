@@ -5,10 +5,6 @@ GameObject::GameObject() : m_model(nullptr), m_texture(nullptr)
 
 }
 
-GameObject::~GameObject()
-{
-}
-
 GameObject::GameObject(ObjFileModel* model)
 {
 	//remember to initialise the model pointer and make "new" model before passing here. or alternatively make it new here so can destroy it here too. r
