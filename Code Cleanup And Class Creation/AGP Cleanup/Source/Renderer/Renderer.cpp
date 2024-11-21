@@ -190,30 +190,17 @@ void Renderer::RenderFrame()
 	g_devcon->PSSetShader(pPS, 0, 0);
 	
 
-	//NONE OF THE FOLLOWING 5 LINES ARE BEING USED 
 
-	//set the vertex buffer
-	UINT stride = sizeof(Vertex); //size of a single vertex
-	UINT offset = 0;
-	g_devcon->IASetVertexBuffers(0, 1, &pVBuffer, &stride, &offset);  //set the vertex buffer
-	g_devcon->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-	g_devcon->IASetInputLayout(pLayout); //input layout is set to the device context, so GPU knows how to read the vertex buffer
-
-	
-
-	//g_devcon->RSSetState(pRasterState);
 
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
-	g_devcon->PSSetShaderResources(0, 1, &pTexture);
-
+	g_devcon->PSSetShaderResources(0, 1, &pTexture); 
 
 
 	XMMATRIX world, view, projection;
 	projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(60),SCREEN_WIDTH / (float)SCREEN_HEIGHT,0.1f, 100);
 	view = cam.GetViewMatrix();
 
-	//world = cube1.GetWorldMatrix();
+	//world = cube1.GetWorldMatrix();              ///create a loop doing this for every object in game.  
 	world = obj1->GetTransform().GetWorldMatrix();
 	CBUFFER0 cBuffer;
 	cBuffer.WVP = world * view * projection;
@@ -227,10 +214,6 @@ void Renderer::RenderFrame()
 	XMMATRIX transpose = XMMatrixTranspose(world); //transpose rotations
 	cBuffer.directionalLightDir = XMVector3Transform(directionalLightShinesFrom, transpose); //transform the light direction by the world matrix
 
-	//point lighting
-	/*cBuffer.pointLightCol = pointLightColour;
-	cBuffer.pointLightPos = pointLightPosition;
-	cBuffer.pointLightStrength = pointLightStrength;*/
 
 	for (size_t i = 0; i < MAX_POINT_LIGHTS;i++)
 	{
@@ -246,36 +229,26 @@ void Renderer::RenderFrame()
 
 	
 	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0); //per go
-	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer); //per mat 
+	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer); //need to set the constant buffer to the device context for every material instance 
 
 
-	//g_devcon->PSSetShaderResources(0, 1, &pTexture);
+	
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
-	//g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
-	//g_devcon->DrawIndexed(36, 0, 0); 
-	//model->Draw();
-	//obj1->ApplyGravity();
+
 	obj1->Draw();
 
 
-	//world = cube2.GetWorldMatrix();
-	//obj2->SetPosition(1, 1, 1);
+	
 	world = obj2->GetTransform().GetWorldMatrix();
 	cBuffer.WVP = world * view * projection;  //done after all objects have been drawn to the screen and lighting has been applied to the objects 
 	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);   //////SECOND CUBE RENDERING 
 	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
-	//g_devcon->DrawIndexed(36, 0, 0);
-	//model->Draw();   ////loads in the model.obj file as the model to be drawn for the second cube 
+	
 	obj2->Draw();
 
-	//pText->AddText("Hello World", -1, +1, 0.075f); //adds text and sets the position of the text 
-	//g_devcon->OMSetBlendState(pAlphaBlendStateEnable, 0, 0xffffffff);
-	//pText->RenderText();
-	//g_devcon->OMSetBlendState(pAlphaBlendStateDisable, 0, 0xffffffff);    ///old text way 
-
-
-	//draw text  in a better way. use this for UI later on down the line 
+	
+	///loop through and process all font and UI relative stuff after drawing objects 
 	spriteBatch->Begin();
 	spriteFont->DrawString(spriteBatch.get(), L"Hello, World!", DirectX::XMFLOAT2(100, 50), DirectX::Colors::ForestGreen);
 	spriteFont2->DrawString(spriteBatch.get(), L"Hello, World!", DirectX::XMFLOAT2(10, 10), DirectX::Colors::OrangeRed);
