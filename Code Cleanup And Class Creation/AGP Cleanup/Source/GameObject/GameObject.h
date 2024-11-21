@@ -35,6 +35,7 @@ public:
 	~GameObject();
 	GameObject(ObjFileModel* model, XMFLOAT3 pos);
 	GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture);
+	void Draw();
 	void SetPosition(float x, float y, float z);
 	void SetRotation(float x, float y, float z);
 	void SetScale(float x, float y, float z);
@@ -42,30 +43,10 @@ public:
 	void ApplyForce(XMFLOAT3 force);
 	ObjFileModel* GetModel() { return m_model; } 
 	Transform GetTransform() { return m_transform; }
-	ID3D11ShaderResourceView* GetTexture() { return m_texture; }
 
 private:
 	Transform m_transform;
-	ObjFileModel* m_model;
-	ID3D11ShaderResourceView* m_texture;
+	ObjFileModel* m_model; // this is the mesh, so vertex and index buffer already handled here 
 
-	ID3D11Buffer* m_vertexBuffer;
-	ID3D11Buffer* m_indexBuffer;
-	ID3D11VertexShader* m_vertexShader;
-	ID3D11PixelShader* m_pixelShader;
-	ID3D11InputLayout* m_inputLayout;
-	ID3D11SamplerState* m_samplerState;  //not sure on this one or any of these 
-	//vertex buffer 
-	//index buffer 
-	//texture 
-	//shader 
-	//material 
-	//model 
-	//etc
-
-	void InitBuffers(ID3D11Device& dev, ID3D11DeviceContext& devcon);
-	void InitShaders(ID3D11Device& dev, ID3D11DeviceContext& devcon);
-	void InitTexture(ID3D11Device& dev, ID3D11DeviceContext& devcon);
-	///might not all need params? 
 };
 

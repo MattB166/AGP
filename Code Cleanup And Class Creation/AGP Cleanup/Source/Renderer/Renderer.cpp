@@ -189,6 +189,9 @@ void Renderer::RenderFrame()
 	g_devcon->VSSetShader(pVS, 0, 0); //shaders encapsulated in shader objects and set to the device context
 	g_devcon->PSSetShader(pPS, 0, 0);
 	
+
+	//NONE OF THE FOLLOWING 5 LINES ARE BEING USED 
+
 	//set the vertex buffer
 	UINT stride = sizeof(Vertex); //size of a single vertex
 	UINT offset = 0;
@@ -246,14 +249,14 @@ void Renderer::RenderFrame()
 	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer); //per mat 
 
 
-	g_devcon->PSSetShaderResources(0, 1, &pTexture);
+	//g_devcon->PSSetShaderResources(0, 1, &pTexture);
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
 	//g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
 	//g_devcon->DrawIndexed(36, 0, 0); 
 	//model->Draw();
-	obj1->ApplyGravity();
-	obj1->GetModel()->Draw();
+	//obj1->ApplyGravity();
+	obj1->Draw();
 
 
 	//world = cube2.GetWorldMatrix();
@@ -264,7 +267,7 @@ void Renderer::RenderFrame()
 	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
 	//g_devcon->DrawIndexed(36, 0, 0);
 	//model->Draw();   ////loads in the model.obj file as the model to be drawn for the second cube 
-	obj2->GetModel()->Draw();
+	obj2->Draw();
 
 	//pText->AddText("Hello World", -1, +1, 0.075f); //adds text and sets the position of the text 
 	//g_devcon->OMSetBlendState(pAlphaBlendStateEnable, 0, 0xffffffff);
@@ -286,12 +289,7 @@ void Renderer::RenderFrame()
 
 void Renderer::InitScene()
 {
-	//cube2.pos = { 3.0f,0.0f,3.0f };
-	//cube2.scl = { 0.3f,0.3f,0.3f };
-	//cube2.rot = { XMConvertToRadians(30),XMConvertToRadians(45),0.0f};
-	/*cube1.pos = { 0,0,1 };
-	cube1.scl = { 1,1,1 };
-	cube1.rot = { 0.0f,0.0f,XMConvertToRadians(90)};*/
+	
 
 	pointLights[0] = { XMVECTOR{1.5f,0,-1},{0.9f,0,0.85f,1},100,true };
 	pointLights[1] = { XMVECTOR{-1.5f,0,-1},{0,0.9f,0.85f,1},200,true };
@@ -391,7 +389,7 @@ void Renderer::InitGraphics()
 	memcpy(ms.pData, v, sizeof(v)); //copy the data
 	g_devcon->Unmap(pVBuffer, NULL); // unmap the buffer
 
-	CreateWICTextureFromFile(g_dev, g_devcon, L"ExternalModels/Box.bmp", NULL, &pTexture); /// load texture from file 
+	CreateWICTextureFromFile(g_dev, g_devcon, L"ExternalModels/Box.bmp", NULL, &pTexture); /// load texture from file. this is what is given to the pixel shader to be drawn on the object
 
 	D3D11_SAMPLER_DESC sampDesc;
 	ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
@@ -401,11 +399,11 @@ void Renderer::InitGraphics()
 	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
 	sampDesc.MaxLOD = D3D11_FLOAT32_MAX; //max level of detail
 	g_dev->CreateSamplerState(&sampDesc, &pSampler); //create the sampler state
-	//creates a linear sampler state. 
+	//creates a linear sampler state.                                               //////GONE INTO MATERIAL CLASS 
 
 
 	//pText = new Text2D("font1.png", g_dev, g_devcon);
-	D3D11_BLEND_DESC bd1 = { 0 };
+	D3D11_BLEND_DESC bd1 = { 0 };                                       ////text class 
 	bd1.RenderTarget[0].BlendEnable = TRUE;
 	bd1.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 	bd1.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -443,7 +441,7 @@ void Renderer::InitGraphics()
 	spriteFont2 = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/comic_sans_ms_16.spritefont");
 
 	model = new ObjFileModel{ (char*)"ExternalModels/Sphere.obj",g_dev,g_devcon };
-	obj1 = new GameObject(model,XMFLOAT3{3,3,3});
+	obj1 = new GameObject(model,XMFLOAT3{1,1,1});
 	obj2 = new GameObject(model,XMFLOAT3{ 5,5,5 });
 
 	//skybox

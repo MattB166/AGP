@@ -68,7 +68,7 @@ struct Camera
 	}
 };
 
-struct Transform
+struct Transform // gone into gameobject.h 
 {
 	XMFLOAT3 pos{ 0,0,2 };
 	XMFLOAT3 rot{ 0,0,0 };
@@ -113,16 +113,16 @@ private:
 	ID3D11RenderTargetView* g_backBuffer = NULL;    // the pointer to our back buffer - the final render target that we draw to. this is a 2D texture that is drawn to by the rasterizer stage of the pipeline.
 	float clearColour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	D3D11_VIEWPORT viewport = {};
-	ID3D11VertexShader* pVS = NULL; // the vertex shader
-	ID3D11PixelShader* pPS = NULL; // the pixel shader
-	ID3D11InputLayout* pLayout = NULL; //pointer to input layout 
-	HRESULT result;
-	ID3D11Buffer* pVBuffer = NULL; // the vertex buffer
-	ID3D11Buffer* pCBuffer = NULL; // the constant buffer 
-	ID3D11Buffer* pIndexBuffer = NULL; // the index buffer	
+	ID3D11VertexShader* pVS = NULL; // the vertex shader MATERIAL 
+	ID3D11PixelShader* pPS = NULL; // the pixel shader MATERIAL 
+	ID3D11InputLayout* pLayout = NULL; //pointer to input layout MATERIAL 
+	HRESULT result; // MATERIAL??
+	ID3D11Buffer* pVBuffer = NULL; // the vertex buffer //MATERIAL 
+	ID3D11Buffer* pCBuffer = NULL; // the constant buffer //MATERIAL 
+	ID3D11Buffer* pIndexBuffer = NULL; // the index buffer	//OBJ DEALS WITH THIS 
 	ID3D11DepthStencilState* g_DSS = NULL; // the pointer to our depth stencil state
 	ID3D11DepthStencilView* g_ZBuffer = NULL; // the pointer to our depth buffer
-	ID3D11ShaderReflection* vShaderReflection = NULL;
+	ID3D11ShaderReflection* vShaderReflection = NULL; //MATERIAL 
 	D3D11_SHADER_DESC desc;
 	/*XMFLOAT3 pos = { 0,0,2 };
 	XMFLOAT3 rot = { 0,0,0 };
@@ -138,8 +138,8 @@ private:
 
 	ObjFileModel* model;
 
-	ID3D11ShaderResourceView* pTexture = NULL; // the pointer to the texture
-	ID3D11SamplerState* pSampler = NULL; // the pointer to the sampler state
+	ID3D11ShaderResourceView* pTexture = NULL; // the pointer to the texture  //MATERIAL 
+	ID3D11SamplerState* pSampler = NULL; // the pointer to the sampler state  //MATERIAL 
 
 
 	Text2D* pText; // the pointer to the text object
@@ -163,6 +163,8 @@ private:
 	float pointLightStrength = 100;*/
 
 	PointLight pointLights[MAX_POINT_LIGHTS];
+
+	//FOLLOWING ARE ALL PART OF THE SKYBOX MATERIAL CLASS 
 
 	ID3D11RasterizerState* p_RasterSolid = NULL;
 	ID3D11RasterizerState* p_RasterSkyBox = NULL;
