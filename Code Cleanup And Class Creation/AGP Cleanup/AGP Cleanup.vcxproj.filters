@@ -15,6 +15,7 @@
     <ClCompile Include="TimeClass.cpp" />
     <ClCompile Include="Source\Window\Window.cpp" />
     <ClCompile Include="Source\GameObject\GameObject.cpp" />
+    <ClCompile Include="Source\Game\Game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ObjectModel\objfilemodel.h" />
@@ -24,6 +25,7 @@
     <ClInclude Include="TimeClass.h" />
     <ClInclude Include="Source\Window\Window.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
+    <ClInclude Include="Source\Game\Game.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -175,6 +175,8 @@ void Renderer::RenderFrame()
 {
 	g_devcon->ClearRenderTargetView(g_backBuffer,Colors::DarkSlateGray);
 	g_devcon->ClearDepthStencilView(g_ZBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	//set primitive topology
+	g_devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); //triangle list is the primitive topology
 
 	DrawSkyBox();
 
@@ -195,8 +197,7 @@ void Renderer::RenderFrame()
 
 	g_devcon->IASetInputLayout(pLayout); //input layout is set to the device context, so GPU knows how to read the vertex buffer
 
-	//set primitive topology
-	g_devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); //triangle list is the primitive topology
+	
 
 	//g_devcon->RSSetState(pRasterState);
 
@@ -209,7 +210,8 @@ void Renderer::RenderFrame()
 	projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(60),SCREEN_WIDTH / (float)SCREEN_HEIGHT,0.1f, 100);
 	view = cam.GetViewMatrix();
 
-	world = cube1.GetWorldMatrix();
+	//world = cube1.GetWorldMatrix();
+	world = obj1->GetTransform().GetWorldMatrix();
 	CBUFFER0 cBuffer;
 	cBuffer.WVP = world * view * projection;
 
@@ -240,24 +242,29 @@ void Renderer::RenderFrame()
 	}
 
 	
-	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);
-	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
+	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0); //per go
+	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer); //per mat 
 
 
 	g_devcon->PSSetShaderResources(0, 1, &pTexture);
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
 	//g_devcon->Draw(3, 0); //draw the vertex buffer to the back buffer
-	g_devcon->DrawIndexed(36, 0, 0); 
+	//g_devcon->DrawIndexed(36, 0, 0); 
 	//model->Draw();
-	
+	obj1->ApplyGravity();
+	obj1->GetModel()->Draw();
 
-	world = cube2.GetWorldMatrix();
+
+	//world = cube2.GetWorldMatrix();
+	//obj2->SetPosition(1, 1, 1);
+	world = obj2->GetTransform().GetWorldMatrix();
 	cBuffer.WVP = world * view * projection;  //done after all objects have been drawn to the screen and lighting has been applied to the objects 
 	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);   //////SECOND CUBE RENDERING 
 	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
 	//g_devcon->DrawIndexed(36, 0, 0);
-	model->Draw();   ////loads in the model.obj file as the model to be drawn for the second cube 
+	//model->Draw();   ////loads in the model.obj file as the model to be drawn for the second cube 
+	obj2->GetModel()->Draw();
 
 	//pText->AddText("Hello World", -1, +1, 0.075f); //adds text and sets the position of the text 
 	//g_devcon->OMSetBlendState(pAlphaBlendStateEnable, 0, 0xffffffff);
@@ -279,8 +286,8 @@ void Renderer::RenderFrame()
 
 void Renderer::InitScene()
 {
-	cube2.pos = { 3.0f,0.0f,3.0f };
-	cube2.scl = { 0.3f,0.3f,0.3f };
+	//cube2.pos = { 3.0f,0.0f,3.0f };
+	//cube2.scl = { 0.3f,0.3f,0.3f };
 	//cube2.rot = { XMConvertToRadians(30),XMConvertToRadians(45),0.0f};
 	/*cube1.pos = { 0,0,1 };
 	cube1.scl = { 1,1,1 };
@@ -436,6 +443,8 @@ void Renderer::InitGraphics()
 	spriteFont2 = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/comic_sans_ms_16.spritefont");
 
 	model = new ObjFileModel{ (char*)"ExternalModels/Sphere.obj",g_dev,g_devcon };
+	obj1 = new GameObject(model,XMFLOAT3{3,3,3});
+	obj2 = new GameObject(model,XMFLOAT3{ 5,5,5 });
 
 	//skybox
 	D3D11_RASTERIZER_DESC rsDescSkyBox;

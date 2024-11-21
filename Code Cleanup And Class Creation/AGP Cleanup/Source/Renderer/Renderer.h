@@ -128,8 +128,11 @@ private:
 	XMFLOAT3 rot = { 0,0,0 };
 	XMFLOAT3 scl = { 1,1,1 };*/
 	XMMATRIX projection; //projection matrix 
-	Transform cube1;
-	Transform cube2;
+	//Transform cube1;
+	//Transform cube2;
+
+	GameObject* obj1;
+	GameObject* obj2;
 	
 
 
