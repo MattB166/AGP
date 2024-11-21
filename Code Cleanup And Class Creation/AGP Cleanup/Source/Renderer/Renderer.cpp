@@ -414,7 +414,7 @@ void Renderer::InitGraphics()
 	spriteFont2 = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/comic_sans_ms_16.spritefont");
 
 	model = new ObjFileModel{ (char*)"ExternalModels/Sphere.obj",g_dev,g_devcon };
-	obj1 = new GameObject(model,XMFLOAT3{1,1,1});
+	obj1 = new GameObject(model,XMFLOAT3{4,1,1});
 	obj2 = new GameObject(model,XMFLOAT3{ 5,5,5 });
 
 	//skybox

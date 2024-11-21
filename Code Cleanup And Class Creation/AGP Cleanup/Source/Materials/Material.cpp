@@ -2,6 +2,11 @@
 #include <d3dcompiler.h>
 #include <WICTextureLoader.h>
 
+Material::Material(ID3D11Device* g_dev, LPCSTR entrypoint, LPCWSTR vertexshaderfile, LPCWSTR pixelshaderfile, ID3D11InputLayout** il)
+{
+	InitMaterial(g_dev, entrypoint, vertexshaderfile, pixelshaderfile, il);
+}
+
 Material::~Material()
 {
 	if (p_VS) p_VS->Release();

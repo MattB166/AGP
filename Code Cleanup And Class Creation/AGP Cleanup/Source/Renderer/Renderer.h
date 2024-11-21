@@ -98,8 +98,8 @@ public:
 	void ChooseRandomColour();
 	HRESULT InitPipeline();
 	void InitGraphics();
-	void MoveCamera(float x, float y, float z);
-	void RotateCamera(float pitch, float yaw);
+	void MoveCamera(float x, float y, float z); //will be part of game class 
+	void RotateCamera(float pitch, float yaw); // ditto 
 	void RotateCube(float x, float y, float z);
 	Camera cam;
 	HRESULT LoadVertexShader(LPCWSTR filename, LPCSTR entrypoint, ID3D11VertexShader** vs, ID3D11InputLayout** il);

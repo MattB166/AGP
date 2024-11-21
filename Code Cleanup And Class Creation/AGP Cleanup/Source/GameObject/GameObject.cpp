@@ -6,13 +6,14 @@ GameObject::GameObject() : m_model(nullptr)
 	
 }
 
-GameObject::GameObject(ObjFileModel* model, XMFLOAT3 pos)
+GameObject::GameObject(ObjFileModel* model, XMFLOAT3 pos, const wchar_t* textureMat)
 {
 	//remember to initialise the model pointer and make "new" model before passing here. or alternatively make it new here so can destroy it here too. r
 	// will also need parameters for device and device context to create the buffers and texture etc. 
 	SetPosition(pos.x, pos.y, pos.y);
-	SetScale(1, 1, 1);
+	SetScale(0.2, 0.2, 0.2);
 	m_model = model;
+	//handle material loading here. so search from asset handler for the material. the handler will search for it, and if it doesnt exist, it will create it. 
 }
 GameObject::GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture)
 {

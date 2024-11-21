@@ -1,18 +1,16 @@
 #pragma once
 #include <DirectXMath.h>
 #include "../ObjectModel/objfilemodel.h"
+#include "../Materials/Material.h"
 
 using namespace DirectX;
 
 class GameObject
 {
 public:
-	class Handler
+	class Handler //manages all the game objects. might not be used. 
 	{
-		//draw function which should just call the draw on the model, as that handles that 
-		//update function
-		//clean up function 
-		//etc 
+		
 	};
 	struct Transform
 	{
@@ -33,7 +31,7 @@ public:
 
 	GameObject();
 	~GameObject();
-	GameObject(ObjFileModel* model, XMFLOAT3 pos);
+	GameObject(ObjFileModel* model, XMFLOAT3 pos, const wchar_t* textureMat); // or use the file path?? 
 	GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture);
 	void Draw();
 	void SetPosition(float x, float y, float z);
@@ -42,10 +40,12 @@ public:
 	void ApplyGravity();
 	void ApplyForce(XMFLOAT3 force);
 	ObjFileModel* GetModel() { return m_model; } 
+	Material* GetMaterial() { return m_material; }
 	Transform GetTransform() { return m_transform; }
 
 private:
 	Transform m_transform;
+	Material* m_material; // this is the material, so vertex and index buffer not handled here
 	ObjFileModel* m_model; // this is the mesh, so vertex and index buffer already handled here 
 
 };

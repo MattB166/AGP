@@ -22,7 +22,7 @@ public:
 private:
 	HINSTANCE hInst = NULL;   // Handle to this instance
 	HWND hWnd = NULL;         // Handle to our created window
-	const wchar_t* windowName = L"AGP TUTORIALS"; // Name of our window
+	const wchar_t* windowName = L"AGP GAME"; // Name of our window
 	static Renderer* s_renderer;
 	POINT cursorPos;
 	POINT lastAcceptableCursorPos;
