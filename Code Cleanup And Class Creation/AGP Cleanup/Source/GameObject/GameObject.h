@@ -32,6 +32,7 @@ public:
 	};
 
 	GameObject();
+	virtual ~GameObject() = 0;
 	GameObject(ObjFileModel* model);
 	GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture);
 	void SetPosition(float x, float y, float z);
@@ -45,6 +46,13 @@ private:
 	Transform m_transform;
 	ObjFileModel* m_model;
 	ID3D11ShaderResourceView* m_texture;
+
+	ID3D11Buffer* m_vertexBuffer;
+	ID3D11Buffer* m_indexBuffer;
+	ID3D11VertexShader* m_vertexShader;
+	ID3D11PixelShader* m_pixelShader;
+	ID3D11InputLayout* m_inputLayout;
+	ID3D11SamplerState* m_samplerState;  //not sure on this one 
 	//vertex buffer 
 	//index buffer 
 	//texture 
@@ -52,5 +60,10 @@ private:
 	//material 
 	//model 
 	//etc
+
+	void InitBuffers(ID3D11Device& dev, ID3D11DeviceContext& devcon);
+	void InitShaders(ID3D11Device& dev, ID3D11DeviceContext& devcon);
+	void InitTexture(ID3D11Device& dev, ID3D11DeviceContext& devcon);
+	///might not all need params? 
 };
 

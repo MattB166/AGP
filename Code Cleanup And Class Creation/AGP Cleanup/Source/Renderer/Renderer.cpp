@@ -484,6 +484,8 @@ void Renderer::InitGraphics()
 		return;
 	}
 
+	
+
 }
 void Renderer::MoveCamera(float x,float y,float z)
 {
