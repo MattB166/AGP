@@ -6,7 +6,7 @@ GameObject::GameObject() : m_model(nullptr)
 	
 }
 
-GameObject::GameObject(ObjFileModel* model, XMFLOAT3 pos, const wchar_t* textureMat)
+GameObject::GameObject(ObjFileModel* model, XMFLOAT3 pos /*const wchar_t* textureMat*/)
 {
 	//remember to initialise the model pointer and make "new" model before passing here. or alternatively make it new here so can destroy it here too. r
 	// will also need parameters for device and device context to create the buffers and texture etc. 
@@ -22,6 +22,8 @@ GameObject::GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11Devi
 void GameObject::Draw()
 {
 	GetModel()->Draw();
+	//also needs to set the constant buffers and texture here. pass gdev / devcon to the model draw function, so it can set the buffers and texture??
+	//update subresource for the constant buffer here too. 
 }
 void GameObject::SetPosition(float x, float y, float z)
 {

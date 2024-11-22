@@ -8,9 +8,19 @@ using namespace DirectX;
 class GameObject
 {
 public:
-	class Handler //manages all the game objects. might not be used. 
+	class Handler //manages all the game objects. might not be used, just testing  
 	{
-		
+	public: 
+		static void AddGameObject(GameObject* gameObject) { m_gameObjects.push_back(gameObject); }
+		static void Draw()
+		{
+			for (auto& gameObject : m_gameObjects)
+			{
+				gameObject->Draw();
+			}
+		}
+	private:
+		static std::vector<GameObject*> m_gameObjects; //dont forget to define in cpp 
 	};
 	struct Transform
 	{
@@ -31,7 +41,7 @@ public:
 
 	GameObject();
 	~GameObject();
-	GameObject(ObjFileModel* model, XMFLOAT3 pos, const wchar_t* textureMat); // or use the file path?? 
+	GameObject(ObjFileModel* model, XMFLOAT3 pos /*const wchar_t* textureMat*/); // or use the file path?? needs to be accessible within the texture handler 
 	GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture);
 	void Draw();
 	void SetPosition(float x, float y, float z);
