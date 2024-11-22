@@ -68,23 +68,23 @@ struct Camera
 	}
 };
 
-struct Transform // gone into gameobject.h 
-{
-	XMFLOAT3 pos{ 0,0,2 };
-	XMFLOAT3 rot{ 0,0,0 };
-	XMFLOAT3 scl{ 1,1,1 };
-
-	XMMATRIX GetWorldMatrix()
-	{
-		XMMATRIX translation = XMMatrixTranslation(pos.x, pos.y, pos.z);
-		XMMATRIX rotationX = XMMatrixRotationX(rot.x);
-		XMMATRIX rotationY = XMMatrixRotationY(rot.y);
-		XMMATRIX rotationZ = XMMatrixRotationZ(rot.z);
-		XMMATRIX scale = XMMatrixScaling(scl.x, scl.y, scl.z);
-		XMMATRIX world = scale * rotationX * rotationY * rotationZ * translation;
-		return world;
-	}
-};
+//struct Transform // gone into gameobject.h 
+//{
+//	XMFLOAT3 pos{ 0,0,2 };
+//	XMFLOAT3 rot{ 0,0,0 };
+//	XMFLOAT3 scl{ 1,1,1 };
+//
+//	XMMATRIX GetWorldMatrix()
+//	{
+//		XMMATRIX translation = XMMatrixTranslation(pos.x, pos.y, pos.z);
+//		XMMATRIX rotationX = XMMatrixRotationX(rot.x);
+//		XMMATRIX rotationY = XMMatrixRotationY(rot.y);
+//		XMMATRIX rotationZ = XMMatrixRotationZ(rot.z);
+//		XMMATRIX scale = XMMatrixScaling(scl.x, scl.y, scl.z);
+//		XMMATRIX world = scale * rotationX * rotationY * rotationZ * translation;
+//		return world;
+//	}
+//};
 class Renderer
 {
 

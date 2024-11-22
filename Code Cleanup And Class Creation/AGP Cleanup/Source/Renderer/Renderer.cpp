@@ -200,6 +200,8 @@ void Renderer::RenderFrame()
 	projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(60),SCREEN_WIDTH / (float)SCREEN_HEIGHT,0.1f, 100);
 	view = cam.GetViewMatrix();
 
+	
+
 	//world = cube1.GetWorldMatrix();              ///create a loop doing this for every object in game.  
 	world = obj1->GetTransform().GetWorldMatrix();
 	CBUFFER0 cBuffer;
@@ -236,7 +238,7 @@ void Renderer::RenderFrame()
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
 
-	obj1->Draw(g_devcon);
+	obj1->Draw(g_devcon,view,projection);
 
 
 	
@@ -245,7 +247,7 @@ void Renderer::RenderFrame()
 	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);   //////SECOND CUBE RENDERING 
 	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
 	
-	obj2->Draw(g_devcon);
+	obj2->Draw(g_devcon,view,projection);
 
 	
 	///loop through and process all font and UI relative stuff after drawing objects 
@@ -414,8 +416,8 @@ void Renderer::InitGraphics()
 	spriteFont2 = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/comic_sans_ms_16.spritefont");
 
 	model = new ObjFileModel{ (char*)"ExternalModels/Sphere.obj",g_dev,g_devcon };
-	obj1 = new GameObject(model,XMFLOAT3{4,1,1});
-	obj2 = new GameObject(model,XMFLOAT3{ 5,5,5 });
+	obj1 = new GameObject(g_dev,model,XMFLOAT3{4,1,1});
+	obj2 = new GameObject(g_dev,model,XMFLOAT3{ 5,5,5 });
 
 	//skybox
 	D3D11_RASTERIZER_DESC rsDescSkyBox;
