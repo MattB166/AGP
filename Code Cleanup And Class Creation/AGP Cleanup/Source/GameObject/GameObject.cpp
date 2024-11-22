@@ -19,9 +19,11 @@ GameObject::GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11Devi
 {
 	
 }
-void GameObject::Draw()
+void GameObject::Draw(ID3D11DeviceContext* g_devcon)
 {
 	GetModel()->Draw();
+	//use g_dev to update material and buffers etc.
+	// //need a cbuffer 
 	//also needs to set the constant buffers and texture here. pass gdev / devcon to the model draw function, so it can set the buffers and texture??
 	//update subresource for the constant buffer here too. 
 }

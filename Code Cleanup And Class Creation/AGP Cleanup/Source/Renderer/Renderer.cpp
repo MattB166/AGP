@@ -236,7 +236,7 @@ void Renderer::RenderFrame()
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
 
-	obj1->Draw();
+	obj1->Draw(g_devcon);
 
 
 	
@@ -245,7 +245,7 @@ void Renderer::RenderFrame()
 	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);   //////SECOND CUBE RENDERING 
 	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
 	
-	obj2->Draw();
+	obj2->Draw(g_devcon);
 
 	
 	///loop through and process all font and UI relative stuff after drawing objects 
