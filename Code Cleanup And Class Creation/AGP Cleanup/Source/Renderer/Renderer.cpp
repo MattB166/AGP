@@ -7,6 +7,7 @@
 
 
 
+
 HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 {
 	//Create a struct to hold information about the swap chain
@@ -203,21 +204,21 @@ void Renderer::RenderFrame()
 	
 
 	//world = cube1.GetWorldMatrix();              ///create a loop doing this for every object in game.  
-	world = obj1->GetTransform().GetWorldMatrix();
-	CBUFFER0 cBuffer;
-	cBuffer.WVP = world * view * projection;
+	//world = obj1->GetTransform().GetWorldMatrix();
+	//CBUFFER0 cBuffer;
+	//cBuffer.WVP = world * view * projection;
 
 	///lighting 
 	//ambient lighting
-	cBuffer.ambientLightCol = ambientLightColour;
+	//cBuffer.ambientLightCol = ambientLightColour;
 	//directional lighting
-	cBuffer.directionalLightCol = directionalLightColour;
+	//cBuffer.directionalLightCol = directionalLightColour;
 
-	XMMATRIX transpose = XMMatrixTranspose(world); //transpose rotations
-	cBuffer.directionalLightDir = XMVector3Transform(directionalLightShinesFrom, transpose); //transform the light direction by the world matrix
+	//XMMATRIX transpose = XMMatrixTranspose(world); //transpose rotations
+	//cBuffer.directionalLightDir = XMVector3Transform(directionalLightShinesFrom, transpose); //transform the light direction by the world matrix
 
 
-	for (size_t i = 0; i < MAX_POINT_LIGHTS;i++)
+	/*for (size_t i = 0; i < MAX_POINT_LIGHTS;i++)
 	{
 		if (!pointLights[i].enabled)
 			continue;
@@ -227,27 +228,27 @@ void Renderer::RenderFrame()
 		cBuffer.pointLights[i].colour = pointLights[i].colour;
 		cBuffer.pointLights[i].strength = pointLights[i].strength;
 		cBuffer.pointLights[i].enabled = pointLights[i].enabled;
-	}
+	}*/
 
 	
-	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0); //per go
-	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer); //need to set the constant buffer to the device context for every material instance 
+	//g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0); //per go
+	//g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer); //need to set the constant buffer to the device context for every material instance 
 
 
 	
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
 
-	obj1->Draw(g_devcon,view,projection);
+	obj1->Draw(g_devcon,pCBuffer, view,projection);
 
 
 	
-	world = obj2->GetTransform().GetWorldMatrix();
-	cBuffer.WVP = world * view * projection;  //done after all objects have been drawn to the screen and lighting has been applied to the objects 
-	g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);   //////SECOND CUBE RENDERING 
-	g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
+	//world = obj2->GetTransform().GetWorldMatrix();
+	//cBuffer.WVP = world * view * projection;  //done after all objects have been drawn to the screen and lighting has been applied to the objects 
+	//g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);   //////SECOND CUBE RENDERING 
+	//g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
 	
-	obj2->Draw(g_devcon,view,projection);
+	obj2->Draw(g_devcon,pCBuffer,view,projection);
 
 	
 	///loop through and process all font and UI relative stuff after drawing objects 
@@ -266,8 +267,8 @@ void Renderer::InitScene()
 {
 	
 
-	pointLights[0] = { XMVECTOR{1.5f,0,-1},{0.9f,0,0.85f,1},100,true };
-	pointLights[1] = { XMVECTOR{-1.5f,0,-1},{0,0.9f,0.85f,1},200,true };
+	//pointLights[0] = { XMVECTOR{1.5f,0,-1},{0.9f,0,0.85f,1},100,true };
+	//pointLights[1] = { XMVECTOR{-1.5f,0,-1},{0,0.9f,0.85f,1},200,true };
 }
 
 void Renderer::SetClearColour(float r, float g, float b)
@@ -350,7 +351,7 @@ void Renderer::InitGraphics()
 
 	D3D11_BUFFER_DESC cbd = { };    ///creation of constant buffer 
 	cbd.Usage = D3D11_USAGE_DEFAULT;
-	cbd.ByteWidth = sizeof(CBUFFER0);
+	cbd.ByteWidth = sizeof(CBuffer);
 	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	if (FAILED(g_dev->CreateBuffer(&cbd, NULL, &pCBuffer)))
 	{
@@ -416,8 +417,8 @@ void Renderer::InitGraphics()
 	spriteFont2 = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/comic_sans_ms_16.spritefont");
 
 	model = new ObjFileModel{ (char*)"ExternalModels/Sphere.obj",g_dev,g_devcon };
-	obj1 = new GameObject(g_dev,model,XMFLOAT3{4,1,1});
-	obj2 = new GameObject(g_dev,model,XMFLOAT3{ 5,5,5 });
+	obj1 = new GameObject(g_dev,pCBuffer,model,XMFLOAT3{4,1,1});
+	obj2 = new GameObject(g_dev,pCBuffer,model,XMFLOAT3{ 5,5,5 });
 
 	//skybox
 	D3D11_RASTERIZER_DESC rsDescSkyBox;

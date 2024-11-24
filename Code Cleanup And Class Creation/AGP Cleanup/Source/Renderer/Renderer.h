@@ -6,20 +6,21 @@
 #include "../ObjectModel/ObjFileModel.h"
 #include <d3d11shader.h>
 #include "../GameObject/GameObject.h"
+#include "../CBuffers/CBuffer.h"
 #include <DDSTextureLoader.h>
 using namespace DirectX;
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 #define MAX_POINT_LIGHTS 8
 #pragma once
-struct PointLight
-{
-	XMVECTOR position = { 0,0,0,1 };
-	XMVECTOR colour = { 1,1,1,1 };
-	float strength = 10;
-	bool enabled = false;
-	float padding[2];
-};
+//struct PointLight
+//{
+//	XMVECTOR position = { 0,0,0,1 };
+//	XMVECTOR colour = { 1,1,1,1 };
+//	float strength = 10;
+//	bool enabled = false;
+//	float padding[2];
+//};
 struct Vertex
 {
 	XMFLOAT3 pos;
@@ -27,24 +28,24 @@ struct Vertex
 	XMFLOAT2 UV; 
 	XMFLOAT3 normal;
 };
-struct CBUFFER0
-{
-	XMMATRIX WVP; // 64 bytes world view projection matrix
-	              // the 64 comes from each row being 16 bytes 
-				  // and 4 rows in total. 4*16 = 64 bytes 
-	              //4,4,4,4
-				  //4,4,4,4
-				  //4,4,4,4
-				  //4,4,4,4
-	              //xmmatrix is a stricly aligned type for simd hardware 
-				  //simple instruction multiple data 
-	XMVECTOR ambientLightCol; // 16 bytes
-	XMVECTOR directionalLightDir; // 16 bytes
-	XMVECTOR directionalLightCol; // 16 bytes
-	PointLight pointLights[MAX_POINT_LIGHTS];
-
-	
-};
+//struct CBUFFER0
+//{
+//	XMMATRIX WVP; // 64 bytes world view projection matrix
+//	              // the 64 comes from each row being 16 bytes 
+//				  // and 4 rows in total. 4*16 = 64 bytes 
+//	              //4,4,4,4
+//				  //4,4,4,4
+//				  //4,4,4,4
+//				  //4,4,4,4
+//	              //xmmatrix is a stricly aligned type for simd hardware 
+//				  //simple instruction multiple data 
+//	XMVECTOR ambientLightCol; // 16 bytes
+//	XMVECTOR directionalLightDir; // 16 bytes
+//	XMVECTOR directionalLightCol; // 16 bytes
+//	PointLight pointLights[MAX_POINT_LIGHTS];
+//
+//	
+//};
 struct CBufferSkyBox
 {
 	XMMATRIX wvp;
@@ -124,6 +125,7 @@ private:
 	ID3D11DepthStencilView* g_ZBuffer = NULL; // the pointer to our depth buffer
 	ID3D11ShaderReflection* vShaderReflection = NULL; //MATERIAL 
 	D3D11_SHADER_DESC desc;
+	CBuffer cBuffer; // the constant buffer //MATERIAL 
 	/*XMFLOAT3 pos = { 0,0,2 };
 	XMFLOAT3 rot = { 0,0,0 };
 	XMFLOAT3 scl = { 1,1,1 };*/
