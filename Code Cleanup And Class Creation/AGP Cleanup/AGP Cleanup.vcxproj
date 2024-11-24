@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="IInputManager.cpp" />
+    <ClCompile Include="KeyBoardMouseInput.cpp" />
     <ClCompile Include="Source\Camera\Camera.cpp" />
     <ClCompile Include="Source\CBuffers\CBuffer.cpp" />
     <ClCompile Include="Source\Materials\Material.cpp" />
@@ -152,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="IInputManager.h" />
+    <ClInclude Include="KeyBoardMouseInput.h" />
     <ClInclude Include="Source\Camera\Camera.h" />
     <ClInclude Include="Source\CBuffers\CBuffer.h" />
     <ClInclude Include="Source\Materials\Material.h" />

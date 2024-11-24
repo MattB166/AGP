@@ -20,6 +20,8 @@
     <ClCompile Include="Source\CBuffers\CBuffer.cpp" />
     <ClCompile Include="Source\Camera\Camera.cpp" />
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="IInputManager.cpp" />
+    <ClCompile Include="KeyBoardMouseInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ObjectModel\objfilemodel.h" />
@@ -34,6 +36,8 @@
     <ClInclude Include="Source\CBuffers\CBuffer.h" />
     <ClInclude Include="Source\Camera\Camera.h" />
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="IInputManager.h" />
+    <ClInclude Include="KeyBoardMouseInput.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
