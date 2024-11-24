@@ -199,7 +199,7 @@ void Renderer::RenderFrame()
 
 	XMMATRIX world, view, projection;
 	projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(60),SCREEN_WIDTH / (float)SCREEN_HEIGHT,0.1f, 100);
-	view = cam.GetViewMatrix();
+	view = cam.GetViewMatrix();  //make cam class to manage the view and projection matrices. 
 
 	
 

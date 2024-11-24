@@ -228,14 +228,14 @@ void Window::LockCursorToWindow()
 	}
 }
 
-void Window::HandleInput(float deltaTime)
+void Window::HandleInput(float deltaTime) ///make input class later which allows binding of keys to functions 
 {
 	auto kbState = keyboard.GetState();
 	tracker.Update(kbState);
 	auto mouseState = mouse.GetState();
 	mouseTracker.Update(mouseState);
 
-	float sensitivity = XM_2PI * 0.00025f;
+	float sensitivity = XM_2PI * 0.00045f;
 	s_renderer->RotateCamera(mouseState.y * sensitivity, mouseState.x * sensitivity);
 
 	if (mouseTracker.leftButton == Mouse::ButtonStateTracker::PRESSED)
@@ -271,12 +271,12 @@ void Window::HandleInput(float deltaTime)
 	}
 	if (kbState.Q)
 	{
-		s_renderer->MoveCamera(0.0f, 2.0f * TestTime::getDeltaTime(), 0.0f);
+		s_renderer->MoveCamera(0.0f, -2.0f * TestTime::getDeltaTime(), 0.0f);
 
 	}
 	if (kbState.E)
 	{
-		s_renderer->MoveCamera(0.0f, -2.0f * TestTime::getDeltaTime(), 0.0f);
+		s_renderer->MoveCamera(0.0f, 2.0f * TestTime::getDeltaTime(), 0.0f);
 	}
 	if (tracker.pressed.T)
 	{

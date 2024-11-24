@@ -20,13 +20,15 @@ using namespace DirectX;
 			return world;
 		}
 	};
-class GameObject ///need a cbuffer ??? 
+	class GameObject //make this abstract with components. 
 {
 public:
 	class Handler //manages all the game objects. might not be used, just testing  
 	{
 	public: 
 		static void AddGameObject(GameObject* gameObject) { m_gameObjects.push_back(gameObject); }
+		static void Start(); //initialise all game objects 
+		static void Update(); //update all game objects
 		static void DrawObjects(ID3D11DeviceContext* g_devcon,ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection)
 		{
 			for (auto& gameObject : m_gameObjects)
@@ -45,7 +47,7 @@ public:
 		static std::vector<GameObject*> m_gameObjects; //dont forget to define in cpp 
 	};
 
-	GameObject();
+	GameObject(); //these all need to become virtual when i start deriving from this class.
 	~GameObject();
 	GameObject(ID3D11Device* dev,ID3D11Buffer* rendererBuffer, ObjFileModel* model, XMFLOAT3 pos /*const wchar_t* textureMat*/); // or use the file path?? needs to be accessible within the texture handler 
 	GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture);

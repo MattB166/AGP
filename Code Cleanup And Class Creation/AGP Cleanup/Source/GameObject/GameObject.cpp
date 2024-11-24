@@ -63,6 +63,7 @@ void GameObject::Draw(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffe
 		m_cBufferData.pointLights[i].strength = m_cBufferData.pointLights[i].strength;
 		m_cBufferData.pointLights[i].enabled = m_cBufferData.pointLights[i].enabled;
 	}
+	//ApplyGravity();
 	GetModel()->Draw();
 
 }

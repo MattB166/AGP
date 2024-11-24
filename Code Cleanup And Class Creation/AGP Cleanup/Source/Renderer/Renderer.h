@@ -164,7 +164,7 @@ private:
 	XMVECTOR pointLightColour = { 0.5f,0,0.85f,1};
 	float pointLightStrength = 100;*/
 
-	PointLight pointLights[MAX_POINT_LIGHTS];
+	//PointLight pointLights[MAX_POINT_LIGHTS];
 
 	//FOLLOWING ARE ALL PART OF THE SKYBOX MATERIAL CLASS 
 
