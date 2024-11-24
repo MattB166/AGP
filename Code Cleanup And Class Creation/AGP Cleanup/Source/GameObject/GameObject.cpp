@@ -44,6 +44,24 @@ void GameObject::Clean()
 void GameObject::Draw(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection)
 {
 	UpdateConstantBuffer(g_devcon,rendererBuffer,view,projection);
+	//lighting 
+	m_cBufferData.ambientLightCol = { 0.1f,0.1f,0.1f,1.0f };
+	XMVECTOR directionalLightShinesFrom = { 0.2788f,0.7063f,0.6506f };
+	XMMATRIX transpose = XMMatrixTranspose(m_transform.GetWorldMatrix());
+	m_cBufferData.directionalLightDir = XMVector3Transform(directionalLightShinesFrom,transpose);
+
+	for (size_t i = 0; i < MAX_POINT_LIGHTS;i++)
+	{
+		if (!m_cBufferData.pointLights[i].enabled)
+			continue;
+
+		XMMATRIX inverse = XMMatrixInverse(nullptr, m_transform.GetWorldMatrix());
+		m_cBufferData.pointLights[i].position = XMVector3Transform(m_cBufferData.pointLights[i].position, inverse);
+		m_cBufferData.pointLights[i].colour = m_cBufferData.pointLights[i].colour;
+		m_cBufferData.pointLights[i].strength = m_cBufferData.pointLights[i].strength;
+		m_cBufferData.pointLights[i].enabled = m_cBufferData.pointLights[i].enabled;
+	}
+
 	//g_devcon->VSSetConstantBuffers(0, 1, &rendererBuffer);
 	GetModel()->Draw();
 	//use g_dev to update material and buffers etc.
