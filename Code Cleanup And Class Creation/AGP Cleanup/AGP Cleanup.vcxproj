@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -135,6 +135,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="IInputManager.cpp" />
+    <ClCompile Include="Source\Camera\Camera.cpp" />
     <ClCompile Include="Source\CBuffers\CBuffer.cpp" />
     <ClCompile Include="Source\Materials\Material.cpp" />
     <ClCompile Include="Source\Game\Game.cpp" />
@@ -147,6 +150,9 @@
     <ClCompile Include="Source\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="IInputManager.h" />
+    <ClInclude Include="Source\Camera\Camera.h" />
     <ClInclude Include="Source\CBuffers\CBuffer.h" />
     <ClInclude Include="Source\Materials\Material.h" />
     <ClInclude Include="Source\Game\Game.h" />

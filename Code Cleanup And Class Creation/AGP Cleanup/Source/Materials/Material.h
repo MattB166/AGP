@@ -1,10 +1,12 @@
 #pragma once
 #include <d3d11.h>
-class Material   ////this class will be used to store the shaders and textures for the game objects. 
+class Material   ////this class will be used to store the shaders and textures for the game objects.
  
 {
 
 public: 
+	//need a constructor for shaders, and another constructor for textures, so can define their behaviour separately. maybe not, as each texture will have shaders with it??  
+
 	Material(ID3D11Device* g_dev, LPCSTR entrypoint, LPCWSTR vertexshaderfile, LPCWSTR pixelshaderfile, ID3D11InputLayout** il);
 	~Material();
 	HRESULT InitMaterial(ID3D11Device* g_dev, LPCSTR entrypoint, LPCWSTR vertexshaderfile, LPCWSTR pixelshaderfile, ID3D11InputLayout** il);
