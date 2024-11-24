@@ -3,16 +3,7 @@
 #include "../ObjectModel/objfilemodel.h"
 #include "../CBuffers/CBuffer.h"
 #include "../Materials/Material.h"
-#define MAX_POINT_LIGHTS 8
 using namespace DirectX;
-//struct PointLight
-//{
-//	XMVECTOR position = { 0,0,0,1 };
-//	XMVECTOR colour = { 1,1,1,1 };
-//	float strength = 10;
-//	bool enabled = false;
-//	float padding[2];
-//};
 	struct Transform ///do i need to put this into a cbuffer?? 
 	{
 		XMFLOAT3 pos{ 0,0,0 }; 
@@ -29,23 +20,6 @@ using namespace DirectX;
 			return world;
 		}
 	};
-//struct CBuffer
-//{
-//	XMMATRIX WVP; // 64 bytes world view projection matrix
-//	// the 64 comes from each row being 16 bytes 
-//	// and 4 rows in total. 4*16 = 64 bytes 
-//	//4,4,4,4
-//	//4,4,4,4
-//	//4,4,4,4
-//	//4,4,4,4
-//	//xmmatrix is a stricly aligned type for simd hardware 
-//	//simple instruction multiple data 
-//	XMVECTOR ambientLightCol; // 16 bytes
-//	XMVECTOR directionalLightDir; // 16 bytes
-//	XMVECTOR directionalLightCol; // 16 bytes
-//	PointLight pointLights[MAX_POINT_LIGHTS];
-//
-//};
 class GameObject ///need a cbuffer ??? 
 {
 public:
@@ -53,7 +27,7 @@ public:
 	{
 	public: 
 		static void AddGameObject(GameObject* gameObject) { m_gameObjects.push_back(gameObject); }
-		static void Draw(ID3D11DeviceContext* g_devcon,ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection)
+		static void DrawObjects(ID3D11DeviceContext* g_devcon,ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection)
 		{
 			for (auto& gameObject : m_gameObjects)
 			{

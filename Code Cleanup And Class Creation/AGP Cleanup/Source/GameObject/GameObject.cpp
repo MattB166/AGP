@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "../Time/TestTime.h"
+std::vector<GameObject*> GameObject::Handler::m_gameObjects;
 
 GameObject::GameObject() : m_model(nullptr), m_material(nullptr)
 {
@@ -15,6 +16,7 @@ GameObject::GameObject(ID3D11Device* dev, ID3D11Buffer* rendererBuffer, ObjFileM
 {
 	//remember to initialise the model pointer and make "new" model before passing here. or alternatively make it new here so can destroy it here too. r
 	// will also need parameters for device and device context to create the buffers and texture etc. 
+	GameObject::Handler::AddGameObject(this);
 	SetPosition(pos.x, pos.y, pos.y);
 	SetScale(0.2, 0.2, 0.2);
 	CreateConstantBuffer(dev,rendererBuffer);
@@ -46,7 +48,7 @@ void GameObject::Draw(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffe
 	UpdateConstantBuffer(g_devcon,rendererBuffer,view,projection);
 	//lighting 
 	m_cBufferData.ambientLightCol = { 0.1f,0.1f,0.1f,1.0f };
-	XMVECTOR directionalLightShinesFrom = { 0.2788f,0.7063f,0.6506f };
+	XMVECTOR directionalLightShinesFrom = { 0.2788f,0.7063f,0.6506f }; //make this a member so can adjust it in runtime. 
 	XMMATRIX transpose = XMMatrixTranspose(m_transform.GetWorldMatrix());
 	m_cBufferData.directionalLightDir = XMVector3Transform(directionalLightShinesFrom,transpose);
 
@@ -61,13 +63,8 @@ void GameObject::Draw(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffe
 		m_cBufferData.pointLights[i].strength = m_cBufferData.pointLights[i].strength;
 		m_cBufferData.pointLights[i].enabled = m_cBufferData.pointLights[i].enabled;
 	}
-
-	//g_devcon->VSSetConstantBuffers(0, 1, &rendererBuffer);
 	GetModel()->Draw();
-	//use g_dev to update material and buffers etc.
-	// //need a cbuffer 
-	//also needs to set the constant buffers and texture here. pass gdev / devcon to the model draw function, so it can set the buffers and texture??
-	//update subresource for the constant buffer here too. 
+
 }
 void GameObject::SetPosition(float x, float y, float z)
 {

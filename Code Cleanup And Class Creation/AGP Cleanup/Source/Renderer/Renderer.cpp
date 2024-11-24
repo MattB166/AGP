@@ -194,7 +194,7 @@ void Renderer::RenderFrame()
 
 
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
-	g_devcon->PSSetShaderResources(0, 1, &pTexture); 
+	g_devcon->PSSetShaderResources(0, 1, &pTexture);  //needs to be moved into the material class so game object can access it and update it there.
 
 
 	XMMATRIX world, view, projection;
@@ -203,55 +203,19 @@ void Renderer::RenderFrame()
 
 	
 
-	//world = cube1.GetWorldMatrix();              ///create a loop doing this for every object in game.  
-	//world = obj1->GetTransform().GetWorldMatrix();
-	//CBUFFER0 cBuffer;
-	//cBuffer.WVP = world * view * projection;
-
-	///lighting 
-	//ambient lighting
-	//cBuffer.ambientLightCol = ambientLightColour;
-	//directional lighting
-	//cBuffer.directionalLightCol = directionalLightColour;
-
-	//XMMATRIX transpose = XMMatrixTranspose(world); //transpose rotations
-	//cBuffer.directionalLightDir = XMVector3Transform(directionalLightShinesFrom, transpose); //transform the light direction by the world matrix
-
-
-	/*for (size_t i = 0; i < MAX_POINT_LIGHTS;i++)
-	{
-		if (!pointLights[i].enabled)
-			continue;
-
-		XMMATRIX inverse = XMMatrixInverse(nullptr, world);
-		cBuffer.pointLights[i].position = XMVector3Transform(pointLights[i].position, inverse);
-		cBuffer.pointLights[i].colour = pointLights[i].colour;
-		cBuffer.pointLights[i].strength = pointLights[i].strength;
-		cBuffer.pointLights[i].enabled = pointLights[i].enabled;
-	}*/
-
 	
-	//g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0); //per go
-	//g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer); //need to set the constant buffer to the device context for every material instance 
-
-
 	
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
 
-	obj1->Draw(g_devcon,pCBuffer, view,projection);
+	/*obj1->Draw(g_devcon,pCBuffer, view,projection);
+	
+	obj2->Draw(g_devcon,pCBuffer,view,projection);*/
 
 
+	GameObject::Handler::DrawObjects(g_devcon, pCBuffer, view, projection);
 	
-	//world = obj2->GetTransform().GetWorldMatrix();
-	//cBuffer.WVP = world * view * projection;  //done after all objects have been drawn to the screen and lighting has been applied to the objects 
-	//g_devcon->UpdateSubresource(pCBuffer, 0, 0, &cBuffer, 0, 0);   //////SECOND CUBE RENDERING 
-	//g_devcon->VSSetConstantBuffers(0, 1, &pCBuffer);
-	
-	obj2->Draw(g_devcon,pCBuffer,view,projection);
-
-	
-	///loop through and process all font and UI relative stuff after drawing objects 
+	///loop through and process all font and UI relative stuff after drawing objects. make a UI class 
 	spriteBatch->Begin();
 	spriteFont->DrawString(spriteBatch.get(), L"Hello, World!", DirectX::XMFLOAT2(100, 50), DirectX::Colors::ForestGreen);
 	spriteFont2->DrawString(spriteBatch.get(), L"Hello, World!", DirectX::XMFLOAT2(10, 10), DirectX::Colors::OrangeRed);
