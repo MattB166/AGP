@@ -4,6 +4,7 @@
 
 std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName, ID3D11Device* dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS)
 {
+	//ensure the shaders are already loading before passing them here 
 	if (IsTextureLoaded(*textureName))
 	{
 		return RetrieveTexture(*textureName);

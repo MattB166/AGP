@@ -10,7 +10,7 @@ public:
 	Game();
 	bool Init(); //function which initializes the game and renderer 
 	void Run(); //function which runs the game loop  
-	void SetupInputs(std::unique_ptr<IInputManager> InputType); //function which sets up the inputs for the game 
+	void SetupInputs(std::unique_ptr<IInputManager> InputType); //function which sets up the inputs for the game. might not work this way? 
 	void Update(); //function which updates the game
 	void LoadScene(); //function which loads the scene 
 

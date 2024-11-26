@@ -21,6 +21,7 @@ GameObject::GameObject(ID3D11Device* dev, ID3D11Buffer* rendererBuffer, ObjFileM
 	SetScale(0.2, 0.2, 0.2);
 	CreateConstantBuffer(dev,rendererBuffer);
 	m_model = model;
+	//m_material = AssetManager::CreateTexture(textureMat, dev, VS, PS);
 	//handle material loading here. so search from asset handler for the material. the handler will search for it, and if it doesnt exist, it will create it. 
 }
 GameObject::GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture)
