@@ -23,7 +23,7 @@ public:
 	void Update() override;
 	void CleanUp() override;
 	void BindKeyToFunction(int key, BindingData data) override;
-	void BindAxisToFunction(const std::string& axis, const std::function<void(float)>& action) override;
+	//void BindAxisToFunction(const std::string& axis, const std::function<void(float)>& action) override;
 	void Initialise() override;
 	void ClearAllBindings() override;
 

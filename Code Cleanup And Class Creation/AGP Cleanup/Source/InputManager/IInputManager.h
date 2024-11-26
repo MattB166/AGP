@@ -28,11 +28,12 @@ public:
 
 	virtual void BindKeyToFunction(int key, BindingData data) = 0;
 
-	virtual void BindAxisToFunction(const std::string& axis, const std::function<void(float)>& action) = 0;
+	//virtual void BindAxisToFunction(const std::string& axis, const std::function<void(float)>& action) = 0;
 
 	virtual void CleanUp() = 0;
 
 	virtual void ClearAllBindings() = 0;
+
 
 
 };

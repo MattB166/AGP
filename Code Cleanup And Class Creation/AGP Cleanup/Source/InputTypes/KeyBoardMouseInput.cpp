@@ -27,10 +27,10 @@ void KeyBoardMouseInput::BindKeyToFunction(int key, BindingData data)
 	BindKeyToFunction(static_cast<Keyboard::Keys>(key), data); //will this work?? 
 }
 
-void KeyBoardMouseInput::BindAxisToFunction(const std::string& axis, const std::function<void(float)>& action)
-{
-	GetAxisFunction(action); 
-}
+//void KeyBoardMouseInput::BindAxisToFunction(const std::string& axis, const std::function<void(float)>& action)
+//{
+//	GetAxisFunction(action); 
+//}
 
 void KeyBoardMouseInput::Initialise()
 {

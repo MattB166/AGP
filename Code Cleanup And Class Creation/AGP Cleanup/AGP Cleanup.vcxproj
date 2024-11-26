@@ -136,10 +136,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
-    <ClCompile Include="IInputManager.cpp" />
-    <ClCompile Include="KeyBoardMouseInput.cpp" />
     <ClCompile Include="Source\Camera\Camera.cpp" />
     <ClCompile Include="Source\CBuffers\CBuffer.cpp" />
+    <ClCompile Include="Source\InputManager\IInputManager.cpp" />
+    <ClCompile Include="Source\InputTypes\KeyBoardMouseInput.cpp" />
     <ClCompile Include="Source\Materials\Material.cpp" />
     <ClCompile Include="Source\Game\Game.cpp" />
     <ClCompile Include="Source\GameObject\GameObject.cpp" />
@@ -152,10 +152,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
-    <ClInclude Include="IInputManager.h" />
-    <ClInclude Include="KeyBoardMouseInput.h" />
     <ClInclude Include="Source\Camera\Camera.h" />
     <ClInclude Include="Source\CBuffers\CBuffer.h" />
+    <ClInclude Include="Source\InputManager\IInputManager.h" />
+    <ClInclude Include="Source\InputTypes\KeyBoardMouseInput.h" />
     <ClInclude Include="Source\Materials\Material.h" />
     <ClInclude Include="Source\Game\Game.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
