@@ -10,7 +10,7 @@ class AssetManager //handles storing and loading of assets (textures, models, so
 {
 public: 
 	///CALLED ELSEWHERE TO CREATE ASSETS - INTERAL FUNCTIONS MANAGE WHETHER ITS ALREADY BEEN LOADED OR NOT 
-	static Material* CreateTexture(const wchar_t* textureName, ID3D11Device* dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS); 
+	static std::shared_ptr<Material> CreateTexture(const wchar_t* textureName, ID3D11Device* dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS); 
 	static ObjFileModel* CreateModel(const wchar_t* modelName, ID3D11Device* g_dev, ID3D11DeviceContext* g_devcon); 
 	static SpriteFont* MakeFont(ID3D11Device* g_dev, const wchar_t* fontName);
 	static ID3D11VertexShader* CreateVertexShader(ID3D11Device* g_dev,const wchar_t* vertexShaderName, LPCSTR entrypoint, ID3D11InputLayout** il);
@@ -34,12 +34,12 @@ private:
 	///RETURNS THE ASSET IF IT HAS ALREADY BEEN LOADED 
 	static ID3D11VertexShader* RetrieveVertexShader(const wchar_t& vertexShaderName);
 	static ID3D11PixelShader* RetrievePixelShader(const wchar_t& pixelShaderName);
-	static Material* RetrieveTexture(const wchar_t& textureName);
+	static std::shared_ptr<Material> RetrieveTexture(const wchar_t& textureName);
 	static ObjFileModel* RetrieveModel(const wchar_t& modelName);
 	static SpriteFont* RetrieveFont(const wchar_t& fontName);
 	
 	//had to do some mad shit to make sure these only get initialised on first use otherwise whole window doesnt even open 
-	static std::unordered_map<const wchar_t*,Material*>& GetTextures() { static std::unordered_map<const wchar_t*, Material*> m_textures; return m_textures; }
+	static std::unordered_map<const wchar_t*,std::shared_ptr<Material>>& GetTextures() { static std::unordered_map<const wchar_t*, std::shared_ptr<Material>> m_textures; return m_textures; }
 	static std::unordered_map<const wchar_t*,ObjFileModel*>& GetModels() { static std::unordered_map<const wchar_t*, ObjFileModel*> m_models; return m_models; }
 	static std::unordered_map<const wchar_t*, SpriteFont*>& GetFonts() { static std::unordered_map<const wchar_t*, SpriteFont*> m_fonts; return m_fonts; }
 	static std::unordered_map<const wchar_t*, ID3D11VertexShader*>& GetVertexShaders() { static std::unordered_map<const wchar_t*, ID3D11VertexShader*> m_vertexShaders; return m_vertexShaders; }
