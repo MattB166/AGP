@@ -33,15 +33,15 @@ public:
 
 private:
 
-	static Keyboard m_keyboard;
-	static Mouse m_mouse;
+	static Keyboard& GetKeyboard() { static Keyboard m_KeyBoard; return m_KeyBoard; }
+	static Mouse& GetMouse() { static Mouse m_Mouse; return m_Mouse; }
 
-	static Keyboard::State m_kbState; //current state of the keyboard
-	static Keyboard::KeyboardStateTracker m_keyboardTracker;
-	static Mouse::State m_mouseState; //current state of the mouse
+	static Keyboard::State& GetKeyBoardState() { static Keyboard::State m_keyBoardState; return m_keyBoardState; }
+	static Keyboard::KeyboardStateTracker& GetKeyBoardTracker() { static Keyboard::KeyboardStateTracker m_keyBoardTracker; return m_keyBoardTracker; }
+	static Mouse::State& GetMouseState() { static Mouse::State m_mouseState; return m_mouseState; }
 
-	static std::unordered_map<Keyboard::Keys, BindingData> m_keyBindings;
-	static std::unordered_map<MouseButton, BindingData> m_mouseBindings;
+	static std::unordered_map<Keyboard::Keys, BindingData>& GetKeyBindings() { static std::unordered_map<Keyboard::Keys, BindingData> m_keyBindings; return m_keyBindings; }
+	static std::unordered_map<MouseButton, BindingData>& GetMouseBindings() { static std::unordered_map<MouseButton, BindingData> m_mouseBindings; return m_mouseBindings; }
 
 	static void ProcessKeyboardInput();
 	static void ProcessMouseInput(); 

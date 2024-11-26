@@ -2,72 +2,78 @@
 
 void KeyBoardMouseInput::Update()
 {
-	m_kbState = m_keyboard.GetState();
-	m_mouseState = m_mouse.GetState();
-	
-	m_keyboardTracker.Update(m_kbState);
+	auto kbState = GetKeyboard().GetState();
+	GetKeyBoardTracker().Update(kbState);
+	auto mouseState = GetMouse().GetState();
+
 	ProcessKeyboardInput();
-	ProcessMouseInput();
+	ProcessMouseInput(); 
 }
 
 void KeyBoardMouseInput::CleanUp()
 {
+	delete& GetKeyboard();
+	delete& GetMouse();
+	delete& GetKeyBoardState();
+	delete& GetKeyBoardTracker();
+	delete& GetMouseState();
+	delete& GetKeyBindings();
+	delete& GetMouseBindings();
 
 }
 
 void KeyBoardMouseInput::Initialise()
 {
-
 }
 
 void KeyBoardMouseInput::ClearAllBindings()
 {
-	m_keyBindings.clear();
-	m_mouseBindings.clear();
-
+	GetKeyBindings().clear();
+	GetMouseBindings().clear();
 }
 
 void KeyBoardMouseInput::BindKeyToFunction(Keyboard::Keys key, BindingData data)
 {
-	m_keyBindings[key] = data;
+	GetKeyBindings()[key] = data; //might not work?? might need to insert pair 
 }
 
 void KeyBoardMouseInput::BindMouseToFunction(MouseButton button, BindingData data)
 {
-	m_mouseBindings[button] = data;
-
+	GetMouseBindings()[button] = data;
 }
-
 
 void KeyBoardMouseInput::ProcessKeyboardInput()
 {
-	for (auto& key : m_keyBindings)
+	for (auto& key : GetKeyBindings())
 	{
 		switch (key.second.PressState)
 		{
 		case State::Held:
-			if (m_kbState.IsKeyDown(key.first))
+			if (GetKeyBoardState().IsKeyDown(key.first))
 			{
 				key.second.action();
 			}
 			break;
 		case State::Pressed:
-			if (m_kbState.IsKeyDown(key.first) && !m_keyboardTracker.IsKeyPressed(key.first))
+			if (GetKeyBoardState().IsKeyDown(key.first) && !GetKeyBoardTracker().IsKeyPressed(key.first))
 			{
 				key.second.action();
 			}
 			break;
 		case State::Released:
-			if (!m_kbState.IsKeyDown(key.first) && m_keyboardTracker.IsKeyPressed(key.first))
+			if (!GetKeyBoardState().IsKeyDown(key.first) && GetKeyBoardTracker().IsKeyPressed(key.first))
 			{
 				key.second.action();
 			}
 			break;
-		default:
-			break;
+			default
+				:
+					break;
+
 		}
 	}
 }
 
-
-
+void KeyBoardMouseInput::ProcessMouseInput()
+{
+}

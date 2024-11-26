@@ -4,33 +4,22 @@ class Material   ////this class will be used to store the shaders and textures f
  
 {
 
-public: 
-	//need a constructor for shaders, and another constructor for textures, so can define their behaviour separately. maybe not, as each texture will have shaders with it??  
-
-	Material(ID3D11Device* g_dev, LPCSTR entrypoint, LPCWSTR vertexshaderfile, LPCWSTR pixelshaderfile, ID3D11InputLayout** il);
+public:   ////load shaders into material class and then apply them to the device context. 
+	  
 	~Material();
-	HRESULT InitMaterial(ID3D11Device* g_dev, LPCSTR entrypoint, LPCWSTR vertexshaderfile, LPCWSTR pixelshaderfile, ID3D11InputLayout** il);
 
-	void SetTexture(ID3D11ShaderResourceView* texture, ID3D11Device* dev, ID3D11DeviceContext* devcon, const wchar_t* fileName);
+	void SetTexture(ID3D11Device* dev, ID3D11DeviceContext* devcon, const wchar_t* fileName);
 	void SetSampler(ID3D11SamplerState* sampler, ID3D11Device* g_dev);
+	void Apply(ID3D11DeviceContext* devcon);
 	ID3D11ShaderResourceView* GetTexture() { return p_Texture; }
-	ID3D11SamplerState* GetSampler() { return p_Sampler; }
-	ID3D11VertexShader* GetVertexShader() { return p_VS; }
-	ID3D11PixelShader* GetPixelShader() { return p_PS; } 
-	ID3D11InputLayout* GetInputLayout() { return p_Layout; }
-	ID3D11Buffer* GetCBuffer() { return p_CBuffer; }
-	//set c buffer up once i know what it needs to be 
-
+	ID3D11SamplerState* GetSampler() { return p_Sampler; } 
 private:
-	//void LoadVertexShader(LPCWSTR filename, LPCSTR entrypoint);
-	//void LoadPixelShader(LPCWSTR filename, LPCSTR entrypoint);
-	ID3D11VertexShader* p_VS = NULL;
-	ID3D11PixelShader* p_PS = NULL;
-	ID3D11InputLayout* p_Layout = NULL;
-	ID3D11Buffer* p_CBuffer = NULL;  ///how do i use this?? 
+	Material(ID3D11Device* g_dev, const wchar_t* filename);
 
+	ID3D11VertexShader* p_VertexShader = NULL;
+	ID3D11PixelShader* p_PixelShader = NULL;
 	ID3D11ShaderResourceView* p_Texture = NULL;
-	ID3D11SamplerState* p_Sampler = NULL;
+	ID3D11SamplerState* p_Sampler = NULL; 
 
 	//needs to be able to return these members to the renderer class so that it can set them in the device context 
 };
