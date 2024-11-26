@@ -3,8 +3,9 @@
 #include <d3d11.h>
 #include <unordered_map>
 #include <Mouse.h>
+#include <string>
 #include <Keyboard.h>
-#include "IInputManager.h"
+#include "../InputManager/IInputManager.h"
 using namespace DirectX;
 enum class MouseButton
 {
@@ -21,6 +22,8 @@ public:
 
 	void Update() override;
 	void CleanUp() override;
+	void BindKeyToFunction(int key, BindingData data) override;
+	void BindAxisToFunction(const std::string& axis, const std::function<void(float)>& action) override;
 	void Initialise() override;
 	void ClearAllBindings() override;
 
@@ -42,6 +45,8 @@ private:
 
 	static std::unordered_map<Keyboard::Keys, BindingData>& GetKeyBindings() { static std::unordered_map<Keyboard::Keys, BindingData> m_keyBindings; return m_keyBindings; }
 	static std::unordered_map<MouseButton, BindingData>& GetMouseBindings() { static std::unordered_map<MouseButton, BindingData> m_mouseBindings; return m_mouseBindings; }
+
+	static std::function<void(float)> GetAxisFunction(const std::function<void(float)>& mouseAction) { return mouseAction; } 
 
 	static void ProcessKeyboardInput();
 	static void ProcessMouseInput(); 
