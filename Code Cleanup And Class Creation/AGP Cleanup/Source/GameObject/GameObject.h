@@ -4,7 +4,7 @@
 #include "../CBuffers/CBuffer.h"
 #include "../Materials/Material.h"
 using namespace DirectX;
-	struct Transform ///do i need to put this into a cbuffer?? 
+	struct Transform
 	{
 		XMFLOAT3 pos{ 0,0,0 }; 
 		XMFLOAT3 rot{ 0,0,0 }; //in radians
@@ -20,7 +20,7 @@ using namespace DirectX;
 			return world;
 		}
 	};
-	class GameObject //make this abstract with components. 
+	class GameObject /////make a component class?? 
 {
 public:
 	class Handler //manages all the game objects. might not be used, just testing  
@@ -29,6 +29,7 @@ public:
 		static void AddGameObject(GameObject* gameObject) { m_gameObjects.push_back(gameObject); }
 		static void Start(); //initialise all game objects 
 		static void Update(); //update all game objects
+		//static void RemoveComponent 
 		static void DrawObjects(ID3D11DeviceContext* g_devcon,ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection)
 		{
 			for (auto& gameObject : m_gameObjects)
