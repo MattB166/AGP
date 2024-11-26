@@ -1,32 +1,122 @@
 #include "AssetManager.h"
+#include <d3dcompiler.h>
 #include <WICTextureLoader.h>	
 
-Material* AssetManager::CreateTexture(const wchar_t& textureName)
+Material* AssetManager::CreateTexture(const wchar_t* textureName, ID3D11Device* dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS)
 {
-	return nullptr;
+	if (IsTextureLoaded(*textureName))
+	{
+		return RetrieveTexture(*textureName);
+	}
+	Material* material = new Material{ textureName, dev, VS, PS }; 
+	GetTextures().insert(std::make_pair(textureName, material));
+	return material; 
+
 }
 
-ObjFileModel* AssetManager::CreateModel(const wchar_t& modelName)
+ObjFileModel* AssetManager::CreateModel(const wchar_t* modelName, ID3D11Device* g_dev, ID3D11DeviceContext* g_devcon)
 {
-	return nullptr;
+	if (IsModelLoaded(*modelName))
+	{
+		return RetrieveModel(*modelName);
+	}
+	ObjFileModel* model; 
+	model = new ObjFileModel{ (char*)modelName, g_dev, g_devcon };
+	GetModels().insert(std::make_pair(modelName, model));
+	return model;
 }
 
-SpriteFont* AssetManager::MakeFont(const wchar_t& fontName)
+SpriteFont* AssetManager::MakeFont(ID3D11Device* g_dev, const wchar_t* fontName)
 {
-	return nullptr;
+	if (IsFontLoaded(*fontName))
+	{
+		return RetrieveFont(*fontName);
+	}
+	std::unique_ptr<DirectX::SpriteFont> font = std::make_unique<DirectX::SpriteFont>(g_dev, fontName); //make sure to release this when done
+	SpriteFont* fontPtr = font.get();
+	GetFonts().insert(std::make_pair(fontName, font.release()));
+	return fontPtr; 
 }
 
-ID3D11VertexShader* AssetManager::CreateVertexShader(const wchar_t& vertexShaderName, ID3D11VertexShader** vs, ID3D11InputLayout** il)
+ID3D11VertexShader* AssetManager::CreateVertexShader(ID3D11Device* g_dev, const wchar_t* vertexShaderName, LPCSTR entrypoint, ID3D11InputLayout** il)
 {
+	if (IsVertexShaderLoaded(*vertexShaderName))
+	{
+		return RetrieveVertexShader(*vertexShaderName);
+	}
+
 	HRESULT hr;
-	ID3DBlob* pVS, * pErrorBlob;
+	ID3DBlob* VS, * pErrorBlob;
+	ID3D11VertexShader* vertexShader = nullptr;
+	hr = D3DCompileFromFile(vertexShaderName, 0, 0, entrypoint, "vs_4_0", 0, 0, &VS, &pErrorBlob);
+	if (FAILED(hr))
+	{
+		if (pErrorBlob)
+		{
+			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
+			pErrorBlob->Release();
+			return nullptr;
+		}
+	}
+		hr = g_dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), nullptr, &vertexShader);
+		if (FAILED(hr))
+		{
+			OutputDebugString(L"Failed to create vertex shader");
+			VS->Release();
+			return nullptr;
+		} 
 
+		D3D11_INPUT_ELEMENT_DESC ied[] =
+		{
+			{"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+			{"COLOR",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+			{"TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+			{"NORMAL",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+		};
+		
+		hr = g_dev->CreateInputLayout(ied, ARRAYSIZE(ied), VS->GetBufferPointer(), VS->GetBufferSize(), il);
+		VS->Release();
+		if (FAILED(hr))
+		{
+			OutputDebugString(L"Failed to create input layout");
+			return nullptr;
+		}
+		GetVertexShaders().insert(std::make_pair(vertexShaderName, vertexShader));
+		return vertexShader;
 
 }
 
-ID3D11PixelShader* AssetManager::CreatePixelShader(const wchar_t& pixelShaderName, ID3D11PixelShader** ps)
+ID3D11PixelShader* AssetManager::CreatePixelShader(ID3D11Device* g_dev, const wchar_t* pixelShaderName, LPCSTR entrypoint)
 {
-	return nullptr;
+	if (IsPixelShaderLoaded(*pixelShaderName))
+	{
+		return RetrievePixelShader(*pixelShaderName);
+	}
+
+	HRESULT hr;
+	ID3DBlob* PS, * pErrorBlob;
+	ID3D11PixelShader* pixelShader = nullptr;
+	hr = D3DCompileFromFile(pixelShaderName, 0, 0, entrypoint, "ps_4_0", 0, 0, &PS, &pErrorBlob);
+	if (FAILED(hr))
+	{
+		if (pErrorBlob)
+		{
+			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
+			pErrorBlob->Release();
+			return nullptr;
+		}
+	}
+	hr = g_dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), nullptr, &pixelShader);
+	if (FAILED(hr))
+	{
+		OutputDebugString(L"Failed to create pixel shader");
+		PS->Release();
+		return nullptr;
+	}
+	PS->Release();
+	GetPixelShaders().insert(std::make_pair(pixelShaderName, pixelShader));
+	return pixelShader;
+
 }
 
 bool AssetManager::IsTextureLoaded(const wchar_t& textureName)
@@ -62,6 +152,7 @@ bool AssetManager::IsFontLoaded(const wchar_t& fontName)
 			return true;
 		}
 	}
+	return false;
 }
 
 bool AssetManager::IsVertexShaderLoaded(const wchar_t& vertexShaderName)
@@ -73,6 +164,7 @@ bool AssetManager::IsVertexShaderLoaded(const wchar_t& vertexShaderName)
 			return true;
 		}
 	}
+	return false;
 }
 
 bool AssetManager::IsPixelShaderLoaded(const wchar_t& pixelShaderName)
@@ -84,6 +176,7 @@ bool AssetManager::IsPixelShaderLoaded(const wchar_t& pixelShaderName)
 			return true;
 		}
 	}
+	return false;
 }
 
 ID3D11VertexShader* AssetManager::RetrieveVertexShader(const wchar_t& vertexShaderName)
@@ -95,6 +188,7 @@ ID3D11VertexShader* AssetManager::RetrieveVertexShader(const wchar_t& vertexShad
 			return vertexShader.second;
 		}
 	}
+	return nullptr;
 }
 
 ID3D11PixelShader* AssetManager::RetrievePixelShader(const wchar_t& pixelShaderName)
@@ -106,6 +200,7 @@ ID3D11PixelShader* AssetManager::RetrievePixelShader(const wchar_t& pixelShaderN
 			return pixelShader.second;
 		}
 	}
+	return nullptr;
 }
 
 Material* AssetManager::RetrieveTexture(const wchar_t& textureName)
@@ -117,6 +212,7 @@ Material* AssetManager::RetrieveTexture(const wchar_t& textureName)
 			return texture.second;
 		}
 	}
+	return nullptr;
 }
 
 ObjFileModel* AssetManager::RetrieveModel(const wchar_t& modelName)
@@ -128,6 +224,7 @@ ObjFileModel* AssetManager::RetrieveModel(const wchar_t& modelName)
 			return model.second;
 		}
 	}
+	return nullptr;
 }
 
 SpriteFont* AssetManager::RetrieveFont(const wchar_t& fontName)
@@ -139,4 +236,5 @@ SpriteFont* AssetManager::RetrieveFont(const wchar_t& fontName)
 			return font.second;
 		}
 	}
+	return nullptr;
 }

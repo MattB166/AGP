@@ -144,7 +144,7 @@ private:
 	ID3D11SamplerState* pSampler = NULL; // the pointer to the sampler state  //MATERIAL 
 
 
-	Text2D* pText; // the pointer to the text object
+	//Text2D* pText; // the pointer to the text object
 	ID3D11BlendState* pAlphaBlendStateEnable = NULL; // the pointer to the alpha blend state
 	ID3D11BlendState* pAlphaBlendStateDisable = NULL; // the pointer to the alpha blend state
 

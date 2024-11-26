@@ -6,6 +6,7 @@ class Material   ////this class will be used to store the shaders and textures f
 
 public:   ////load shaders into material class and then apply them to the device context. 
 	  
+	Material(const wchar_t* filename, ID3D11Device* g_dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS);
 	~Material();
 
 	void SetTexture(ID3D11Device* dev, ID3D11DeviceContext* devcon, const wchar_t* fileName);
@@ -14,7 +15,6 @@ public:   ////load shaders into material class and then apply them to the device
 	ID3D11ShaderResourceView* GetTexture() { return p_Texture; }
 	ID3D11SamplerState* GetSampler() { return p_Sampler; } 
 private:
-	Material(ID3D11Device* g_dev, const wchar_t* filename);
 
 	ID3D11VertexShader* p_VertexShader = NULL;
 	ID3D11PixelShader* p_PixelShader = NULL;

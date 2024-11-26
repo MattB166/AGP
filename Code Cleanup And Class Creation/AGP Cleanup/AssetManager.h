@@ -10,11 +10,11 @@ class AssetManager //handles storing and loading of assets (textures, models, so
 {
 public: 
 	///CALLED ELSEWHERE TO CREATE ASSETS - INTERAL FUNCTIONS MANAGE WHETHER ITS ALREADY BEEN LOADED OR NOT 
-	static Material* CreateTexture(const wchar_t& textureName); 
-	static ObjFileModel* CreateModel(const wchar_t& modelName); 
-	static SpriteFont* MakeFont(const wchar_t& fontName);
-	static ID3D11VertexShader* CreateVertexShader(const wchar_t& vertexShaderName, LPCSTR entrypoint, ID3D11VertexShader** vs, ID3D11InputLayout** il);
-	static ID3D11PixelShader* CreatePixelShader(const wchar_t& pixelShaderName, ID3D11PixelShader** ps); 
+	static Material* CreateTexture(const wchar_t* textureName, ID3D11Device* dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS); 
+	static ObjFileModel* CreateModel(const wchar_t* modelName, ID3D11Device* g_dev, ID3D11DeviceContext* g_devcon); 
+	static SpriteFont* MakeFont(ID3D11Device* g_dev, const wchar_t* fontName);
+	static ID3D11VertexShader* CreateVertexShader(ID3D11Device* g_dev,const wchar_t* vertexShaderName, LPCSTR entrypoint, ID3D11InputLayout** il);
+	static ID3D11PixelShader* CreatePixelShader(ID3D11Device* g_dev,const wchar_t* pixelShaderName, LPCSTR entrypoint);
 
 
 private:

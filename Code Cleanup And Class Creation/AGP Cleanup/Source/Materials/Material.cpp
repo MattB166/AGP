@@ -2,7 +2,7 @@
 #include <d3dcompiler.h>
 #include <WICTextureLoader.h>
 
-Material::Material(ID3D11Device* g_dev, const wchar_t* filename)
+Material::Material(const wchar_t* filename, ID3D11Device* g_dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS)
 {
 	
 }
