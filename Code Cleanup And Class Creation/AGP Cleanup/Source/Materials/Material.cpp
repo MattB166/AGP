@@ -33,6 +33,12 @@ void Material::SetSampler(ID3D11SamplerState* sampler, ID3D11Device* g_dev)
 	g_dev->CreateSamplerState(&sampDesc, &p_Sampler);
 }
 
+void Material::ApplyShaders(ID3D11VertexShader* VS, ID3D11PixelShader* PS)
+{
+	p_VertexShader = VS;
+	p_PixelShader = PS;
+}
+
 void Material::Apply(ID3D11DeviceContext* devcon)
 {
 }

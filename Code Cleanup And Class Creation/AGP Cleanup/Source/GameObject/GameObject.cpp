@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "../Time/TestTime.h"
+#include "../../AssetManager.h"
 std::vector<GameObject*> GameObject::Handler::m_gameObjects;
 
 GameObject::GameObject() : m_model(nullptr), m_material(nullptr)
