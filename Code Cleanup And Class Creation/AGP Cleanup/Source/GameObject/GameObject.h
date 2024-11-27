@@ -2,6 +2,7 @@
 #include <DirectXMath.h>
 #include "../ObjectModel/objfilemodel.h"
 #include "../CBuffers/CBuffer.h"
+#include <memory>
 #include "../Materials/Material.h"
 using namespace DirectX;
 	struct Transform
@@ -60,13 +61,13 @@ public:
 	void ApplyGravity();
 	void ApplyForce(XMFLOAT3 force);
 	ObjFileModel* GetModel() { return m_model; } 
-	Material* GetMaterial() { return m_material; }
+	std::shared_ptr<Material> GetMaterial() { return m_material; }
 	Transform GetTransform() { return m_transform; }
 
 private:
 	CBuffer m_cBufferData;
 	Transform m_transform;
-	Material* m_material; // this is the material, so vertex and index buffer not handled here
+	std::shared_ptr<Material> m_material; // this is the material, so vertex and index buffer not handled here
 	ObjFileModel* m_model; // this is the mesh, so vertex and index buffer already handled here 
 	//ID3D11Buffer* m_CBuffer = nullptr; //this is the constant buffer for the game object. 
 

@@ -2,18 +2,31 @@
 #include <d3dcompiler.h>
 #include <WICTextureLoader.h>	
 
-std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName, ID3D11Device* dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS)
+std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName, ID3D11Device* dev, const wchar_t* VS, const wchar_t* PS)
 {
 	//ensure the shaders are already loading before passing them here 
 	if (IsTextureLoaded(*textureName))
 	{
 		return RetrieveTexture(*textureName);
 	}
-	auto material = std::make_shared<Material>(textureName, dev, VS, PS);
-
-	GetTextures().insert(std::make_pair(textureName, material));
-
-	return material;  ////should prevent dangling pointer by doing it this way? and can only remove the pointer from the map when the material is deleted by its last reference.
+	//check if shaders are loaded, if not, load it.
+	if (IsPixelShaderLoaded(*PS) && IsVertexShaderLoaded(*VS))
+	{
+		//Material* material = new Material(textureName, dev, RetrieveVertexShader(*VS), RetrievePixelShader(*PS));
+		std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev, RetrieveVertexShader(*VS), RetrievePixelShader(*PS));
+		return material;
+	}
+	else
+	{
+		ID3D11VertexShader* vertexShader = CreateVertexShader(dev, VS, "main", nullptr);
+		ID3D11PixelShader* pixelShader = CreatePixelShader(dev, PS, "main");
+		if (vertexShader && pixelShader)
+		{
+			std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev, vertexShader, pixelShader);
+			return material;
+		}
+	}
+	
 
 }
 
@@ -211,7 +224,7 @@ std::shared_ptr<Material> AssetManager::RetrieveTexture(const wchar_t& textureNa
 	auto it = GetTextures().find(&textureName);
 	if (it != GetTextures().end())
 	{
-		return it->second; 
+        return it->second;
 	}
 	return nullptr;
 }
