@@ -25,6 +25,7 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 			std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev, vertexShader, pixelShader);
 			return material;
 		}
+		//or do if(!vertexShader || !pixelShader) return nullptr; 
 	}
 	
 

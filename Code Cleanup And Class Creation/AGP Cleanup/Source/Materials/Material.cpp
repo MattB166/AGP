@@ -4,7 +4,7 @@
 
 Material::Material(const wchar_t* filename, ID3D11Device* g_dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS)
 {
-	
+	//SetTexture(g_dev, nullptr, filename); need to add device context to this function 
 }
 
 Material::~Material()
@@ -18,7 +18,7 @@ Material::~Material()
 
 void Material::SetTexture(ID3D11Device* dev, ID3D11DeviceContext* devcon, const wchar_t* fileName)
 {
-	DirectX::CreateWICTextureFromFile(dev, devcon, fileName, NULL, &p_Texture);
+	DirectX::CreateWICTextureFromFile(dev, devcon, fileName, NULL, &p_Texture); //MAYBE THIS NEEDS TO BE DONE INSIDE ASSET MANAGER TOO? to prevent multiple textures being loaded. 
 }
 
 void Material::SetSampler(ID3D11SamplerState* sampler, ID3D11Device* g_dev)
@@ -41,4 +41,6 @@ void Material::ApplyShaders(ID3D11VertexShader* VS, ID3D11PixelShader* PS)
 
 void Material::Apply(ID3D11DeviceContext* devcon)
 {
+	//set samples
+	//set shader resources
 }

@@ -19,10 +19,11 @@ GameObject::GameObject(ID3D11Device* dev, ID3D11Buffer* rendererBuffer, ObjFileM
 	// will also need parameters for device and device context to create the buffers and texture etc. 
 	GameObject::Handler::AddGameObject(this);
 	SetPosition(pos.x, pos.y, pos.y);
-	SetScale(0.2, 0.2, 0.2);
+	SetScale(0.1, 0.1, 0.1);
 	CreateConstantBuffer(dev,rendererBuffer);
 	m_model = model;
-	//handle material loading here. so search from asset handler for the material. the handler will search for it, and if it doesnt exist, it will create it. 
+	//load in material here
+
 }
 GameObject::GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture)
 {

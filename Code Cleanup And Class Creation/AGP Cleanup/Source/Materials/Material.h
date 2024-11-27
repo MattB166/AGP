@@ -11,7 +11,7 @@ public:   ////load shaders into material class and then apply them to the device
 
 	void SetTexture(ID3D11Device* dev, ID3D11DeviceContext* devcon, const wchar_t* fileName);
 	void SetSampler(ID3D11SamplerState* sampler, ID3D11Device* g_dev);
-	void ApplyShaders(ID3D11VertexShader* VS, ID3D11PixelShader* PS);
+	void ApplyShaders(ID3D11VertexShader* VS, ID3D11PixelShader* PS); 
 	void Apply(ID3D11DeviceContext* devcon);
 	ID3D11ShaderResourceView* GetTexture() { return p_Texture; }
 	ID3D11SamplerState* GetSampler() { return p_Sampler; } 

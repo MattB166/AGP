@@ -15,7 +15,7 @@ public:
 	static SpriteFont* MakeFont(ID3D11Device* g_dev, const wchar_t* fontName);
 	static ID3D11VertexShader* CreateVertexShader(ID3D11Device* g_dev,const wchar_t* vertexShaderName, LPCSTR entrypoint, ID3D11InputLayout** il);
 	static ID3D11PixelShader* CreatePixelShader(ID3D11Device* g_dev,const wchar_t* pixelShaderName, LPCSTR entrypoint);
-
+	//create skybox function 
 
 private:
 	AssetManager() = delete; 
