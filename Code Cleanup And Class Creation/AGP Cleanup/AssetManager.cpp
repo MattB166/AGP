@@ -2,7 +2,7 @@
 #include <d3dcompiler.h>
 #include <WICTextureLoader.h>	
 
-std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName, ID3D11Device* dev, const wchar_t* VS, const wchar_t* PS)
+std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName, ID3D11Device* dev, ID3D11DeviceContext* g_devcon, LPCWSTR VS, LPCWSTR PS)
 {
 	//NEED TO ADD WIC TEXTURE LOADER TO THIS FUNCTION SO WE ARE NOT LOADING THE SAME TEXTURE MULTIPLE TIMES 
 	if (IsTextureLoaded(*textureName))
@@ -12,20 +12,33 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 	//check if shaders are loaded, if not, load it.
 	if (IsPixelShaderLoaded(*PS) && IsVertexShaderLoaded(*VS))
 	{
+		ID3D11InputLayout* il = nullptr;
 		ID3D11ShaderResourceView* texture = nullptr;
 		DirectX::CreateWICTextureFromFile(dev, textureName, nullptr, &texture);
-		std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev, RetrieveVertexShader(*VS), RetrievePixelShader(*PS),texture);
+		std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev, g_devcon, RetrieveVertexShader(*VS), RetrievePixelShader(*PS),texture,il);
 		return material;
 	}
 	else
 	{
-		ID3D11VertexShader* vertexShader = CreateVertexShader(dev, VS, "main", nullptr);
+		ID3D11InputLayout* il = nullptr;
+		D3D11_INPUT_ELEMENT_DESC ied[] =
+		{
+			{"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+			{"COLOR",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+			{"TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+			{"NORMAL",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+		};
+		ID3DBlob* blob = nullptr;
+		D3DCompileFromFile(VS, 0, 0, "main", "vs_4_0", 0, 0, &blob, nullptr);
+		 dev->CreateInputLayout(ied, ARRAYSIZE(ied), blob->GetBufferPointer(), blob->GetBufferSize(), &il);`
+		ID3D11VertexShader* vertexShader = CreateVertexShader(dev, VS, "main",&il);
 		ID3D11PixelShader* pixelShader = CreatePixelShader(dev, PS, "main");
 		if (vertexShader && pixelShader)
 		{
 			ID3D11ShaderResourceView* texture = nullptr;
 			DirectX::CreateWICTextureFromFile(dev, textureName, nullptr, &texture);
-			std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev, vertexShader, pixelShader,texture);
+			//Material* material = new Material(textureName, dev, g_devcon, vertexShader, pixelShader, texture, il);
+			std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev,g_devcon, vertexShader, pixelShader,texture,il);
 			return material;
 		}
 		//or do if(!vertexShader || !pixelShader) return nullptr; 
@@ -58,7 +71,7 @@ SpriteFont* AssetManager::MakeFont(ID3D11Device* g_dev, const wchar_t* fontName)
 	return fontPtr; 
 }
 
-ID3D11VertexShader* AssetManager::CreateVertexShader(ID3D11Device* g_dev, const wchar_t* vertexShaderName, LPCSTR entrypoint, ID3D11InputLayout** il)
+ID3D11VertexShader* AssetManager::CreateVertexShader(ID3D11Device* g_dev, const wchar_t* vertexShaderName, LPCSTR entrypoint,ID3D11InputLayout** il)
 {
 	if (IsVertexShaderLoaded(*vertexShaderName))
 	{
@@ -94,7 +107,7 @@ ID3D11VertexShader* AssetManager::CreateVertexShader(ID3D11Device* g_dev, const 
 			{"NORMAL",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
 		};
 		
-		hr = g_dev->CreateInputLayout(ied, ARRAYSIZE(ied), VS->GetBufferPointer(), VS->GetBufferSize(), il);
+		hr = g_dev->CreateInputLayout(ied, ARRAYSIZE(ied), VS->GetBufferPointer(), VS->GetBufferSize(),il);
 		VS->Release();
 		if (FAILED(hr))
 		{
@@ -138,6 +151,12 @@ ID3D11PixelShader* AssetManager::CreatePixelShader(ID3D11Device* g_dev, const wc
 	return pixelShader;
 
 }
+
+//void AssetManager::SetInputLayout(ID3D11InputLayout* il, ID3D11DeviceContext* g_devcon)
+//{
+//	m_inputLayout = il;
+//	g_devcon->IASetInputLayout(m_inputLayout);
+//}
 
 bool AssetManager::IsTextureLoaded(const wchar_t& textureName)
 {

@@ -2,12 +2,13 @@
 #include <d3dcompiler.h>
 #include <WICTextureLoader.h>
 
-Material::Material(const wchar_t* filename, ID3D11Device* g_dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS, ID3D11ShaderResourceView* SRV)
+Material::Material(const wchar_t* filename, ID3D11Device* g_dev, ID3D11DeviceContext* g_devcon, ID3D11VertexShader* VS, ID3D11PixelShader* PS, ID3D11ShaderResourceView* SRV, ID3D11InputLayout* il)
 {
 	//SetTexture(g_dev, nullptr, filename); need to add device context to this function 
 	p_Texture = SRV;
-	p_VertexShader = VS;
-	p_PixelShader = PS;
+	ApplyShaders(VS, PS, il);
+	SetSampler(g_dev);
+	SetTexture(g_dev, g_devcon, filename);
 	 //need to add sampler to this function
 }
 
@@ -39,14 +40,18 @@ void Material::SetSampler(ID3D11Device* g_dev)
 	g_dev->CreateSamplerState(&sampDesc, &p_Sampler);
 }
 
-void Material::ApplyShaders(ID3D11VertexShader* VS, ID3D11PixelShader* PS)
+void Material::ApplyShaders(ID3D11VertexShader* VS, ID3D11PixelShader* PS, ID3D11InputLayout* il)
 {
+	m_inputLayout = il;
 	p_VertexShader = VS;
 	p_PixelShader = PS;
 }
 
 void Material::Apply(ID3D11DeviceContext* devcon)
 {
+	devcon->VSSetShader(p_VertexShader, 0, 0);
+	devcon->PSSetShader(p_PixelShader, 0, 0);
+
 	devcon->PSSetSamplers(0, 1, &p_Sampler);
 	devcon->PSSetShaderResources(0, 1, &p_Texture);
 }

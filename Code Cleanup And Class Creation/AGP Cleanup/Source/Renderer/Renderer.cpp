@@ -2,6 +2,7 @@
 #include "../ReadData/ReadData.h"
 #include <d3dcompiler.h>
 #include <WICTextureLoader.h>	
+#include "../../AssetManager.h"
 #include <DirectXColors.h>
 
 
@@ -187,14 +188,16 @@ void Renderer::RenderFrame()
 	g_devcon->OMSetRenderTargets(1, &g_backBuffer, g_ZBuffer);
 	g_devcon->RSSetViewports(1, &viewport);
 
-	g_devcon->VSSetShader(pVS, 0, 0); //shaders encapsulated in shader objects and set to the device context
-	g_devcon->PSSetShader(pPS, 0, 0);
-	
+	//g_devcon->IASetInputLayout(pLayout); //set the input layout	
+
+	//g_devcon->VSSetShader(pVS, 0, 0); //shaders encapsulated in shader objects and set to the device context
+	//g_devcon->PSSetShader(pPS, 0, 0);
+	//
 
 
 
-	g_devcon->PSSetSamplers(0, 1, &pSampler);
-	g_devcon->PSSetShaderResources(0, 1, &pTexture);  //needs to be moved into the material class so game object can access it and update it there.
+/*	g_devcon->PSSetSamplers(0, 1, &pSampler);
+	g_devcon->PSSetShaderResources(0, 1, &pTexture);  *///needs to be moved into the material class so game object can access it and update it there.
 
 
 	XMMATRIX world, view, projection;
@@ -253,9 +256,12 @@ void Renderer::ChooseRandomColour()
 
 HRESULT Renderer::InitPipeline()
 {
-	LoadVertexShader(L"VertexShader.hlsl", "main", &pVS, &pLayout);
-	LoadPixelShader(L"PixelShader.hlsl", "main", &pPS);
+	/*LoadVertexShader(L"VertexShader.hlsl", "main", &pVS, &pLayout);
+	LoadPixelShader(L"PixelShader.hlsl", "main", &pPS);*/
+	//set input layout in asset manager before creating any objects 
 
+	//AssetManager::SetInputLayout(pLayout, g_devcon);
+	
 	LoadVertexShader(L"SkyBoxVShader.hlsl", "main", &pVSSkyBox, &pLayoutSkyBox);
 	LoadPixelShader(L"SkyBoxPShader.hlsl", "main", &pPSSkyBox);
 
@@ -381,8 +387,8 @@ void Renderer::InitGraphics()
 	spriteFont2 = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/comic_sans_ms_16.spritefont");
 
 	model = new ObjFileModel{ (char*)"ExternalModels/Sphere.obj",g_dev,g_devcon };
-	obj1 = new GameObject(g_dev,pCBuffer,model,XMFLOAT3{4,1,1});
-	obj2 = new GameObject(g_dev,pCBuffer,model,XMFLOAT3{ 5,5,5 });
+	obj1 = new GameObject(g_dev,g_devcon,pCBuffer,model,XMFLOAT3{4,1,1});
+	obj2 = new GameObject(g_dev,g_devcon,pCBuffer,model,XMFLOAT3{ 5,5,5 });
 
 	//skybox
 	D3D11_RASTERIZER_DESC rsDescSkyBox;

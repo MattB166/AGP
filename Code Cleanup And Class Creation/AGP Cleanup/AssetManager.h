@@ -10,11 +10,12 @@ class AssetManager //handles storing and loading of assets (textures, models, so
 {
 public: 
 	///CALLED ELSEWHERE TO CREATE ASSETS - INTERAL FUNCTIONS MANAGE WHETHER ITS ALREADY BEEN LOADED OR NOT 
-	static std::shared_ptr<Material> CreateTexture(const wchar_t* textureName, ID3D11Device* dev, const wchar_t* VS, const wchar_t* PS); 
+	static std::shared_ptr<Material> CreateTexture(const wchar_t* textureName, ID3D11Device* dev,ID3D11DeviceContext* g_devcon, LPCWSTR VS, LPCWSTR PS); 
 	static ObjFileModel* CreateModel(const wchar_t* modelName, ID3D11Device* g_dev, ID3D11DeviceContext* g_devcon); 
 	static SpriteFont* MakeFont(ID3D11Device* g_dev, const wchar_t* fontName);
-	static ID3D11VertexShader* CreateVertexShader(ID3D11Device* g_dev,const wchar_t* vertexShaderName, LPCSTR entrypoint, ID3D11InputLayout** il);
+	static ID3D11VertexShader* CreateVertexShader(ID3D11Device* g_dev,const wchar_t* vertexShaderName, LPCSTR entrypoint,ID3D11InputLayout** il);
 	static ID3D11PixelShader* CreatePixelShader(ID3D11Device* g_dev,const wchar_t* pixelShaderName, LPCSTR entrypoint);
+	//static void SetInputLayout(ID3D11InputLayout* il, ID3D11DeviceContext* g_devcon);
 	//create skybox function 
 
 private:
@@ -45,6 +46,6 @@ private:
 	static std::unordered_map<const wchar_t*, ID3D11VertexShader*>& GetVertexShaders() { static std::unordered_map<const wchar_t*, ID3D11VertexShader*> m_vertexShaders; return m_vertexShaders; }
 	static std::unordered_map<const wchar_t*, ID3D11PixelShader*>& GetPixelShaders() { static std::unordered_map<const wchar_t*, ID3D11PixelShader*> m_pixelShaders; return m_pixelShaders; }
 
-	 
+	
 };
 

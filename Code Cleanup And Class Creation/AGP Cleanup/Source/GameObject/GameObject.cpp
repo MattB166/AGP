@@ -13,7 +13,7 @@ GameObject::~GameObject()
 
 }
 
-GameObject::GameObject(ID3D11Device* dev, ID3D11Buffer* rendererBuffer, ObjFileModel* model, XMFLOAT3 pos /*const wchar_t* textureMat*/)
+GameObject::GameObject(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Buffer* rendererBuffer, ObjFileModel* model, XMFLOAT3 pos/*const wchar_t* textureMat*/)
 {
 	//remember to initialise the model pointer and make "new" model before passing here. or alternatively make it new here so can destroy it here too. r
 	// will also need parameters for device and device context to create the buffers and texture etc. 
@@ -23,6 +23,7 @@ GameObject::GameObject(ID3D11Device* dev, ID3D11Buffer* rendererBuffer, ObjFileM
 	CreateConstantBuffer(dev,rendererBuffer);
 	m_model = model; // do this through asset manager and let derived classes load in their models and materials. 
 					//load in material here
+	m_material = AssetManager::CreateTexture(L"ExternalModels/Box.bmp", dev,devcon, L"VertexShader.hlsl", L"PixelShader.hlsl");
 
 }
 GameObject::GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture)
@@ -47,7 +48,6 @@ void GameObject::Clean()
 }
 void GameObject::Draw(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection)
 {
-	UpdateConstantBuffer(g_devcon,rendererBuffer,view,projection);
 	//lighting 
 	m_cBufferData.ambientLightCol = { 0.1f,0.1f,0.1f,1.0f };
 	XMVECTOR directionalLightShinesFrom = { 0.2788f,0.7063f,0.6506f }; //make this a member so can adjust it in runtime. 
@@ -65,7 +65,9 @@ void GameObject::Draw(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffe
 		m_cBufferData.pointLights[i].strength = m_cBufferData.pointLights[i].strength;
 		m_cBufferData.pointLights[i].enabled = m_cBufferData.pointLights[i].enabled;
 	}
+	UpdateConstantBuffer(g_devcon,rendererBuffer,view,projection);
 	//ApplyGravity();
+	m_material->Apply(g_devcon);
 	GetModel()->Draw();
 
 }
