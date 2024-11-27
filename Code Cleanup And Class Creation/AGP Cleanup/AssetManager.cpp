@@ -4,7 +4,7 @@
 
 std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName, ID3D11Device* dev, const wchar_t* VS, const wchar_t* PS)
 {
-	//ensure the shaders are already loading before passing them here 
+	//NEED TO ADD WIC TEXTURE LOADER TO THIS FUNCTION SO WE ARE NOT LOADING THE SAME TEXTURE MULTIPLE TIMES 
 	if (IsTextureLoaded(*textureName))
 	{
 		return RetrieveTexture(*textureName);
@@ -12,8 +12,9 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 	//check if shaders are loaded, if not, load it.
 	if (IsPixelShaderLoaded(*PS) && IsVertexShaderLoaded(*VS))
 	{
-		//Material* material = new Material(textureName, dev, RetrieveVertexShader(*VS), RetrievePixelShader(*PS));
-		std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev, RetrieveVertexShader(*VS), RetrievePixelShader(*PS));
+		ID3D11ShaderResourceView* texture = nullptr;
+		DirectX::CreateWICTextureFromFile(dev, textureName, nullptr, &texture);
+		std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev, RetrieveVertexShader(*VS), RetrievePixelShader(*PS),texture);
 		return material;
 	}
 	else
@@ -22,7 +23,9 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 		ID3D11PixelShader* pixelShader = CreatePixelShader(dev, PS, "main");
 		if (vertexShader && pixelShader)
 		{
-			std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev, vertexShader, pixelShader);
+			ID3D11ShaderResourceView* texture = nullptr;
+			DirectX::CreateWICTextureFromFile(dev, textureName, nullptr, &texture);
+			std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev, vertexShader, pixelShader,texture);
 			return material;
 		}
 		//or do if(!vertexShader || !pixelShader) return nullptr; 

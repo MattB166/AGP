@@ -2,9 +2,13 @@
 #include <d3dcompiler.h>
 #include <WICTextureLoader.h>
 
-Material::Material(const wchar_t* filename, ID3D11Device* g_dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS)
+Material::Material(const wchar_t* filename, ID3D11Device* g_dev, ID3D11VertexShader* VS, ID3D11PixelShader* PS, ID3D11ShaderResourceView* SRV)
 {
 	//SetTexture(g_dev, nullptr, filename); need to add device context to this function 
+	p_Texture = SRV;
+	p_VertexShader = VS;
+	p_PixelShader = PS;
+	 //need to add sampler to this function
 }
 
 Material::~Material()
@@ -14,6 +18,8 @@ Material::~Material()
 	//if (p_PixelShader) p_PixelShader->Release();
 	if (p_Texture) p_Texture->Release();
 	if (p_Sampler) p_Sampler->Release();
+	if (p_VertexShader) p_VertexShader->Release();
+	if (p_PixelShader) p_PixelShader->Release();
 }
 
 void Material::SetTexture(ID3D11Device* dev, ID3D11DeviceContext* devcon, const wchar_t* fileName)
@@ -21,7 +27,7 @@ void Material::SetTexture(ID3D11Device* dev, ID3D11DeviceContext* devcon, const 
 	DirectX::CreateWICTextureFromFile(dev, devcon, fileName, NULL, &p_Texture); //MAYBE THIS NEEDS TO BE DONE INSIDE ASSET MANAGER TOO? to prevent multiple textures being loaded. 
 }
 
-void Material::SetSampler(ID3D11SamplerState* sampler, ID3D11Device* g_dev)
+void Material::SetSampler(ID3D11Device* g_dev)
 {
 	D3D11_SAMPLER_DESC sampDesc;
 	ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
@@ -41,6 +47,6 @@ void Material::ApplyShaders(ID3D11VertexShader* VS, ID3D11PixelShader* PS)
 
 void Material::Apply(ID3D11DeviceContext* devcon)
 {
-	//set samples
-	//set shader resources
+	devcon->PSSetSamplers(0, 1, &p_Sampler);
+	devcon->PSSetShaderResources(0, 1, &p_Texture);
 }

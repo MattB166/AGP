@@ -205,7 +205,7 @@ void Renderer::RenderFrame()
 
 	
 	
-	g_devcon->PSSetSamplers(0, 1, &pSampler);
+	//g_devcon->PSSetSamplers(0, 1, &pSampler);
 	
 
 	/*obj1->Draw(g_devcon,pCBuffer, view,projection);

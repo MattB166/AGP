@@ -21,8 +21,8 @@ GameObject::GameObject(ID3D11Device* dev, ID3D11Buffer* rendererBuffer, ObjFileM
 	SetPosition(pos.x, pos.y, pos.y);
 	SetScale(0.1, 0.1, 0.1);
 	CreateConstantBuffer(dev,rendererBuffer);
-	m_model = model;
-	//load in material here
+	m_model = model; // do this through asset manager and let derived classes load in their models and materials. 
+					//load in material here
 
 }
 GameObject::GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture)
