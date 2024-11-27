@@ -3,7 +3,7 @@
 #include "../../AssetManager.h"
 std::vector<GameObject*> GameObject::Handler::m_gameObjects;
 
-GameObject::GameObject() : m_model(nullptr)
+GameObject::GameObject() : m_model(nullptr), m_material(nullptr) //initialise the model pointer to nullptr so that it can be deleted in the destructor.
 {
 	
 }
@@ -17,18 +17,29 @@ GameObject::GameObject(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Buf
 {
 	//remember to initialise the model pointer and make "new" model before passing here. or alternatively make it new here so can destroy it here too. r
 	// will also need parameters for device and device context to create the buffers and texture etc. 
-	GameObject::Handler::AddGameObject(this);
+	
 	SetPosition(pos.x, pos.y, pos.y);
 	SetScale(0.1, 0.1, 0.1);
 	CreateConstantBuffer(dev,rendererBuffer);
 	m_model = model; // do this through asset manager and let derived classes load in their models and materials. 
 					//load in material here
 	m_material = AssetManager::CreateTexture(L"ExternalModels/Box.bmp", dev,devcon, L"VertexShader.hlsl", L"PixelShader.hlsl");
+	if (m_material != nullptr) //would go in start function 
+	{
+		GameObject::Handler::AddGameObject(this);
+	}
 
 }
 GameObject::GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture)
 {
 	
+}
+void GameObject::Start()
+{
+	if (m_material != nullptr) 
+	{
+		GameObject::Handler::AddGameObject(this); //prevents attempting to draw a game object that has no material. 
+	}
 }
 void GameObject::Clean()
 {
@@ -49,7 +60,7 @@ void GameObject::Clean()
 void GameObject::Draw(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection)
 {
 	//lighting 
-	m_cBufferData.ambientLightCol = { 0.1f,0.1f,0.1f,1.0f };
+	m_cBufferData.ambientLightCol = { 0.5f,0.5f,0.5f,1.0f };
 	XMVECTOR directionalLightShinesFrom = { 0.2788f,0.7063f,0.6506f }; //make this a member so can adjust it in runtime. 
 	XMMATRIX transpose = XMMatrixTranspose(m_transform.GetWorldMatrix());
 	m_cBufferData.directionalLightDir = XMVector3Transform(directionalLightShinesFrom,transpose);
@@ -67,7 +78,11 @@ void GameObject::Draw(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffe
 	}
 	UpdateConstantBuffer(g_devcon,rendererBuffer,view,projection);
 	//ApplyGravity();
-	m_material->Apply(g_devcon);
+	if (m_material)
+	{
+		m_material->Apply(g_devcon);
+	}
+	
 	GetModel()->Draw();
 
 }

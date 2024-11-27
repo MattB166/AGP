@@ -53,6 +53,7 @@ public:
 	~GameObject();
 	GameObject(ID3D11Device* dev,ID3D11DeviceContext* devcon, ID3D11Buffer* rendererBuffer, ObjFileModel* model, XMFLOAT3 pos /*const wchar_t* textureMat*/); // or use the file path?? needs to be accessible within the texture handler 
 	GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture);
+	void Start();
 	void Clean();
 	void Draw(ID3D11DeviceContext* g_devcon,ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection);
 	void SetPosition(float x, float y, float z);

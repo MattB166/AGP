@@ -192,19 +192,17 @@ void Renderer::RenderFrame()
 
 	//g_devcon->VSSetShader(pVS, 0, 0); //shaders encapsulated in shader objects and set to the device context
 	//g_devcon->PSSetShader(pPS, 0, 0);
-	//
+	////
 
 
 
-/*	g_devcon->PSSetSamplers(0, 1, &pSampler);
-	g_devcon->PSSetShaderResources(0, 1, &pTexture);  *///needs to be moved into the material class so game object can access it and update it there.
+	//g_devcon->PSSetSamplers(0, 1, &pSampler);
+	//g_devcon->PSSetShaderResources(0, 1, &pTexture);  //needs to be moved into the material class so game object can access it and update it there.
 
 
 	XMMATRIX world, view, projection;
 	projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(60),SCREEN_WIDTH / (float)SCREEN_HEIGHT,0.1f, 100);
 	view = cam.GetViewMatrix();  //make cam class to manage the view and projection matrices. 
-
-	
 
 	
 	

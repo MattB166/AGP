@@ -30,7 +30,7 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 		};
 		ID3DBlob* blob = nullptr;
 		D3DCompileFromFile(VS, 0, 0, "main", "vs_4_0", 0, 0, &blob, nullptr);
-		 dev->CreateInputLayout(ied, ARRAYSIZE(ied), blob->GetBufferPointer(), blob->GetBufferSize(), &il);`
+		 dev->CreateInputLayout(ied, ARRAYSIZE(ied), blob->GetBufferPointer(), blob->GetBufferSize(), &il);
 		ID3D11VertexShader* vertexShader = CreateVertexShader(dev, VS, "main",&il);
 		ID3D11PixelShader* pixelShader = CreatePixelShader(dev, PS, "main");
 		if (vertexShader && pixelShader)
