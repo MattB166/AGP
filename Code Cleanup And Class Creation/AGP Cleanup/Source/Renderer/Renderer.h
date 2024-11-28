@@ -95,8 +95,8 @@ public:
 	void CleanRenderer();
 	void RenderFrame();
 	void InitScene();
-	void SetClearColour(float r, float g, float b);
-	void ChooseRandomColour();
+	/*void SetClearColour(float r, float g, float b);
+	void ChooseRandomColour();*/
 	HRESULT InitPipeline();
 	void InitGraphics();
 	void MoveCamera(float x, float y, float z); //will be part of game class. move current cam 

@@ -222,26 +222,26 @@ void Renderer::InitScene()
 	
 }
 
-void Renderer::SetClearColour(float r, float g, float b)
-{
-	clearColour[0] = r;
-	clearColour[1] = g;
-	clearColour[2] = b;
-	clearColour[3] = 1.0f;
-}
-
-void Renderer::ChooseRandomColour()
-{
-	clearColour[0] = (float)(rand() % 100) / 100;
-	clearColour[1] = (float)(rand() % 100) / 100;
-	clearColour[2] = (float)(rand() % 100) / 100;
-	clearColour[3] = 1.0f;
-}
+//void Renderer::SetClearColour(float r, float g, float b)
+//{
+//	clearColour[0] = r;
+//	clearColour[1] = g;
+//	clearColour[2] = b;
+//	clearColour[3] = 1.0f;
+//}
+//
+//void Renderer::ChooseRandomColour()
+//{
+//	clearColour[0] = (float)(rand() % 100) / 100;
+//	clearColour[1] = (float)(rand() % 100) / 100;
+//	clearColour[2] = (float)(rand() % 100) / 100;
+//	clearColour[3] = 1.0f;
+//}
 
 HRESULT Renderer::InitPipeline()
 {
 	
-	LoadVertexShader(L"SkyBoxVShader.hlsl", "main", &pVSSkyBox, &pLayoutSkyBox);
+	LoadVertexShader(L"SkyBoxVShader.hlsl", "main", &pVSSkyBox, &pLayoutSkyBox);   ///need to have my skybox in its own class 
 	LoadPixelShader(L"SkyBoxPShader.hlsl", "main", &pPSSkyBox);
 
 	
@@ -250,52 +250,52 @@ HRESULT Renderer::InitPipeline()
 
 void Renderer::InitGraphics()
 {
-	//create a triangle using the VERTEX struct
-	Vertex v[] =
-	{
-		{XMFLOAT3{-0.5f,-0.5f,-0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{0.0f,1.0f},XMFLOAT3{-0.5773f,-0.5773f,-0.5773f}}, //FRONT BOTTOM LEFT
-		{XMFLOAT3{-0.5f,0.5f,-0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{0.0f,0.0f},XMFLOAT3{-0.5773f,0.5773f,-0.5773f}}, //FRONT TOP LEFT
-		{XMFLOAT3{0.5f,0.5f,-0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{1.0f,0.0f},XMFLOAT3{0.5773f,0.5773f,-0.5773f}}, //FRONT TOP RIGHT
-		{XMFLOAT3{0.5f,-0.5f,-0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{1.0f,1.0f},XMFLOAT3{0.5773f,-0.5773f,-0.5773f}}, //FRONT BOTTOM RIGHT
+	////create a triangle using the VERTEX struct
+	//Vertex v[] =
+	//{
+	//	{XMFLOAT3{-0.5f,-0.5f,-0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{0.0f,1.0f},XMFLOAT3{-0.5773f,-0.5773f,-0.5773f}}, //FRONT BOTTOM LEFT
+	//	{XMFLOAT3{-0.5f,0.5f,-0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{0.0f,0.0f},XMFLOAT3{-0.5773f,0.5773f,-0.5773f}}, //FRONT TOP LEFT
+	//	{XMFLOAT3{0.5f,0.5f,-0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{1.0f,0.0f},XMFLOAT3{0.5773f,0.5773f,-0.5773f}}, //FRONT TOP RIGHT
+	//	{XMFLOAT3{0.5f,-0.5f,-0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{1.0f,1.0f},XMFLOAT3{0.5773f,-0.5773f,-0.5773f}}, //FRONT BOTTOM RIGHT
 
-		{XMFLOAT3{-0.5f,-0.5f,0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{0.0f,1.0f},XMFLOAT3{-0.5773f,-0.5773f,0.5773f}}, //BACK BOTTOM LEFT
-		{XMFLOAT3{-0.5f,0.5f,0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{0.0f,0.0f},XMFLOAT3{-0.5773f,0.5773f,0.5773f}}, //BACK TOP LEFT
-		{XMFLOAT3{0.5f,0.5f,0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{1.0f,0.0f},XMFLOAT3{0.5773f,0.5773f,0.5773f}}, //BACK TOP RIGHT
-		{XMFLOAT3{0.5f,-0.5f,0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{1.0f,1.0f},XMFLOAT3{0.5773f,-0.5773f,0.5773f}}, //BACK BOTTOM RIGHT 
+	//	{XMFLOAT3{-0.5f,-0.5f,0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{0.0f,1.0f},XMFLOAT3{-0.5773f,-0.5773f,0.5773f}}, //BACK BOTTOM LEFT
+	//	{XMFLOAT3{-0.5f,0.5f,0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{0.0f,0.0f},XMFLOAT3{-0.5773f,0.5773f,0.5773f}}, //BACK TOP LEFT
+	//	{XMFLOAT3{0.5f,0.5f,0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{1.0f,0.0f},XMFLOAT3{0.5773f,0.5773f,0.5773f}}, //BACK TOP RIGHT
+	//	{XMFLOAT3{0.5f,-0.5f,0.5f},XMFLOAT4{DirectX::Colors::White},XMFLOAT2{1.0f,1.0f},XMFLOAT3{0.5773f,-0.5773f,0.5773f}}, //BACK BOTTOM RIGHT 
 
 
-	};
+	//};
 
-	unsigned int indices[] = {/*front*/ 0,1,2,2,3,0, /*back*/ 7,6,5,5,4,7,/*left*/ 4,5,1,1,0,4,/*right*/
-							  3,2,6,6,7,3,/*top*/ 1,5,6,6,2,1, /*bottom*/ 4,0,3,3,7,4 };
+	//unsigned int indices[] = {/*front*/ 0,1,2,2,3,0, /*back*/ 7,6,5,5,4,7,/*left*/ 4,5,1,1,0,4,/*right*/
+	//						  3,2,6,6,7,3,/*top*/ 1,5,6,6,2,1, /*bottom*/ 4,0,3,3,7,4 };
 
-	//create the vertex buffer
-	D3D11_BUFFER_DESC bd = { 0 };
-	bd.Usage = D3D11_USAGE_DYNAMIC; // dynamic allows cpu write access and gpu read access
-	bd.ByteWidth = sizeof(v); //size of the buffer in bytes - size of the vertex struct * 3 vertices
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER; // use as a vertex buffer
-	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // allow cpu to write in buffer
+	////create the vertex buffer
+	//D3D11_BUFFER_DESC bd = { 0 };
+	//bd.Usage = D3D11_USAGE_DYNAMIC; // dynamic allows cpu write access and gpu read access
+	//bd.ByteWidth = sizeof(v); //size of the buffer in bytes - size of the vertex struct * 3 vertices
+	//bd.BindFlags = D3D11_BIND_VERTEX_BUFFER; // use as a vertex buffer
+	//bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // allow cpu to write in buffer
 
-	g_dev->CreateBuffer(&bd, NULL, &pVBuffer); //create the buffer
+	//g_dev->CreateBuffer(&bd, NULL, &pVBuffer); //create the buffer
 
-	if (pVBuffer == 0)
-	{
-		return;
-	}
+	//if (pVBuffer == 0)
+	//{
+	//	return;
+	//}
 
-	D3D11_BUFFER_DESC bufferDesc = {0};
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(indices);
-	bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	
-	D3D11_SUBRESOURCE_DATA initData = { 0 };
-	initData.pSysMem = indices;
-	
-	if (FAILED(g_dev->CreateBuffer(&bufferDesc, &initData, &pIndexBuffer)))
-	{
-		OutputDebugString(L"Failed to create index buffer");
-		return;
-	}
+	//D3D11_BUFFER_DESC bufferDesc = {0};
+	//bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	//bufferDesc.ByteWidth = sizeof(indices);
+	//bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	//
+	//D3D11_SUBRESOURCE_DATA initData = { 0 };
+	//initData.pSysMem = indices;
+	//
+	//if (FAILED(g_dev->CreateBuffer(&bufferDesc, &initData, &pIndexBuffer)))
+	//{
+	//	OutputDebugString(L"Failed to create index buffer");
+	//	return;
+	//}
 
 
 	D3D11_BUFFER_DESC cbd = { };    ///creation of constant buffer 
@@ -308,23 +308,23 @@ void Renderer::InitGraphics()
 		return;
 	}
 
-	//copy the vertices into the buffer
-	D3D11_MAPPED_SUBRESOURCE ms;
-	g_devcon->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms); // map the buffer
-	memcpy(ms.pData, v, sizeof(v)); //copy the data
-	g_devcon->Unmap(pVBuffer, NULL); // unmap the buffer
+	////copy the vertices into the buffer
+	//D3D11_MAPPED_SUBRESOURCE ms;
+	//g_devcon->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms); // map the buffer
+	//memcpy(ms.pData, v, sizeof(v)); //copy the data
+	//g_devcon->Unmap(pVBuffer, NULL); // unmap the buffer
 
-	CreateWICTextureFromFile(g_dev, g_devcon, L"ExternalModels/Box.bmp", NULL, &pTexture); /// load texture from file. this is what is given to the pixel shader to be drawn on the object
+	////CreateWICTextureFromFile(g_dev, g_devcon, L"ExternalModels/Box.bmp", NULL, &pTexture); /// load texture from file. this is what is given to the pixel shader to be drawn on the object
 
-	D3D11_SAMPLER_DESC sampDesc;
-	ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
-	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; //linear filtering
-	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
-	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
-	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
-	sampDesc.MaxLOD = D3D11_FLOAT32_MAX; //max level of detail
-	g_dev->CreateSamplerState(&sampDesc, &pSampler); //create the sampler state
-	//creates a linear sampler state.                                               //////GONE INTO MATERIAL CLASS 
+	//D3D11_SAMPLER_DESC sampDesc;
+	//ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
+	//sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; //linear filtering
+	//sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
+	//sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
+	//sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
+	//sampDesc.MaxLOD = D3D11_FLOAT32_MAX; //max level of detail
+	//g_dev->CreateSamplerState(&sampDesc, &pSampler); //create the sampler state
+	////creates a linear sampler state.                                               //////GONE INTO MATERIAL CLASS 
 
 
 	//pText = new Text2D("font1.png", g_dev, g_devcon);
