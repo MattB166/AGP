@@ -11,6 +11,7 @@ struct Vout
     float4 pos : SV_POSITION;
     float4 colour : COLOR;
     float2 UV : TEXCOORD;
+    float3 reflectionUVW: TEXCOORD1;
 
 };
 struct PointLight
@@ -44,7 +45,7 @@ Vout main(Vin Input)
     float3 pointFinal = float3(0, 0, 0);
     for (int i = 0; i < MAX_POINT_LIGHTS; i++)
     {
-        if(!pointLights[i].enabled)
+        if (!pointLights[i].enabled)
             continue;
         
         float4 pointLightDir = normalize(pointLights[i].position - float4(Input.pos, 1.0f));
@@ -54,11 +55,15 @@ Vout main(Vin Input)
         pointAmount = saturate(pointAmount);
         pointFinal += pointLights[i].colour * pointAmount;
     }
-    
-    
-    
-    
     output.colour = saturate(ambientLightCol + float4(directionalFinal, 1.0f) + float4(pointFinal, 1));
+    
+    float3 wvpos = mul(WV, Input.pos);
+    float3 wvnormal = mul(WV, float4(Input.normal, 0));
+    float3 eyer = -normalize(wvpos);
+    output.reflectionUVW = 2.0 * dot(eyer, wvnormal) * wvnormal - eyer;
+    output.reflectionUVW = mul(float4(output.reflectionUVW, 0), WV);
+    
+    
     
     return output;
 }

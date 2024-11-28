@@ -99,7 +99,7 @@ public:
 	void ChooseRandomColour();
 	HRESULT InitPipeline();
 	void InitGraphics();
-	void MoveCamera(float x, float y, float z); //will be part of game class 
+	void MoveCamera(float x, float y, float z); //will be part of game class. move current cam 
 	void RotateCamera(float pitch, float yaw); // ditto 
 	void RotateCube(float x, float y, float z);
 	Camera cam;
@@ -126,12 +126,9 @@ private:
 	ID3D11ShaderReflection* vShaderReflection = NULL; //MATERIAL 
 	D3D11_SHADER_DESC desc;
 	CBuffer cBuffer; // the constant buffer //MATERIAL 
-	/*XMFLOAT3 pos = { 0,0,2 };
-	XMFLOAT3 rot = { 0,0,0 };
-	XMFLOAT3 scl = { 1,1,1 };*/
+	
 	XMMATRIX projection; //projection matrix 
-	//Transform cube1;
-	//Transform cube2;
+	
 
 	GameObject* obj1;
 	GameObject* obj2;
@@ -160,11 +157,7 @@ private:
 	XMVECTOR ambientLightColour = { 0.1f,0.1f,0.1f,0.01f }; // 16 bytes
 	XMVECTOR directionalLightShinesFrom = { 0.2788f,0.7063f, 0.6506f }; // 16 bytes
 	XMVECTOR directionalLightColour = { 0.96f,0.8f,0.75f,1.0f };  // 16 bytes
-	/*XMVECTOR pointLightPosition = { 0,1.0f,-1 };
-	XMVECTOR pointLightColour = { 0.5f,0,0.85f,1};
-	float pointLightStrength = 100;*/
-
-	//PointLight pointLights[MAX_POINT_LIGHTS];
+	
 
 	//FOLLOWING ARE ALL PART OF THE SKYBOX MATERIAL CLASS 
 

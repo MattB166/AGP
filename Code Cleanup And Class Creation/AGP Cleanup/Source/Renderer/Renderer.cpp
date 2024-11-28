@@ -188,16 +188,7 @@ void Renderer::RenderFrame()
 	g_devcon->OMSetRenderTargets(1, &g_backBuffer, g_ZBuffer);
 	g_devcon->RSSetViewports(1, &viewport);
 
-	//g_devcon->IASetInputLayout(pLayout); //set the input layout	
-
-	//g_devcon->VSSetShader(pVS, 0, 0); //shaders encapsulated in shader objects and set to the device context
-	//g_devcon->PSSetShader(pPS, 0, 0);
-	////
-
-
-
-	//g_devcon->PSSetSamplers(0, 1, &pSampler);
-	//g_devcon->PSSetShaderResources(0, 1, &pTexture);  //needs to be moved into the material class so game object can access it and update it there.
+	
 
 
 	XMMATRIX world, view, projection;
@@ -205,13 +196,6 @@ void Renderer::RenderFrame()
 	view = cam.GetViewMatrix();  //make cam class to manage the view and projection matrices. 
 
 	
-	
-	//g_devcon->PSSetSamplers(0, 1, &pSampler);
-	
-
-	/*obj1->Draw(g_devcon,pCBuffer, view,projection);
-	
-	obj2->Draw(g_devcon,pCBuffer,view,projection);*/
 
 
 	GameObject::Handler::DrawObjects(g_devcon, pCBuffer, view, projection);
@@ -231,9 +215,6 @@ void Renderer::RenderFrame()
 void Renderer::InitScene()
 {
 	
-
-	//pointLights[0] = { XMVECTOR{1.5f,0,-1},{0.9f,0,0.85f,1},100,true };
-	//pointLights[1] = { XMVECTOR{-1.5f,0,-1},{0,0.9f,0.85f,1},200,true };
 }
 
 void Renderer::SetClearColour(float r, float g, float b)
@@ -254,11 +235,6 @@ void Renderer::ChooseRandomColour()
 
 HRESULT Renderer::InitPipeline()
 {
-	/*LoadVertexShader(L"VertexShader.hlsl", "main", &pVS, &pLayout);
-	LoadPixelShader(L"PixelShader.hlsl", "main", &pPS);*/
-	//set input layout in asset manager before creating any objects 
-
-	//AssetManager::SetInputLayout(pLayout, g_devcon);
 	
 	LoadVertexShader(L"SkyBoxVShader.hlsl", "main", &pVSSkyBox, &pLayoutSkyBox);
 	LoadPixelShader(L"SkyBoxPShader.hlsl", "main", &pPSSkyBox);
@@ -438,7 +414,7 @@ void Renderer::InitGraphics()
 	
 
 }
-void Renderer::MoveCamera(float x,float y,float z)
+void Renderer::MoveCamera(float x,float y,float z) ////move all of this to camera class 
 {
 	XMVECTOR fwd = XMVectorSet(sin(cam.yaw) * sin(cam.pitch), cos(cam.pitch), cos(cam.yaw) * sin(cam.pitch), 0.0f);
 	//move into lookto struct inside camera class when come to make it 

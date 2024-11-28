@@ -6,6 +6,8 @@
     <FxCompile Include="SkyBoxVShader.hlsl" />
     <FxCompile Include="VertexShader.hlsl" />
     <FxCompile Include="VertexShaderLit.hlsl" />
+    <FxCompile Include="ReflectiveVertexShader.hlsl" />
+    <FxCompile Include="ReflectivePixelShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

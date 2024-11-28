@@ -15,7 +15,6 @@ public:
 	void LoadScene(); //function which loads the scene 
 
 private: 
-	static Renderer* r; 
 	Window w; 
 	std::unique_ptr<IInputManager> inputManager;
 

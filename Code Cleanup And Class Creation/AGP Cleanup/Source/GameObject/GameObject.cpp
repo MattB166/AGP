@@ -24,12 +24,13 @@ GameObject::GameObject(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Buf
 	CreateConstantBuffer(dev,rendererBuffer);
 	m_model = model; // do this through asset manager and let derived classes load in their models and materials. 
 					//load in material here
-	m_material = AssetManager::CreateTexture(L"ExternalModels/Box.bmp", dev,devcon, L"VertexShader.hlsl", L"PixelShader.hlsl");
+	m_material = AssetManager::CreateTexture(L"ExternalModels/Box.bmp", dev,devcon, L"ReflectiveVertexShader.hlsl", L"ReflectivePixelShader.hlsl");
 	if (m_material != nullptr) //would go in start function 
 	{
+		
 		GameObject::Handler::AddGameObject(this);
 	}
-	
+	///need to sort point lights out. 
 
 }
 GameObject::GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture)
@@ -77,6 +78,8 @@ void GameObject::Draw(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffe
 		m_cBufferData.pointLights[i].colour = m_cBufferData.pointLights[i].colour;
 		m_cBufferData.pointLights[i].strength = m_cBufferData.pointLights[i].strength;
 		m_cBufferData.pointLights[i].enabled = m_cBufferData.pointLights[i].enabled;
+
+		std::cout << "Point Light Position: " << m_cBufferData.pointLights[i].position.m128_f32[0] << " " << m_cBufferData.pointLights[i].position.m128_f32[1] << " " << m_cBufferData.pointLights[i].position.m128_f32[2] << std::endl;
 	}
 	UpdateConstantBuffer(g_devcon,rendererBuffer,view,projection);
 	//ApplyGravity();
@@ -125,6 +128,7 @@ void GameObject::UpdateConstantBuffer(ID3D11DeviceContext* g_devcon, ID3D11Buffe
 	XMMATRIX world = m_transform.GetWorldMatrix();
 	//CBuffer m_cBufferData;
 	m_cBufferData.WVP = world * view * projection;
+	m_cBufferData.WV = world * view;
 	g_devcon->UpdateSubresource(rendererBuffer, 0, 0, &m_cBufferData, 0, 0);
 	g_devcon->VSSetConstantBuffers(0, 1, &rendererBuffer);
 }

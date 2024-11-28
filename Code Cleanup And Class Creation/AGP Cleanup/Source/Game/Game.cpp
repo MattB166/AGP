@@ -1,6 +1,6 @@
 #include "Game.h"
 #include <iostream>
-Renderer* Game::r = nullptr;
+//Renderer* Game::r = nullptr;
 
 void Game::Run()
 {

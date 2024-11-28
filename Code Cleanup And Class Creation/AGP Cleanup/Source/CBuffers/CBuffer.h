@@ -14,15 +14,8 @@ struct PointLight
 struct CBuffer
 {
 	
-	XMMATRIX WVP; // 64 bytes world view projection matrix
-	// the 64 comes from each row being 16 bytes 
-	// and 4 rows in total. 4*16 = 64 bytes 
-	//4,4,4,4
-	//4,4,4,4
-	//4,4,4,4
-	//4,4,4,4
-	//xmmatrix is a stricly aligned type for simd hardware 
-	//simple instruction multiple data 
+	XMMATRIX WVP; 
+	XMMATRIX WV;
 	XMVECTOR ambientLightCol; // 16 bytes
 	XMVECTOR directionalLightDir; // 16 bytes
 	XMVECTOR directionalLightCol; // 16 bytes
