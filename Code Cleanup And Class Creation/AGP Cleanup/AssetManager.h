@@ -39,7 +39,7 @@ private:
 	static ObjFileModel* RetrieveModel(const wchar_t& modelName);
 	static SpriteFont* RetrieveFont(const wchar_t& fontName);
 	
-	//had to do some mad shit to make sure these only get initialised on first use otherwise whole window doesnt even open 
+	//change to string to compare value or ID'S as we are trying to piggyback material types. obj2 trying to reference same material as obj1 
 	static std::unordered_map<const wchar_t*, std::shared_ptr<Material>>& GetTextures() { static std::unordered_map<const wchar_t*, std::shared_ptr<Material>> m_textures; return m_textures; }
 	static std::unordered_map<const wchar_t*,ObjFileModel*>& GetModels() { static std::unordered_map<const wchar_t*, ObjFileModel*> m_models; return m_models; }
 	static std::unordered_map<const wchar_t*, SpriteFont*>& GetFonts() { static std::unordered_map<const wchar_t*, SpriteFont*> m_fonts; return m_fonts; }

@@ -85,6 +85,10 @@ void GameObject::Draw(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffe
 	{
 		m_material->Apply(g_devcon);
 	}
+	else
+	{
+		return;
+	}
 	
 	GetModel()->Draw();
 
