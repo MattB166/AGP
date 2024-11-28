@@ -136,6 +136,7 @@ private:
 
 
 	ObjFileModel* model;
+	ObjFileModel* modelSkyBox;
 
 	ID3D11ShaderResourceView* pTexture = NULL; // the pointer to the texture  //MATERIAL 
 	ID3D11SamplerState* pSampler = NULL; // the pointer to the sampler state  //MATERIAL 

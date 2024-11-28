@@ -30,7 +30,8 @@ GameObject::GameObject(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Buf
 		
 		GameObject::Handler::AddGameObject(this);
 	}
-	///need to sort point lights out. 
+
+
 
 }
 GameObject::GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture)
@@ -79,7 +80,6 @@ void GameObject::Draw(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffe
 		m_cBufferData.pointLights[i].strength = m_cBufferData.pointLights[i].strength;
 		m_cBufferData.pointLights[i].enabled = m_cBufferData.pointLights[i].enabled;
 
-		std::cout << "Point Light Position: " << m_cBufferData.pointLights[i].position.m128_f32[0] << " " << m_cBufferData.pointLights[i].position.m128_f32[1] << " " << m_cBufferData.pointLights[i].position.m128_f32[2] << std::endl;
 	}
 	UpdateConstantBuffer(g_devcon,rendererBuffer,view,projection);
 	//ApplyGravity();

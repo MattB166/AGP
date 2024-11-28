@@ -143,6 +143,9 @@ HRESULT Renderer::InitRenderer(HWND hWnd, int ScreenHeight, int ScreenWidth)
 void Renderer::CleanRenderer()
 {
 	delete model;
+	delete modelSkyBox;
+	delete obj1;
+	delete obj2;
 	if (p_RasterSolid) p_RasterSolid->Release();
 	if (p_RasterSkyBox) p_RasterSkyBox->Release();
 	if (pDepthWriteSolid) pDepthWriteSolid->Release();
@@ -179,6 +182,8 @@ void Renderer::RenderFrame()
 	g_devcon->ClearDepthStencilView(g_ZBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	//set primitive topology
 	g_devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); //triangle list is the primitive topology
+
+	g_devcon->PSSetShaderResources(1, 1, &pSkyBoxTexture); ///set the skybox texture to the pixel shader
 
 	DrawSkyBox();
 
@@ -363,6 +368,7 @@ void Renderer::InitGraphics()
 	model = new ObjFileModel{ (char*)"ExternalModels/Sphere.obj",g_dev,g_devcon };
 	obj1 = new GameObject(g_dev,g_devcon,pCBuffer,model,XMFLOAT3{4,1,1});
 	obj2 = new GameObject(g_dev,g_devcon,pCBuffer,model,XMFLOAT3{ 5,5,5 });
+	modelSkyBox = new ObjFileModel{ (char*)"ExternalModels/cube.obj",g_dev,g_devcon };
 
 	//skybox
 	D3D11_RASTERIZER_DESC rsDescSkyBox;
@@ -402,7 +408,7 @@ void Renderer::InitGraphics()
 	}
 
 	///create dds texture for skybox
-	CreateDDSTextureFromFile(g_dev, g_devcon, L"ExternalModels/SkyBox02.dds", NULL, &pSkyBoxTexture);
+	CreateDDSTextureFromFile(g_dev, g_devcon, L"ExternalModels/SkyBox01.dds", NULL, &pSkyBoxTexture);
 
 	cbd.ByteWidth = sizeof(CBufferSkyBox);
 	if (FAILED(g_dev->CreateBuffer(&cbd, NULL, &pSkyBoxCBuffer)))
@@ -556,7 +562,7 @@ void Renderer::DrawSkyBox()
 	g_devcon->PSSetSamplers(0, 1, &pSampler);
 	g_devcon->PSSetShaderResources(0, 1, &pSkyBoxTexture);
 
-	model->Draw();
+	modelSkyBox->Draw();
 
 	//back face culling to enable depth writing
 	g_devcon->OMSetDepthStencilState(pDepthWriteSolid, 1);
