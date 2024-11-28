@@ -49,6 +49,7 @@ void Material::ApplyShaders(ID3D11VertexShader* VS, ID3D11PixelShader* PS, ID3D1
 
 void Material::Apply(ID3D11DeviceContext* devcon)
 {
+	devcon->IASetInputLayout(m_inputLayout);
 	devcon->VSSetShader(p_VertexShader, 0, 0);
 	devcon->PSSetShader(p_PixelShader, 0, 0);
 

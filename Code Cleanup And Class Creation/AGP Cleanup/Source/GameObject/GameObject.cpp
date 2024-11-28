@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include <iostream>
 #include "../Time/TestTime.h"
 #include "../../AssetManager.h"
 std::vector<GameObject*> GameObject::Handler::m_gameObjects;
@@ -17,7 +18,7 @@ GameObject::GameObject(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Buf
 {
 	//remember to initialise the model pointer and make "new" model before passing here. or alternatively make it new here so can destroy it here too. r
 	// will also need parameters for device and device context to create the buffers and texture etc. 
-	
+	std::cout << "GameObject created" << std::endl;
 	SetPosition(pos.x, pos.y, pos.y);
 	SetScale(0.1, 0.1, 0.1);
 	CreateConstantBuffer(dev,rendererBuffer);
@@ -26,8 +27,10 @@ GameObject::GameObject(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Buf
 	m_material = AssetManager::CreateTexture(L"ExternalModels/Box.bmp", dev,devcon, L"VertexShader.hlsl", L"PixelShader.hlsl");
 	if (m_material != nullptr) //would go in start function 
 	{
+		std::cout << "Material loaded" << std::endl;
 		GameObject::Handler::AddGameObject(this);
 	}
+	
 
 }
 GameObject::GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture)

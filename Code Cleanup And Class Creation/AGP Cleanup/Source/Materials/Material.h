@@ -17,6 +17,7 @@ public:   ////load shaders into material class and then apply them to the device
 	ID3D11SamplerState* GetSampler() { return p_Sampler; } 
 	ID3D11VertexShader* GetVertexShader() { return p_VertexShader; }
 	ID3D11PixelShader* GetPixelShader() { return p_PixelShader; }
+	ID3D11InputLayout* GetInputLayout() { return m_inputLayout; }
 private:
 
 	ID3D11VertexShader* p_VertexShader = NULL;

@@ -1,5 +1,6 @@
 #include "AssetManager.h"
 #include <d3dcompiler.h>
+#include <iostream>
 #include <WICTextureLoader.h>	
 
 std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName, ID3D11Device* dev, ID3D11DeviceContext* g_devcon, LPCWSTR VS, LPCWSTR PS)
@@ -7,11 +8,13 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 	//NEED TO ADD WIC TEXTURE LOADER TO THIS FUNCTION SO WE ARE NOT LOADING THE SAME TEXTURE MULTIPLE TIMES 
 	if (IsTextureLoaded(*textureName))
 	{
-		return RetrieveTexture(*textureName);
+		std::cout << "Texture already loaded" << std::endl;
+		return RetrieveTexture(*textureName); 
 	}
 	//check if shaders are loaded, if not, load it.
 	if (IsPixelShaderLoaded(*PS) && IsVertexShaderLoaded(*VS))
 	{
+		std::cout << "Shaders already loaded" << std::endl;
 		ID3D11InputLayout* il = nullptr;
 		ID3D11ShaderResourceView* texture = nullptr;
 		DirectX::CreateWICTextureFromFile(dev, textureName, nullptr, &texture);
@@ -20,6 +23,7 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 	}
 	else
 	{
+		std::cout << "Shaders and material not loaded" << std::endl;
 		ID3D11InputLayout* il = nullptr;
 		D3D11_INPUT_ELEMENT_DESC ied[] =
 		{
@@ -29,7 +33,8 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 			{"NORMAL",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
 		};
 		ID3DBlob* blob = nullptr;
-		D3DCompileFromFile(VS, 0, 0, "main", "vs_4_0", 0, 0, &blob, nullptr);
+		ID3DBlob* pErrorBlob = nullptr;
+		D3DCompileFromFile(VS, 0, 0, "main", "vs_4_0", 0, 0, &blob, &pErrorBlob);
 		 dev->CreateInputLayout(ied, ARRAYSIZE(ied), blob->GetBufferPointer(), blob->GetBufferSize(), &il);
 		ID3D11VertexShader* vertexShader = CreateVertexShader(dev, VS, "main",&il);
 		ID3D11PixelShader* pixelShader = CreatePixelShader(dev, PS, "main");

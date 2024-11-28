@@ -40,7 +40,7 @@ void TestTime::CalculateFrameStats()
 	if (elapsedTime >= 1.0f)
 	{
 		FPS = frameCount;
-		std::cout << "FPS: " << FPS << std::endl;
+		//std::cout << "FPS: " << FPS << std::endl;
 		//std::cout << "Delta Time: " << deltaTime << std::endl;
 		frameCount = 0;
 		elapsedTime = 0.0f;
