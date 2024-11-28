@@ -316,15 +316,15 @@ void Renderer::InitGraphics()
 
 	////CreateWICTextureFromFile(g_dev, g_devcon, L"ExternalModels/Box.bmp", NULL, &pTexture); /// load texture from file. this is what is given to the pixel shader to be drawn on the object
 
-	//D3D11_SAMPLER_DESC sampDesc;
-	//ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
-	//sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; //linear filtering
-	//sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
-	//sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
-	//sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
-	//sampDesc.MaxLOD = D3D11_FLOAT32_MAX; //max level of detail
-	//g_dev->CreateSamplerState(&sampDesc, &pSampler); //create the sampler state
-	////creates a linear sampler state.                                               //////GONE INTO MATERIAL CLASS 
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; //linear filtering
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX; //max level of detail
+	g_dev->CreateSamplerState(&sampDesc, &pSampler); //create the sampler state
+	//creates a linear sampler state.                                               //////GONE INTO MATERIAL CLASS 
 
 
 	//pText = new Text2D("font1.png", g_dev, g_devcon);
