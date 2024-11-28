@@ -183,7 +183,7 @@ void Renderer::RenderFrame()
 	//set primitive topology
 	g_devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); //triangle list is the primitive topology
 
-	g_devcon->PSSetShaderResources(1, 1, &pSkyBoxTexture); ///set the skybox texture to the pixel shader
+	
 
 	DrawSkyBox();
 
@@ -544,6 +544,7 @@ void Renderer::DrawSkyBox()
 	g_devcon->RSSetState(p_RasterSkyBox);
 
 	//set skybox shaders
+	g_devcon->PSSetShaderResources(1, 1, &pSkyBoxTexture); ///set the skybox texture to the pixel shader
 	g_devcon->VSSetShader(pVSSkyBox, 0, 0);
 	g_devcon->PSSetShader(pPSSkyBox, 0, 0);
 	g_devcon->IASetInputLayout(pLayoutSkyBox);
