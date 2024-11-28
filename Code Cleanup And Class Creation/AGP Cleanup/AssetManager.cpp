@@ -8,13 +8,13 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 	//NEED TO ADD WIC TEXTURE LOADER TO THIS FUNCTION SO WE ARE NOT LOADING THE SAME TEXTURE MULTIPLE TIMES 
 	if (IsTextureLoaded(*textureName))
 	{
-		std::cout << "Texture already loaded" << std::endl;
+		std::cout << "Texture already loaded so using that one" << std::endl;
 		return RetrieveTexture(*textureName); 
 	}
 	//check if shaders are loaded, if not, load it.
 	if (IsPixelShaderLoaded(*PS) && IsVertexShaderLoaded(*VS))
 	{
-		std::cout << "Shaders already loaded" << std::endl;
+		std::cout << "Shaders already loaded so using same ones" << std::endl;
 		ID3D11InputLayout* il = nullptr;
 		ID3D11ShaderResourceView* texture = nullptr;
 		DirectX::CreateWICTextureFromFile(dev, textureName, nullptr, &texture);
@@ -23,7 +23,7 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 	}
 	else
 	{
-		std::cout << "Shaders and material not loaded" << std::endl;
+		std::cout << "Shaders and material not loaded so loading the pair of them" << std::endl;
 		ID3D11InputLayout* il = nullptr;
 		D3D11_INPUT_ELEMENT_DESC ied[] =
 		{

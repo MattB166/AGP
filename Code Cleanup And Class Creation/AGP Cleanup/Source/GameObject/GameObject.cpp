@@ -27,7 +27,6 @@ GameObject::GameObject(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Buf
 	m_material = AssetManager::CreateTexture(L"ExternalModels/Box.bmp", dev,devcon, L"VertexShader.hlsl", L"PixelShader.hlsl");
 	if (m_material != nullptr) //would go in start function 
 	{
-		std::cout << "Material loaded" << std::endl;
 		GameObject::Handler::AddGameObject(this);
 	}
 	
