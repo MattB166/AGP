@@ -44,9 +44,11 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 			DirectX::CreateWICTextureFromFile(dev, textureName, nullptr, &texture);
 			//Material* material = new Material(textureName, dev, g_devcon, vertexShader, pixelShader, texture, il);
 			std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev,g_devcon, vertexShader, pixelShader,texture,il);
+			GetTextures().insert(std::make_pair(textureName, material));
 			return material;
 		}
 		//or do if(!vertexShader || !pixelShader) return nullptr; 
+       
 	}
 	
 
