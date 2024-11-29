@@ -125,6 +125,7 @@ void GameObject::ApplyForce(XMFLOAT3 force)
 
 void GameObject::UpdateConstantBuffer(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection)
 {
+	//have a bool to check if the object is reflective or not. so we can assign the correct cbuffer. 
 	XMMATRIX world = m_transform.GetWorldMatrix();
 	//CBuffer m_cBufferData;
 	m_cBufferData.WVP = world * view * projection;
