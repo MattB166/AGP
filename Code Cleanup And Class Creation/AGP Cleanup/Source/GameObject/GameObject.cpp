@@ -14,23 +14,20 @@ GameObject::~GameObject()
 
 }
 
-GameObject::GameObject(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Buffer* rendererBuffer, ObjFileModel* model, XMFLOAT3 pos, bool reflective/*const wchar_t* textureMat*/)
+GameObject::GameObject(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Buffer* rendererBuffer, ObjFileModel* model, XMFLOAT3 pos, bool reflective/*const wchar_t* textureMat*/) : m_model(model),m_reflective(reflective)
+
+	//remember to initialise the model pointer and make "new" model before passing here. or alternatively make it new here so can destroy it here too. 	// will also need parameters for device and device context to create the buffers and texture etc
 {
 	//remember to initialise the model pointer and make "new" model before passing here. or alternatively make it new here so can destroy it here too. r
 	// will also need parameters for device and device context to create the buffers and texture etc. 
 	std::cout << "GameObject created" << std::endl;
-	m_reflective = reflective;
+	//m_reflective = reflective;
 	SetPosition(pos.x, pos.y, pos.y);
 	SetScale(0.1, 0.1, 0.1);
 	CreateConstantBuffer(dev,rendererBuffer,m_reflective);
-	m_model = model; // do this through asset manager and let derived classes load in their models and materials. 
+	//m_model = model; // do this through asset manager and let derived classes load in their models and materials. 
 					//load in material here
-	if (!m_reflective)
-	{
-		m_material = AssetManager::CreateTexture(L"ExternalModels/Box.bmp", dev, devcon, L"VertexShader.hlsl", L"PixelShader.hlsl");
-	}
-	else
-	m_material = AssetManager::CreateTexture(L"ExternalModels/Box.bmp", dev,devcon, L"ReflectiveVertexShader.hlsl", L"ReflectivePixelShader.hlsl");
+	m_reflective == true ? m_material = AssetManager::CreateTexture(L"ExternalModels/Box.bmp", dev, devcon, L"ReflectiveVertexShader.hlsl", L"ReflectivePixelShader.hlsl") : m_material = AssetManager::CreateTexture(L"ExternalModels/Box.bmp", dev, devcon, L"VertexShader.hlsl", L"PixelShader.hlsl");
 	
 	if (m_material != nullptr) //would go in start function 
 	{
