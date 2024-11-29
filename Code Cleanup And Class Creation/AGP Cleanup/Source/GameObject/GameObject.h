@@ -51,7 +51,7 @@ public:
 
 	GameObject(); //these all need to become virtual when i start deriving from this class.
 	~GameObject();
-	GameObject(ID3D11Device* dev,ID3D11DeviceContext* devcon, ID3D11Buffer* rendererBuffer, ObjFileModel* model, XMFLOAT3 pos /*const wchar_t* textureMat*/); // or use the file path?? needs to be accessible within the texture handler 
+	GameObject(ID3D11Device* dev,ID3D11DeviceContext* devcon, ID3D11Buffer* rendererBuffer, ObjFileModel* model, XMFLOAT3 pos, bool reflective /*const wchar_t* textureMat*/); // or use the file path?? needs to be accessible within the texture handler 
 	GameObject(const wchar_t* TextureName, ID3D11Device& dev, ID3D11DeviceContext& devcon, ID3D11ShaderResourceView* texture);
 	void Start();
 	void Clean();
@@ -61,19 +61,22 @@ public:
 	void SetScale(float x, float y, float z);
 	void ApplyGravity();
 	void ApplyForce(XMFLOAT3 force);
+	void ApplyLighting();
 	ObjFileModel* GetModel() { return m_model; } 
 	std::shared_ptr<Material> GetMaterial() { return m_material; }
 	Transform GetTransform() { return m_transform; }
 
 private:
+	bool m_reflective; 
 	CBuffer m_cBufferData;
+	ReflectiveCBuffer m_reflectiveCBufferData;
 	Transform m_transform;
 	std::shared_ptr<Material> m_material; // this is the material, so vertex and index buffer not handled here
 	ObjFileModel* m_model; // this is the mesh, so vertex and index buffer already handled here 
 	//ID3D11Buffer* m_CBuffer = nullptr; //this is the constant buffer for the game object. 
 
-	void UpdateConstantBuffer(ID3D11DeviceContext* g_devcon,ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection);
-	void CreateConstantBuffer(ID3D11Device* g_dev, ID3D11Buffer* rendererBuffer);
+	void UpdateConstantBuffer(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection, bool reflective);
+	void CreateConstantBuffer(ID3D11Device* g_dev, ID3D11Buffer* rendererBuffer, bool reflective);
 
 };
 

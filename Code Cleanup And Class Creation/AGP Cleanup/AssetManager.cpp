@@ -6,13 +6,13 @@
 std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName, ID3D11Device* dev, ID3D11DeviceContext* g_devcon, LPCWSTR VS, LPCWSTR PS)
 {
 	//NEED TO ADD WIC TEXTURE LOADER TO THIS FUNCTION SO WE ARE NOT LOADING THE SAME TEXTURE MULTIPLE TIMES 
-	if (IsTextureLoaded(*textureName))
+	if (IsTextureLoaded(*textureName) && IsPixelShaderLoaded(*VS) && IsVertexShaderLoaded(*PS))
 	{
 		std::cout << "Texture already loaded so using that one" << std::endl;
 		return RetrieveTexture(*textureName); 
 	}
 	//check if shaders are loaded, if not, load it.
-	if (IsPixelShaderLoaded(*PS) && IsVertexShaderLoaded(*VS))
+	if (IsPixelShaderLoaded(*PS) && IsVertexShaderLoaded(*VS) && !IsTextureLoaded(*textureName))
 	{
 		std::cout << "Shaders already loaded so using same ones" << std::endl;
 		ID3D11InputLayout* il = nullptr;
