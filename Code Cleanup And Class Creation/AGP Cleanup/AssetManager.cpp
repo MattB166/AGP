@@ -4,9 +4,8 @@
 #include <WICTextureLoader.h>	
 
 std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName, ID3D11Device* dev, ID3D11DeviceContext* g_devcon, LPCWSTR VS, LPCWSTR PS)
-{
-	//NEED TO ADD WIC TEXTURE LOADER TO THIS FUNCTION SO WE ARE NOT LOADING THE SAME TEXTURE MULTIPLE TIMES 
-	if (IsTextureLoaded(*textureName) && IsPixelShaderLoaded(*VS) && IsVertexShaderLoaded(*PS))
+{ 
+	if (IsTextureLoaded(*textureName) && IsVertexShaderLoaded(*VS) && IsPixelShaderLoaded(*PS))
 	{
 		std::cout << "Texture already loaded so using that one" << std::endl;
 		return RetrieveTexture(*textureName); 
@@ -45,6 +44,9 @@ std::shared_ptr<Material> AssetManager::CreateTexture(const wchar_t* textureName
 			//Material* material = new Material(textureName, dev, g_devcon, vertexShader, pixelShader, texture, il);
 			std::shared_ptr<Material> material = std::make_shared<Material>(textureName, dev,g_devcon, vertexShader, pixelShader,texture,il);
 			GetTextures().insert(std::make_pair(textureName, material));
+			std::cout << GetTextures().size() << std::endl;
+			std::cout << GetVertexShaders().size() << std::endl;
+			std::cout << GetPixelShaders().size() << std::endl;
 			return material;
 		}
 		//or do if(!vertexShader || !pixelShader) return nullptr; 
