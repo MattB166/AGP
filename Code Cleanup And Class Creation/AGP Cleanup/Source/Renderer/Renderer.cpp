@@ -159,15 +159,15 @@ void Renderer::CleanRenderer()
 	if (pAlphaBlendStateDisable) pAlphaBlendStateDisable->Release();
 	if (pAlphaBlendStateEnable) pAlphaBlendStateEnable->Release();
 	//if (pText) delete pText;
-	if (pTexture) pTexture->Release();
-	if (pSampler) pSampler->Release();
+	//if (pTexture) pTexture->Release();
+	//if (pSampler) pSampler->Release();
 	if (g_DSS) g_DSS->Release();
 	if (g_ZBuffer) g_ZBuffer->Release();
 	if (pIndexBuffer) pIndexBuffer->Release();
 	if (pCBuffer) pCBuffer->Release();
 	if (pVBuffer) pVBuffer->Release();
-	if (pVS) pVS->Release();
-	if (pPS) pPS->Release();
+	//if (pVS) pVS->Release();
+	//if (pPS) pPS->Release();
 	if (pLayout) pLayout->Release();
 
 	if (g_backBuffer) g_backBuffer->Release();
@@ -316,14 +316,14 @@ void Renderer::InitGraphics()
 
 	////CreateWICTextureFromFile(g_dev, g_devcon, L"ExternalModels/Box.bmp", NULL, &pTexture); /// load texture from file. this is what is given to the pixel shader to be drawn on the object
 
-	D3D11_SAMPLER_DESC sampDesc;
-	ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
-	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; //linear filtering
-	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
-	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
-	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
-	sampDesc.MaxLOD = D3D11_FLOAT32_MAX; //max level of detail
-	g_dev->CreateSamplerState(&sampDesc, &pSampler); //create the sampler state
+	//D3D11_SAMPLER_DESC sampDesc;
+	//ZeroMemory(&sampDesc, sizeof(D3D11_SAMPLER_DESC));
+	//sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; //linear filtering
+	//sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
+	//sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texturetexture
+	//sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP; //wrap texture
+	//sampDesc.MaxLOD = D3D11_FLOAT32_MAX; //max level of detail
+	//g_dev->CreateSamplerState(&sampDesc, &pSampler); //create the sampler state
 	//creates a linear sampler state.                                               //////GONE INTO MATERIAL CLASS 
 
 
@@ -560,7 +560,7 @@ void Renderer::DrawSkyBox()
 
 	//set shader resources
 	g_devcon->VSSetConstantBuffers(0, 1, &pSkyBoxCBuffer);
-	g_devcon->PSSetSamplers(0, 1, &pSampler);
+	//g_devcon->PSSetSamplers(0, 1, &pSampler);
 	g_devcon->PSSetShaderResources(0, 1, &pSkyBoxTexture);
 
 	modelSkyBox->Draw();
@@ -570,8 +570,8 @@ void Renderer::DrawSkyBox()
 	g_devcon->RSSetState(p_RasterSolid);
 
 	//set standard shaders
-	g_devcon->VSSetShader(pVS, 0, 0);
-	g_devcon->PSSetShader(pPS, 0, 0);
+	//g_devcon->VSSetShader(pVS, 0, 0);
+	//g_devcon->PSSetShader(pPS, 0, 0);
 	g_devcon->IASetInputLayout(pLayout);
 
 
