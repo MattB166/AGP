@@ -46,6 +46,6 @@ private:
 	static std::unordered_map<const wchar_t*, ID3D11VertexShader*>& GetVertexShaders() { static std::unordered_map<const wchar_t*, ID3D11VertexShader*> m_vertexShaders; return m_vertexShaders; }
 	static std::unordered_map<const wchar_t*, ID3D11PixelShader*>& GetPixelShaders() { static std::unordered_map<const wchar_t*, ID3D11PixelShader*> m_pixelShaders; return m_pixelShaders; }
 
-	
+	//ref to dev and devcon? 
 };
 

@@ -178,7 +178,8 @@ void Renderer::CleanRenderer()
 
 void Renderer::RenderFrame()
 {
-	g_devcon->ClearRenderTargetView(g_backBuffer,Colors::DarkSlateGray);
+	g_devcon->ClearRenderTargetView(g_backBuffer,Colors::DarkSlateGray);                           ///can just set these at beginning of application update 
+	                                                                                                //function. 
 	g_devcon->ClearDepthStencilView(g_ZBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	//set primitive topology
 	g_devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); //triangle list is the primitive topology
@@ -327,32 +328,32 @@ void Renderer::InitGraphics()
 	//creates a linear sampler state.                                               //////GONE INTO MATERIAL CLASS 
 
 
-	//pText = new Text2D("font1.png", g_dev, g_devcon);
-	D3D11_BLEND_DESC bd1 = { 0 };                                       ////text class 
-	bd1.RenderTarget[0].BlendEnable = TRUE;
-	bd1.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	bd1.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	bd1.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	bd1.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	bd1.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	bd1.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	bd1.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	bd1.IndependentBlendEnable = FALSE;
-	bd1.AlphaToCoverageEnable = FALSE;
-	g_dev->CreateBlendState(&bd1, &pAlphaBlendStateEnable);
+	////pText = new Text2D("font1.png", g_dev, g_devcon);
+	//D3D11_BLEND_DESC bd1 = { 0 };                                       ////text class 
+	//bd1.RenderTarget[0].BlendEnable = TRUE;
+	//bd1.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	//bd1.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	//bd1.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	//bd1.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	//bd1.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	//bd1.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	//bd1.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	//bd1.IndependentBlendEnable = FALSE;
+	//bd1.AlphaToCoverageEnable = FALSE;
+	//g_dev->CreateBlendState(&bd1, &pAlphaBlendStateEnable);
 
-	D3D11_BLEND_DESC bd2 = { 0 };
-	bd2.RenderTarget[0].BlendEnable = FALSE;
-	bd2.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	bd2.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	bd2.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	bd2.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	bd2.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	bd2.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	bd2.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	bd2.IndependentBlendEnable = FALSE;
-	bd2.AlphaToCoverageEnable = FALSE;
-	g_dev->CreateBlendState(&bd2, &pAlphaBlendStateDisable);
+	//D3D11_BLEND_DESC bd2 = { 0 };
+	//bd2.RenderTarget[0].BlendEnable = FALSE;
+	//bd2.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	//bd2.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	//bd2.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	//bd2.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	//bd2.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	//bd2.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	//bd2.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	//bd2.IndependentBlendEnable = FALSE;
+	//bd2.AlphaToCoverageEnable = FALSE;
+	//g_dev->CreateBlendState(&bd2, &pAlphaBlendStateDisable);
 
 	D3D11_RASTERIZER_DESC rsDesc; // creates a rasterizer state for transparency 
 	ZeroMemory(&rsDesc, sizeof(D3D11_RASTERIZER_DESC));

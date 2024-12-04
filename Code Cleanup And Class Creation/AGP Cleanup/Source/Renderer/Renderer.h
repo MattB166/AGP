@@ -172,5 +172,5 @@ private:
 	ID3D11PixelShader* pPSSkyBox = NULL;
 	ID3D11InputLayout* pLayoutSkyBox = NULL;
 
-
+	//////MOST OF THIS STUFF WILL NOT BE STAYING HERE 
 };
