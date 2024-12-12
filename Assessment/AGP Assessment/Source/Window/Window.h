@@ -8,7 +8,9 @@ public:
 	Window();
 	HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow);
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	void Run();
+	HWND GetHWND() { return m_hwnd; }
+	void Run(); //probably not needed 
+	void OpenConsole();
 
 private:
 	HINSTANCE m_hInstance = NULL;

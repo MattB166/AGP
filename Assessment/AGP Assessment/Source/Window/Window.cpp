@@ -1,4 +1,5 @@
 #include "Window.h"
+#include <iostream>
 
 Window::Window() : m_hInstance(NULL), m_hwnd(NULL), wr{0,0,0,0}
 {
@@ -78,7 +79,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return MA_ACTIVATEANDEAT;
 
 	case WM_MOUSEMOVE:
-		//s_renderer->RotateCube(0.01f,0.0f,0.0f);
 
 	case WM_LBUTTONDOWN:
 	case WM_LBUTTONUP:
@@ -125,20 +125,21 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void Window::Run()
 {
-	MSG msg = { 0 };  ///initialize the message structure to 0
-	///Enter the infinite message loop
-	while (WM_QUIT != msg.message)  ///while the message is not a quit message
+	
+	
+}
+
+void Window::OpenConsole()
+{
+	if (AllocConsole())
 	{
-		///Check to see if any messages are waiting in the queue
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))  ///if there is a message in the queue
-		{
-			///Translate the message and dispatch it to the window procedure
-			TranslateMessage(&msg);  ///translate the message
-			DispatchMessage(&msg);  ///dispatch the message to the window procedure
-		}
-		else
-		{
-			///Run game code here
-		}
+		FILE* fp = nullptr;
+		freopen_s(&fp, "CONIN$", "r", stdin);
+		freopen_s(&fp, "CONOUT$", "w", stdout);
+		freopen_s(&fp, "CONOUT$", "w", stderr);
+		std::ios::sync_with_stdio(true);
+
+		std::cout << "Hello Console!" << std::endl;
+
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "../Window/Window.h"
+#include "../Renderer/Renderer.h"
 class Application
 {
 public:
@@ -13,6 +14,9 @@ public:
 
 private:
 	Window* m_window = nullptr;
+	Renderer* m_renderer = nullptr; 
+	//list/vector of scenes. 
 
+	//need a way to determine whether we are in "edit" mode or "play" mode. 
 };
 

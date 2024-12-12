@@ -11,6 +11,11 @@ Application::~Application()
 		delete m_window;
 		m_window = nullptr;
 	}
+	if (m_renderer)
+	{
+		delete m_renderer;
+		m_renderer = nullptr;
+	}
 }
 
 bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
@@ -26,10 +31,46 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 	{
 		return false;
 	}
+
+	if (m_renderer == nullptr)
+		m_renderer = new Renderer();
+	else
+	{
+		return false;
+	}
+
+	if (FAILED(m_renderer->InitRenderer(m_window->GetHWND(), SCREEN_WIDTH, SCREEN_HEIGHT)))
+	{
+		return false;
+	}
+
+	m_window->OpenConsole();	
+
+	return true;
 }
 
 void Application::Run()
 {
-	if (m_window)
-		m_window->Run(); 
+	MSG msg = { 0 };
+
+	while (WM_QUIT != msg.message)
+	{
+
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else
+		{
+			///Run game code here
+			m_renderer->Clear();
+
+			//render current scene in here 
+
+
+			m_renderer->Present();
+		}
+
+	}
 }
