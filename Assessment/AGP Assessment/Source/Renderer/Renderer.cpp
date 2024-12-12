@@ -132,7 +132,7 @@ HRESULT Renderer::InitRenderer(HWND hwnd, int width, int height)
 	if (FAILED(m_device->CreateDepthStencilState(&dsDesc, &pDepthWriteSolid)))
 	{
 		OutputDebugString(L"Failed to create depth stencil state");
-		return;
+		return hr;
 	}
 
 	//SKYBOX DEPTH STENCIL STATE WOULD GO HERE BUT PUT IN SKYBOX CLASS INSTEAD 
@@ -157,7 +157,7 @@ void Renderer::CleanRenderer()
 void Renderer::Clear()
 {
 	std::cout << "Clearing" << std::endl;
-	m_deviceContext->ClearRenderTargetView(m_backBuffer, DirectX::Colors::CornflowerBlue);
+	m_deviceContext->ClearRenderTargetView(m_backBuffer, DirectX::Colors::DeepSkyBlue);
 	m_deviceContext->ClearDepthStencilView(m_zBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
