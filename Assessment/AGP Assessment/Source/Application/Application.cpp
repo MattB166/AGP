@@ -66,11 +66,18 @@ void Application::Run()
 			///Run game code here
 			m_renderer->Clear();
 
-			//render current scene in here 
+			//render current scene in here, as well as determine whether we are in "edit" mode or "play" mode, and render IMGUI accordingly, and update behaviours accordingly.
 
 
 			m_renderer->Present();
 		}
 
 	}
+}
+
+void Application::SetMode(Mode mode)
+{
+	m_mode = mode;
+	//if mode is play, hide IMGUI, if mode is edit, show IMGUI.
+	//send objects back to their original positions if mode is edit, and update behaviours if mode is play. 
 }
