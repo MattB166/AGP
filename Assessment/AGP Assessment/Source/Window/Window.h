@@ -9,6 +9,7 @@ class Window
 {
 public:
 	Window();
+	~Window();
 	HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow, IInputManager* inp);
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	HWND GetHWND() { return m_hwnd; }
@@ -20,8 +21,8 @@ private:
 	HINSTANCE m_hInstance = NULL;
 	HWND m_hwnd = NULL; 
 	RECT wr;
-	IInputManager* m_Input; 
-	static IInputManager* m_InputStatic; 
+	IInputManager* m_Input = nullptr;
+	static IInputManager* m_InputStatic;
 
 };
 

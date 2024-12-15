@@ -10,6 +10,24 @@ Window::Window() : m_hInstance(NULL), m_hwnd(NULL), wr{0,0,0,0}
 {
 }
 
+Window::~Window()
+{
+	if (m_hwnd)
+	{
+		DestroyWindow(m_hwnd);
+		m_hwnd = NULL;
+	}
+	if (m_hInstance)
+	{
+		UnregisterClass(L"WindowClass1", m_hInstance);
+		m_hInstance = NULL;
+	}
+	if (m_Input)
+	{
+		m_Input = nullptr; //only setting to null because application will delete the input manager, as it owns it. 
+	}
+}
+
 HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow, IInputManager* inp)
 {
 	m_hInstance = hInstance;  
