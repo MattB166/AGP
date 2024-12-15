@@ -78,7 +78,7 @@ void KeyboardMouse::ProcessInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 	{
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
-		std::cout << "Key Down" << std::endl; 
+		//std::cout << "Key Down" << std::endl; 
 		if (m_keyBindings.find(wParam) != m_keyBindings.end())
 		{
 			auto& binding = m_keyBindings[wParam];
@@ -100,7 +100,7 @@ void KeyboardMouse::ProcessInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		}
 		break;
 	case WM_LBUTTONDOWN:
-		std::cout << "Left Button Down" << std::endl;
+		//std::cout << "Left Button Down" << std::endl;
 		if (m_mouseBindings.find(MouseButton::Left) != m_mouseBindings.end())
 		{
 			auto& binding = m_mouseBindings[MouseButton::Left];
@@ -111,7 +111,7 @@ void KeyboardMouse::ProcessInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		}
 		break;
 	case WM_LBUTTONUP:
-		std::cout << "Left Button Up" << std::endl;
+		//std::cout << "Left Button Up" << std::endl;
 		if (m_mouseBindings.find(MouseButton::Left) != m_mouseBindings.end())
 		{
 			auto& binding = m_mouseBindings[MouseButton::Left];
@@ -122,7 +122,7 @@ void KeyboardMouse::ProcessInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		}
 		break;
 	case WM_RBUTTONDOWN:
-		std::cout << "Right Button Down" << std::endl;
+		//std::cout << "Right Button Down" << std::endl;
 		if (m_mouseBindings.find(MouseButton::Right) != m_mouseBindings.end())
 		{
 			auto& binding = m_mouseBindings[MouseButton::Right];
@@ -133,7 +133,7 @@ void KeyboardMouse::ProcessInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		}
 		break;
 	case WM_RBUTTONUP:
-		std::cout << "Right Button Up" << std::endl;
+		//std::cout << "Right Button Up" << std::endl;
 		if (m_mouseBindings.find(MouseButton::Right) != m_mouseBindings.end())
 		{
 			auto& binding = m_mouseBindings[MouseButton::Right];

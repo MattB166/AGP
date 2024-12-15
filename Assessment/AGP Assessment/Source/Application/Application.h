@@ -22,11 +22,13 @@ public:
 	void SetMode(Mode mode);
 	void SwitchMode();
 	Mode GetMode() { return m_mode; }
+	void SetupBindings();
 
 
 private:
 	Window* m_window = nullptr;
 	Renderer* m_renderer = nullptr; 
+	std::unique_ptr<IInputManager> m_input = nullptr;
 	Mode m_mode = Mode::EDIT;
 	//list/vector of scenes. 
 

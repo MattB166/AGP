@@ -9,18 +9,18 @@ class Window
 {
 public:
 	Window();
-	HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow, std::unique_ptr<IInputManager>& inp);
+	HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow, IInputManager* inp);
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	HWND GetHWND() { return m_hwnd; }
 	void Run(); //probably not needed 
 	void OpenConsole();
-	IInputManager* GetInput() { return m_Input.get(); }
+	IInputManager* GetInput() { return m_Input; }
 
 private:
 	HINSTANCE m_hInstance = NULL;
 	HWND m_hwnd = NULL; 
 	RECT wr;
-	std::unique_ptr<IInputManager> m_Input; 
+	IInputManager* m_Input; 
 	static IInputManager* m_InputStatic; 
 
 };

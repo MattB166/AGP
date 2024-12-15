@@ -10,7 +10,7 @@ Window::Window() : m_hInstance(NULL), m_hwnd(NULL), wr{0,0,0,0}
 {
 }
 
-HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow, std::unique_ptr<IInputManager>& inp)
+HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow, IInputManager* inp)
 {
 	m_hInstance = hInstance;  
 	WNDCLASSEX wc = { };  
@@ -61,8 +61,8 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow, std::unique_ptr<II
 
 	//mouse.SetWindow(hWnd);
 	//mouse.SetMode(Mouse::MODE_RELATIVE);
-	m_Input = std::move(inp);
-	m_InputStatic = m_Input.get();
+	m_Input = inp;
+	m_InputStatic = inp;
 	
 
 	return S_OK;

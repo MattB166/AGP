@@ -1,9 +1,12 @@
 #include "Application.h"
 #include <memory>
+#include <iostream>
 #include "../Input/KeyboardMouse.h"
 
-Application::Application()
+Application::Application() : m_window(nullptr), m_renderer(nullptr), m_input(std::make_unique<KeyboardMouse>())
 {
+
+	
 }
 
 Application::~Application()
@@ -33,9 +36,9 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 		return false;
 	}
 
-	std::unique_ptr<IInputManager> input = std::make_unique<KeyboardMouse>();
+	
 
-	if (FAILED(m_window->InitWindow(hInstance, nCmdShow, input)))
+	if (FAILED(m_window->InitWindow(hInstance, nCmdShow, m_input.get())))
 	{
 		return false;
 	}
@@ -69,6 +72,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 void Application::Run()
 {
 	MSG msg = { 0 };
+	SetupBindings();
 
 	while (WM_QUIT != msg.message)
 	{
@@ -141,4 +145,17 @@ void Application::SwitchMode()
 	//if mode is play, hide IMGUI, if mode is edit, show IMGUI.
 	//send objects back to their original positions if mode is edit, and update behaviours if mode is play. 
 	//do this via the scene manager.
+}
+
+void Application::SetupBindings()
+{
+	if (m_input != nullptr)
+	{
+		m_input->BindKeyToFunction('W', BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
+	}
+	else
+	{
+		std::cout << "Input is null" << std::endl;
+	}
+	
 }
