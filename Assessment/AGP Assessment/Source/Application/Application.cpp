@@ -86,18 +86,29 @@ void Application::Run()
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 
-			ImGui::Begin("Hello, world!", nullptr, ImGuiWindowFlags_None);
-			ImGui::Text("This is some useful text.");
-			ImGui::End();
 			//determine whether we are in "edit" mode or "play" mode, and render IMGUI accordingly, and update behaviours accordingly.
 			//any active object will know how to update itself, based on the application mode.
 			if (m_mode == Mode::EDIT)
 			{
-				
+				ImGui::Begin("Edit Mode",nullptr,ImGuiWindowFlags_AlwaysAutoResize);
+				ImGui::Text("Current Mode: Edit Mode");
+				//ImGui::SetWindowPos(ImVec2(0, 0));
+				if (ImGui::Button("Switch Mode"))
+				{
+					SwitchMode();
+				}
+				ImGui::End();
 			}
 			else if (m_mode == Mode::PLAY)
 			{
-				
+				ImGui::Begin("Play Mode",nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+				ImGui::Text("Current Mode: Play Mode");
+				//ImGui::SetWindowPos(ImVec2(0, 0));
+				if (ImGui::Button("Switch Mode"))
+				{
+					SwitchMode();
+				}
+				ImGui::End();
 			}
 			////need a container which manages all the imgui windows and what they display/ whether they display. 
 			ImGui::Render();
