@@ -2,6 +2,9 @@
 #include <Windows.h>
 #include "../Window/Window.h"
 #include "../Renderer/Renderer.h"
+#include "../IMGUI/imgui.h"
+#include "../IMGUI/imgui_impl_win32.h"
+#include "../IMGUI/imgui_impl_dx11.h"
 enum class Mode
 {
 	EDIT,
@@ -17,6 +20,7 @@ public:
 	bool Initialize(HINSTANCE hInstance, int nCmdShow); //initialize window, renderer, imgui. 
 	void Run();  //run the application if initialized.
 	void SetMode(Mode mode);
+	void SwitchMode();
 	Mode GetMode() { return m_mode; }
 
 

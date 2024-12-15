@@ -1,4 +1,6 @@
 #include "Application.h"
+#include <memory>
+#include "../Input/KeyboardMouse.h"
 
 Application::Application()
 {
@@ -16,6 +18,10 @@ Application::~Application()
 		delete m_renderer;
 		m_renderer = nullptr;
 	}
+
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 }
 
 bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
@@ -27,7 +33,9 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 		return false;
 	}
 
-	if (FAILED(m_window->InitWindow(hInstance, nCmdShow)))
+	std::unique_ptr<IInputManager> input = std::make_unique<KeyboardMouse>();
+
+	if (FAILED(m_window->InitWindow(hInstance, nCmdShow, input)))
 	{
 		return false;
 	}
@@ -46,6 +54,15 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 
 	m_window->OpenConsole();	
 
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+
+	ImGui_ImplWin32_Init(m_window->GetHWND());
+	ImGui_ImplDX11_Init(m_renderer->GetDevice(), m_renderer->GetDeviceContext());
+
 	return true;
 }
 
@@ -55,7 +72,6 @@ void Application::Run()
 
 	while (WM_QUIT != msg.message)
 	{
-
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
@@ -66,9 +82,26 @@ void Application::Run()
 			///Run game code here
 			m_renderer->Clear();
 
+			ImGui_ImplDX11_NewFrame();
+			ImGui_ImplWin32_NewFrame();
+			ImGui::NewFrame();
+
+			ImGui::Begin("Hello, world!", nullptr, ImGuiWindowFlags_None);
+			ImGui::Text("This is some useful text.");
+			ImGui::End();
 			//determine whether we are in "edit" mode or "play" mode, and render IMGUI accordingly, and update behaviours accordingly.
 			//any active object will know how to update itself, based on the application mode.
-
+			if (m_mode == Mode::EDIT)
+			{
+				
+			}
+			else if (m_mode == Mode::PLAY)
+			{
+				
+			}
+			////need a container which manages all the imgui windows and what they display/ whether they display. 
+			ImGui::Render();
+			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 			m_renderer->Present();
 		}
@@ -82,4 +115,19 @@ void Application::SetMode(Mode mode)
 	//if mode is play, hide IMGUI, if mode is edit, show IMGUI.
 	//send objects back to their original positions if mode is edit, and update behaviours if mode is play. 
 	//do this via the scene manager. 
+}
+
+void Application::SwitchMode()
+{
+	if (m_mode == Mode::EDIT)
+	{
+		m_mode = Mode::PLAY;
+	}
+	else if (m_mode == Mode::PLAY)
+	{
+		m_mode = Mode::EDIT;
+	}
+	//if mode is play, hide IMGUI, if mode is edit, show IMGUI.
+	//send objects back to their original positions if mode is edit, and update behaviours if mode is play. 
+	//do this via the scene manager.
 }

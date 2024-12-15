@@ -5,7 +5,7 @@ Window::Window() : m_hInstance(NULL), m_hwnd(NULL), wr{0,0,0,0}
 {
 }
 
-HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
+HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow, std::unique_ptr<IInputManager>& inp)
 {
 	m_hInstance = hInstance;  
 	WNDCLASSEX wc = { };  
@@ -33,6 +33,7 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
 		return E_FAIL;
 	}
 
+	
 
 	
 	m_hwnd = CreateWindowEx(NULL,
@@ -46,7 +47,7 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
 		NULL, 
 		NULL, 
 		hInstance, 
-		NULL); 
+		this); 
 
 	if (m_hwnd == NULL) return E_FAIL;
 
@@ -55,72 +56,49 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
 
 	//mouse.SetWindow(hWnd);
 	//mouse.SetMode(Mouse::MODE_RELATIVE);
+	m_Input = std::move(inp);
+
+	
+
 	return S_OK;
 
 }
 
 LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	//float change = XM_PI / 8;
+
+	/*Window* wThis = nullptr;
+	if (message == WM_NCCREATE)
+	{
+		CREATESTRUCT* pCreate = (CREATESTRUCT*)lParam;
+		wThis = (Window*)pCreate->lpCreateParams;
+		SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)wThis);
+		wThis->m_hwnd = hWnd;
+		std::cout << "Window pointer set" << std::endl;
+	}
+	else
+	{
+		wThis = (Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+		if (wThis == nullptr)
+		{
+			std::cout << "Window pointer is null" << std::endl;
+		}
+	}
+
+	if (wThis)
+	{
+		wThis->m_Input->ProcessInput(hWnd, message, wParam, lParam);
+	}*/
 	switch (message)
 	{
-		//This message is sent when the user closes the window
-		//depending on the handling of the application window, you might not need this
-		//in this case, if a window is destroyed, we also tell the application to quit entirely by posting a quit message
-
-	case WM_ACTIVATE:
-	case WM_ACTIVATEAPP:
-	case WM_INPUT:
-		//Keyboard::ProcessMessage(message, wParam, lParam);
-		//Mouse::ProcessMessage(message, wParam, lParam);
-		break;
-
-	case WM_MOUSEACTIVATE:
-		return MA_ACTIVATEANDEAT;
-
-	case WM_MOUSEMOVE:
-
-	case WM_LBUTTONDOWN:
-	case WM_LBUTTONUP:
-	case WM_RBUTTONDOWN:
-	case WM_RBUTTONUP:
-	case WM_MBUTTONDOWN:
-	case WM_MBUTTONUP:
-	case WM_MOUSEWHEEL:
-	case WM_XBUTTONDOWN:
-	case WM_XBUTTONUP:
-	case WM_MOUSEHOVER:
-		//Mouse::ProcessMessage(message, wParam, lParam);
-		break;
-
-	case WM_SYSKEYDOWN:
-		if (wParam == VK_RETURN && (lParam & 0x60000000) == 0x20000000)
-		{
-			//this is where you would handle the classic alt+enter fullscreen toggle 
-		}
-		//Keyboard::ProcessMessage(message, wParam, lParam);
-		break;
-
-	case WM_KEYDOWN:
-	case WM_KEYUP:
-	case WM_SYSKEYUP:
-		//Keyboard::ProcessMessage(message, wParam, lParam);
-		break;
-
 	case WM_DESTROY:
-		//sends a quit message to the windows message queue
+
 		PostQuitMessage(0);
-		return 0;
-
-		/// Key being pressed down events 
-
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam); ///let windows handle everything else with default handling 
 		break;
 	}
 
-
-	return 0;
+	return DefWindowProc(hWnd, message, wParam, lParam); ///let windows handle everything else with default handling 
+		
 }
 
 void Window::Run()

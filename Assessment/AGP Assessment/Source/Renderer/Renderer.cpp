@@ -156,7 +156,7 @@ void Renderer::CleanRenderer()
 
 void Renderer::Clear()
 {
-	std::cout << "Clearing" << std::endl;
+	//std::cout << "Clearing" << std::endl;
 	m_deviceContext->ClearRenderTargetView(m_backBuffer, DirectX::Colors::DeepSkyBlue);
 	m_deviceContext->ClearDepthStencilView(m_zBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -168,7 +168,7 @@ void Renderer::Clear()
 
 void Renderer::Present()
 {
-	std::cout << "Presenting" << std::endl;
+	//std::cout << "Presenting" << std::endl;
 	m_deviceContext->OMSetRenderTargets(1, &m_backBuffer, m_zBuffer);
 	m_swapChain->Present(0, 0); 
 }

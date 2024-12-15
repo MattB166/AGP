@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include "../Constant Buffer/CBuffer.h"
+using namespace DirectX;
 class Renderer
 {
 
@@ -10,9 +11,13 @@ public:
 	
 	void CleanRenderer();
 
-	void Clear(); 
+	void Clear(); // current scene as parameters? 
 
 	void Present(); 
+
+	ID3D11Device* GetDevice() { return m_device; }
+
+	ID3D11DeviceContext* GetDeviceContext() { return m_deviceContext; }
 
 private:
 	IDXGISwapChain* m_swapChain = nullptr;
@@ -36,6 +41,12 @@ private:
 	ID3D11DepthStencilView* m_zBuffer = nullptr;
 
 	ID3D11RasterizerState* m_rasterizerState = nullptr;
+
+	XMMATRIX m_worldMatrix; //world matrix
+	
+	XMMATRIX m_projectionMatrix; //projection matrix. camera manages this and view matrix. 
+
+	XMMATRIX m_viewMatrix; //view matrix
 
 
 	//current camera 
