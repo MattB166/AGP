@@ -1,5 +1,10 @@
 #include "Window.h"
 #include <iostream>
+#include "../IMGUI/imgui.h"
+#include "../IMGUI/imgui_impl_win32.h"
+#include "../IMGUI/imgui_impl_dx11.h"
+IInputManager* Window::m_InputStatic = nullptr;
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 Window::Window() : m_hInstance(NULL), m_hwnd(NULL), wr{0,0,0,0}
 {
@@ -47,7 +52,7 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow, std::unique_ptr<II
 		NULL, 
 		NULL, 
 		hInstance, 
-		this); 
+		NULL); 
 
 	if (m_hwnd == NULL) return E_FAIL;
 
@@ -57,7 +62,7 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow, std::unique_ptr<II
 	//mouse.SetWindow(hWnd);
 	//mouse.SetMode(Mouse::MODE_RELATIVE);
 	m_Input = std::move(inp);
-
+	m_InputStatic = m_Input.get();
 	
 
 	return S_OK;
@@ -66,29 +71,11 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow, std::unique_ptr<II
 
 LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+		return true;
 
-	/*Window* wThis = nullptr;
-	if (message == WM_NCCREATE)
-	{
-		CREATESTRUCT* pCreate = (CREATESTRUCT*)lParam;
-		wThis = (Window*)pCreate->lpCreateParams;
-		SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)wThis);
-		wThis->m_hwnd = hWnd;
-		std::cout << "Window pointer set" << std::endl;
-	}
-	else
-	{
-		wThis = (Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-		if (wThis == nullptr)
-		{
-			std::cout << "Window pointer is null" << std::endl;
-		}
-	}
-
-	if (wThis)
-	{
-		wThis->m_Input->ProcessInput(hWnd, message, wParam, lParam);
-	}*/
+	if (m_InputStatic != nullptr)
+		m_InputStatic->ProcessInput(hWnd, message, wParam, lParam); //process input
 	switch (message)
 	{
 	case WM_DESTROY:
@@ -103,8 +90,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void Window::Run()
 {
-	
-	
+	m_InputStatic->Update();
 }
 
 void Window::OpenConsole()

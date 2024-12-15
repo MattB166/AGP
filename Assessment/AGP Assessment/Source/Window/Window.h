@@ -21,5 +21,7 @@ private:
 	HWND m_hwnd = NULL; 
 	RECT wr;
 	std::unique_ptr<IInputManager> m_Input; 
+	static IInputManager* m_InputStatic; 
+
 };
 
