@@ -94,24 +94,16 @@ void Application::Run()
 			//any active object will know how to update itself, based on the application mode.
 			if (m_mode == Mode::EDIT)
 			{
-				ImGui::Begin("Edit Mode",nullptr,ImGuiWindowFlags_AlwaysAutoResize);
-				ImGui::Text("Current Mode: Edit Mode");
-				//ImGui::SetWindowPos(ImVec2(0, 0));
-				if (ImGui::Button("Switch Mode"))
-				{
-					SwitchMode();
-				}
+				ImGui::Begin("Edit Mode",nullptr,ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+				ImGui::Text("Current Mode: Edit Mode. Press P to Play");
+				ImGui::SetWindowPos(ImVec2(0, 0));
 				ImGui::End();
 			}
 			else if (m_mode == Mode::PLAY)
 			{
-				ImGui::Begin("Play Mode",nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-				ImGui::Text("Current Mode: Play Mode");
-				//ImGui::SetWindowPos(ImVec2(0, 0));
-				if (ImGui::Button("Switch Mode"))
-				{
-					SwitchMode();
-				}
+				ImGui::Begin("Play Mode",nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+				ImGui::Text("Current Mode: Play Mode. Press P to Exit Play");
+				ImGui::SetWindowPos(ImVec2(0, 0));
 				ImGui::End();
 			}
 			////need a container which manages all the imgui windows and what they display/ whether they display. 
@@ -151,7 +143,7 @@ void Application::SetupBindings()
 {
 	if (m_input != nullptr)
 	{
-		m_input->BindKeyToFunction('W', BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
+		m_input->BindKeyToFunction('P', BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
 	}
 	else
 	{
