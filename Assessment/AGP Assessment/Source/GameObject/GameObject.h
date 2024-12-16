@@ -4,6 +4,7 @@
 #include "../Constant Buffer/CBuffer.h"
 #include "../Component/Component.h"
 #include <memory>
+#include <vector>
 using namespace DirectX;
 struct Transform
 {
@@ -24,12 +25,23 @@ struct Transform
 class GameObject
 {
 public:
+	void AddComponent(std::shared_ptr<Component> component);
+	void Update(float deltaTime);
+	void SetPosition(float x, float y, float z) { m_transform.pos = { x,y,z }; }
+	void SetRotation(float x, float y, float z) { m_transform.rot = { x,y,z }; }
+	void SetScale(float x, float y, float z) { m_transform.scl = { x,y,z }; }
+	void ChangeYPosition(float y) { m_transform.pos.y += y; }
+	void ChangeXPosition(float x) { m_transform.pos.x += x; }
+	void ChangeZPosition(float z) { m_transform.pos.z += z; }
+
+
+	Transform GetTransform() { return m_transform; }
 
 
 private:
 	Transform m_transform;
-	/*std::unique_ptr<ObjFileModel> m_model = nullptr;*/
 	std::unique_ptr<CBuffer> m_constantBuffer = nullptr;
 	std::unique_ptr<ReflectiveCBuffer> m_reflectiveConstantBuffer = nullptr;
+	std::vector<std::shared_ptr<Component>> m_components;
 };
 
