@@ -4,7 +4,7 @@ ID3D11Device* AssetManager::m_dev = nullptr;
 ID3D11DeviceContext* AssetManager::m_devcon = nullptr;
 
 std::unordered_map<const wchar_t*, std::shared_ptr<Material>> AssetManager::m_materials;
-std::unordered_map<const wchar_t*, std::shared_ptr<ObjFileModel>> AssetManager::m_models;
+std::unordered_map<const wchar_t*, std::shared_ptr<Model>> AssetManager::m_models;
 std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>> AssetManager::m_fonts;
 
 
@@ -48,7 +48,7 @@ std::shared_ptr<Material> AssetManager::CreateMaterial(const wchar_t* texturePat
 
 }
 
-std::shared_ptr<ObjFileModel> AssetManager::CreateModel(const wchar_t* modelPath)
+std::shared_ptr<Model> AssetManager::CreateModel(const wchar_t* modelPath)
 {
 	if (IsModelLoaded(*modelPath))
 	{
@@ -56,7 +56,8 @@ std::shared_ptr<ObjFileModel> AssetManager::CreateModel(const wchar_t* modelPath
 	}
 	else
 	{
-		std::shared_ptr<ObjFileModel> model = std::make_shared<ObjFileModel>((char*)modelPath, m_dev, m_devcon);
+		ObjFileModel* Tmpmodel = new ObjFileModel((char*)modelPath, m_dev,m_devcon);
+		std::shared_ptr<Model> model = std::make_shared<Model>(m_dev, m_devcon, Tmpmodel);
 		GetModels().insert(std::make_pair(modelPath, model));
 		return model;
 
@@ -113,7 +114,7 @@ std::shared_ptr<Material> AssetManager::RetrieveMaterial(const wchar_t& textureP
 	return nullptr; 
 }
 
-std::shared_ptr<ObjFileModel> AssetManager::RetrieveModel(const wchar_t& modelPath)
+std::shared_ptr<Model> AssetManager::RetrieveModel(const wchar_t& modelPath)
 {
 	auto it = GetModels().find(&modelPath);
 	if (it != GetModels().end())

@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include "SpriteFont.h"
 #include "../Component/Material.h"
-#include "../ObjectFileModel/objfilemodel.h"
+#include "../Component/Model.h"
 class AssetManager
 {
 public:
@@ -14,7 +14,7 @@ public:
 #pragma region Externals
 	static std::shared_ptr<Material> CreateMaterial(const wchar_t* texturePath);
 
-	static std::shared_ptr<ObjFileModel> CreateModel(const wchar_t* modelPath);
+	static std::shared_ptr<Model> CreateModel(const wchar_t* modelPath);
 
 	static std::shared_ptr<SpriteFont> MakeFont(const wchar_t* fontPath);
 
@@ -45,7 +45,7 @@ private:
 #pragma region InternalRetrievals
 	static std::shared_ptr<Material> RetrieveMaterial(const wchar_t& texturePath);
 
-	static std::shared_ptr<ObjFileModel> RetrieveModel(const wchar_t& modelPath);
+	static std::shared_ptr<Model> RetrieveModel(const wchar_t& modelPath);
 
 	static std::shared_ptr<SpriteFont> RetrieveFont(const wchar_t& fontPath);
 #pragma endregion
@@ -53,7 +53,7 @@ private:
 #pragma region Maps
 	static std::unordered_map<const wchar_t*, std::shared_ptr<Material>> m_materials;
 
-	static std::unordered_map<const wchar_t*, std::shared_ptr<ObjFileModel>> m_models;
+	static std::unordered_map<const wchar_t*, std::shared_ptr<Model>> m_models;
 
 	static std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>> m_fonts;
 #pragma endregion
@@ -61,7 +61,7 @@ private:
 #pragma region InternalGetters
 	static std::unordered_map<const wchar_t*, std::shared_ptr<Material>>& GetMaterials() { return m_materials; }
 
-	static std::unordered_map<const wchar_t*, std::shared_ptr<ObjFileModel>>& GetModels() { return m_models; }
+	static std::unordered_map<const wchar_t*, std::shared_ptr<Model>>& GetModels() { return m_models; }
 
 	static std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>>& GetFonts() { return m_fonts; }
 #pragma endregion
