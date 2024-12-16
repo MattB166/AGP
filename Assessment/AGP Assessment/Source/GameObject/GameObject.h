@@ -26,6 +26,7 @@ class GameObject
 {
 public:
 	void AddComponent(std::shared_ptr<Component> component);
+	void RemoveComponent(std::shared_ptr<Component> component);
 	void Update(float deltaTime);
 	void SetPosition(float x, float y, float z) { m_transform.pos = { x,y,z }; }
 	void SetRotation(float x, float y, float z) { m_transform.rot = { x,y,z }; }

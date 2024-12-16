@@ -90,23 +90,8 @@ void Application::Run()
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 
-			//determine whether we are in "edit" mode or "play" mode, and render IMGUI accordingly, and update behaviours accordingly.
-			//any active object will know how to update itself, based on the application mode.
-			if (m_mode == Mode::EDIT)
-			{
-				ImGui::Begin("Edit Mode",nullptr,ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-				ImGui::Text("Current Mode: Edit Mode. Press P to Play");
-				ImGui::SetWindowPos(ImVec2(0, 0));
-				ImGui::End();
-			}
-			else if (m_mode == Mode::PLAY)
-			{
-				ImGui::Begin("Play Mode",nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-				ImGui::Text("Current Mode: Play Mode. Press P to Exit Play");
-				ImGui::SetWindowPos(ImVec2(0, 0));
-				ImGui::End();
-			}
-			////need a container which manages all the imgui windows and what they display/ whether they display. 
+			RunMode();
+
 			ImGui::Render();
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
@@ -137,6 +122,24 @@ void Application::SwitchMode()
 	//if mode is play, hide IMGUI, if mode is edit, show IMGUI.
 	//send objects back to their original positions if mode is edit, and update behaviours if mode is play. 
 	//do this via the scene manager.
+}
+
+void Application::RunMode() //also in here run all logic for choosing objects and editing them. 
+{
+	if (m_mode == Mode::EDIT)
+	{
+		ImGui::Begin("Edit Mode", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+		ImGui::Text("Current Mode: Edit Mode. Press P to Play");
+		ImGui::SetWindowPos(ImVec2(0, 0));
+		ImGui::End();
+	}
+	else if (m_mode == Mode::PLAY)
+	{
+		ImGui::Begin("Play Mode", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+		ImGui::Text("Current Mode: Play Mode. Press P to Exit Play");
+		ImGui::SetWindowPos(ImVec2(0, 0));
+		ImGui::End();
+	}
 }
 
 void Application::SetupBindings()

@@ -152,6 +152,7 @@
     <ClCompile Include="Source\IMGUI\imgui_tables.cpp" />
     <ClCompile Include="Source\IMGUI\imgui_widgets.cpp" />
     <ClCompile Include="Source\Window\Window.cpp" />
+    <ClCompile Include="Source\Time\TimeClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Component\Model.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Source\IMGUI\imstb_textedit.h" />
     <ClInclude Include="Source\IMGUI\imstb_truetype.h" />
     <ClInclude Include="Source\Window\Window.h" />
+    <ClInclude Include="Source\Time\TimeClass.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

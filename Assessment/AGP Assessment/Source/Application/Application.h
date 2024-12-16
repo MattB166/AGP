@@ -22,6 +22,7 @@ public:
 	void SetMode(Mode mode);
 	void SwitchMode();
 	Mode GetMode() { return m_mode; }
+	void RunMode(); 
 	void SetupBindings();
 
 
