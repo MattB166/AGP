@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AssetManager\AssetManager.cpp" />
     <ClCompile Include="Source\Component\Material.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\GameObject\GameObject.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="Source\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\AssetManager\AssetManager.h" />
     <ClInclude Include="Source\Component\Material.h" />
     <ClInclude Include="Source\Component\Component.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
