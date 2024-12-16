@@ -1,14 +1,32 @@
 #include "SceneManager.h"
 
-std::unordered_map<const wchar_t*, std::shared_ptr<Scene>> SceneManager::m_scenes;
-std::shared_ptr<Scene> SceneManager::m_activeScene;
+std::unordered_map<std::wstring, std::unique_ptr<Scene>> SceneManager::m_scenes;
+std::wstring SceneManager::m_activeScene;
 
-void SceneManager::AddScene(const wchar_t* name, std::shared_ptr<Scene> sc)
+void SceneManager::AddScene(const std::wstring& name, Scene* sc)
 {
 	m_scenes.insert(std::make_pair(name, sc));
 }
 
-std::shared_ptr<Scene> SceneManager::GetActiveScene()
+Scene* SceneManager::GetActiveScene()
 {
-	return m_activeScene;
+	if (m_scenes.find(m_activeScene) != m_scenes.end())
+	{
+		return m_scenes[m_activeScene].get();
+	}
+	return nullptr;
+}
+
+void SceneManager::SetActiveScene(const wchar_t* name)
+{
+	if (m_scenes.find(name) != m_scenes.end())
+	{
+		m_activeScene = name;
+	}
+}
+
+void SceneManager::CleanUp()
+{
+	m_scenes.clear();
+	m_activeScene.clear();
 }

@@ -131,6 +131,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Component\Material.cpp" />
+    <ClCompile Include="Source\Component\Component.cpp" />
+    <ClCompile Include="Source\GameObject\GameObject.cpp" />
+    <ClCompile Include="Source\ObjectFileModel\objfilemodel.cpp" />
     <ClCompile Include="Source\Input\KeyboardMouse.cpp" />
     <ClCompile Include="Source\Input\IInputManager.cpp" />
     <ClCompile Include="Source\Scenes\Scene.cpp" />
@@ -148,6 +152,10 @@
     <ClCompile Include="Source\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Component\Material.h" />
+    <ClInclude Include="Source\Component\Component.h" />
+    <ClInclude Include="Source\GameObject\GameObject.h" />
+    <ClInclude Include="Source\ObjectFileModel\objfilemodel.h" />
     <ClInclude Include="Source\Input\KeyboardMouse.h" />
     <ClInclude Include="Source\Input\IInputManager.h" />
     <ClInclude Include="Source\Scenes\Scene.h" />
