@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Source\Component\Model.cpp" />
     <ClCompile Include="Source\AssetManager\AssetManager.cpp" />
     <ClCompile Include="Source\Component\Material.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="Source\Time\TimeClass.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Source\Component\Model.h" />
     <ClInclude Include="Source\AssetManager\AssetManager.h" />
     <ClInclude Include="Source\Component\Material.h" />
