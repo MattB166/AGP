@@ -3,15 +3,14 @@
 class Scene //controls all current gameobjects in the scene. 
 {
 public:
-	Scene() = default;
-	virtual ~Scene() = default;
-	virtual void OnLoad() = 0;
-	virtual void OnUpdate(float deltaTime) = 0;
-	virtual void OnRender() = 0;
-	virtual void OnImGuiRender() = 0;
-	virtual void OnUnload() = 0;   
+	void Initialize(); //initialize the scene.
+	void DrawStatics(); //draw all gameobjects in the scene. 
+	void CycleSelectedGameObject(); //cycle through the gameobjects in the scene. 
 
 private:
-	//vector of gameobjects. 
+	//vector of gameobjects, and selected gameobject.
+	std::vector<GameObject*> m_gameObjects;
+	GameObject* m_selectedGameObject = nullptr;
+	int m_selectedIndex = 0;
 };
 

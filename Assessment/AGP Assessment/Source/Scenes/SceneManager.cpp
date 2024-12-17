@@ -25,6 +25,14 @@ void SceneManager::SetActiveScene(const wchar_t* name)
 	}
 }
 
+void SceneManager::DrawScenePreview() 
+{
+}
+
+void SceneManager::DrawScene()
+{
+}
+
 void SceneManager::CleanUp()
 {
 	m_scenes.clear();

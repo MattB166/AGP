@@ -13,6 +13,10 @@ public:
 
 	static void SetActiveScene(const wchar_t* name); //set the active scene.
 
+	static void DrawScenePreview(); //draw the active scene preview.
+
+	static void DrawScene(); //draw the active scene. 
+
 	static void CleanUp(); //clean up the scene manager.
 
 private:
