@@ -11,7 +11,7 @@
 class AssetManager
 {
 public:
-	static void Initialize(ID3D11Device* dev, ID3D11DeviceContext* devcon);
+	static void Initialize(ID3D11Device* dev, ID3D11DeviceContext* devcon); //const buffer too? 
 	static void CleanUp();
 
 #pragma region Externals

@@ -113,28 +113,7 @@ void GameObject::ApplyForce(XMFLOAT3 force)
 
 void GameObject::ApplyLighting() //if you apply the non reflective lighting to the reflective shader it will just be a reflective object with no lighting. 
 {
-	if (m_reflective)
-	{
-		m_reflectiveCBufferData.ambientLightCol = { 0.5f,0.5f,0.5f,1.0f };
-		XMVECTOR directionalLightShinesFrom = { 0.2788f,0.7063f,0.6506f }; //make this a member so can adjust it in runtime. 
-		XMMATRIX transpose = XMMatrixTranspose(m_transform.GetWorldMatrix());
-		m_reflectiveCBufferData.directionalLightDir = XMVector3Transform(directionalLightShinesFrom, transpose);
-
-		for (size_t i = 0; i < MAX_POINT_LIGHTS; i++)
-		{
-			if (!m_cBufferData.pointLights[i].enabled)
-				continue;
-
-			XMMATRIX inverse = XMMatrixInverse(nullptr, m_transform.GetWorldMatrix());
-			m_reflectiveCBufferData.pointLights[i].position = XMVector3Transform(m_cBufferData.pointLights[i].position, inverse);
-			m_reflectiveCBufferData.pointLights[i].colour = m_reflectiveCBufferData.pointLights[i].colour;
-			m_reflectiveCBufferData.pointLights[i].strength = m_reflectiveCBufferData.pointLights[i].strength;
-			m_reflectiveCBufferData.pointLights[i].enabled = m_reflectiveCBufferData.pointLights[i].enabled;
-
-		}
-	}
-	else
-	{
+	
 		m_cBufferData.ambientLightCol = { 0.5f,0.5f,0.5f,1.0f };
 		XMVECTOR directionalLightShinesFrom = { 0.2788f,0.7063f,0.6506f }; //make this a member so can adjust it in runtime. 
 		XMMATRIX transpose = XMMatrixTranspose(m_transform.GetWorldMatrix());
@@ -152,36 +131,24 @@ void GameObject::ApplyLighting() //if you apply the non reflective lighting to t
 			m_cBufferData.pointLights[i].enabled = m_cBufferData.pointLights[i].enabled;
 
 		}
-	}
 }
 
 void GameObject::UpdateConstantBuffer(ID3D11DeviceContext* g_devcon, ID3D11Buffer* rendererBuffer, const XMMATRIX& view, const XMMATRIX& projection, bool reflective)
 {
-	if (!reflective)
-	{
+	
 		XMMATRIX world = m_transform.GetWorldMatrix();
 		//CBuffer m_cBufferData;
 		m_cBufferData.WVP = world * view * projection;
+		m_cBufferData.WV = world * view;
 		//m_cBufferData.WV = world * view;
 		g_devcon->UpdateSubresource(rendererBuffer, 0, 0, &m_cBufferData, 0, 0);
 		g_devcon->VSSetConstantBuffers(0, 1, &rendererBuffer);
-	}
-	else
-	{
-		XMMATRIX world = m_transform.GetWorldMatrix();
-		//ReflectiveCBuffer m_cBufferData;
-		m_reflectiveCBufferData.WVP = world * view * projection;
-		m_reflectiveCBufferData.WV = world * view;
-		g_devcon->UpdateSubresource(rendererBuffer, 0, 0, &m_reflectiveCBufferData, 0, 0);
-		g_devcon->VSSetConstantBuffers(0, 1, &rendererBuffer);
-	}
 	
 }
 
 void GameObject::CreateConstantBuffer(ID3D11Device* g_dev, ID3D11Buffer* rendererBuffer, bool reflective) //throws error because renderer cbuffer is different to gameobject cbuffer. 
 {
-	if (!reflective)
-	{
+	
 		D3D11_BUFFER_DESC cBufferDesc = {};
 		cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 		cBufferDesc.ByteWidth = sizeof(CBuffer);
@@ -192,19 +159,5 @@ void GameObject::CreateConstantBuffer(ID3D11Device* g_dev, ID3D11Buffer* rendere
 		{
 			MessageBox(NULL, L"Error creating constant buffer", L"Error", MB_OK);
 		}
-	}
-	else
-	{
-		D3D11_BUFFER_DESC cBufferDesc = {};
-		cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		cBufferDesc.ByteWidth = sizeof(ReflectiveCBuffer);
-		cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		cBufferDesc.CPUAccessFlags = 0;
-		HRESULT hr = g_dev->CreateBuffer(&cBufferDesc, NULL, &rendererBuffer);
-		if (FAILED(hr))
-		{
-			MessageBox(NULL, L"Error creating constant buffer", L"Error", MB_OK);
-		}
-	}
 	
 }

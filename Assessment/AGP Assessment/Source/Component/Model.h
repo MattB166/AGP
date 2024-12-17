@@ -12,5 +12,6 @@ public:
 	ObjFileModel* GetModel() { return m_model; }
 private:
 	ObjFileModel* m_model = nullptr;
+	ID3D11Buffer* m_constBuffer = nullptr;
 };
 

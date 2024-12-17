@@ -1,5 +1,9 @@
 #include "GameObject.h"
 
+GameObject::GameObject()
+{
+}
+
 void GameObject::AddComponent(std::shared_ptr<Component> component)
 {
 	component->SetOwner(this);

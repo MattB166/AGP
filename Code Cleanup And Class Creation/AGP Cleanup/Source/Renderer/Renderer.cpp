@@ -367,8 +367,8 @@ void Renderer::InitGraphics()
 	spriteFont2 = std::make_unique<DirectX::SpriteFont>(g_dev, L"Fonts/comic_sans_ms_16.spritefont");
 
 	model = new ObjFileModel{ (char*)"ExternalModels/Sphere.obj",g_dev,g_devcon };
-	obj1 = new GameObject(g_dev,g_devcon,pCBuffer,model,XMFLOAT3{4,1,1},true);
-	obj2 = new GameObject(g_dev,g_devcon,pCBuffer,model,XMFLOAT3{ 5,5,5 },false);
+	obj1 = new GameObject(g_dev,g_devcon,pCBuffer,model,XMFLOAT3{4,1,1},false);
+	obj2 = new GameObject(g_dev,g_devcon,pCBuffer,model,XMFLOAT3{ 5,5,5 },true);
 	modelSkyBox = new ObjFileModel{ (char*)"ExternalModels/cube.obj",g_dev,g_devcon };
 
 	//skybox

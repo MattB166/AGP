@@ -69,7 +69,6 @@ public:
 private:
 	bool m_reflective; 
 	CBuffer m_cBufferData;
-	ReflectiveCBuffer m_reflectiveCBufferData;
 	Transform m_transform;
 	std::shared_ptr<Material> m_material; // this is the material, so vertex and index buffer not handled here
 	ObjFileModel* m_model; // this is the mesh, so vertex and index buffer already handled here 

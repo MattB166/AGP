@@ -25,6 +25,7 @@ struct Transform
 class GameObject
 {
 public:
+	GameObject(); //need to find way to give it default model 
 	void AddComponent(std::shared_ptr<Component> component);
 	void RemoveComponent(std::shared_ptr<Component> component);
 	void Update(float deltaTime);
@@ -41,8 +42,7 @@ public:
 
 private:
 	Transform m_transform;
-	std::unique_ptr<CBuffer> m_constantBuffer = nullptr;
-	std::unique_ptr<ReflectiveCBuffer> m_reflectiveConstantBuffer = nullptr;
+	std::unique_ptr<CBuffer> m_constantBuffer = nullptr;  //only one type of cbuffer required for gameobject. shader will know what to do with it. 
 	std::vector<std::shared_ptr<Component>> m_components;
 };
 
