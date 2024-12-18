@@ -19,14 +19,19 @@ void AssetManager::Initialize(ID3D11Device* dev, ID3D11DeviceContext* devcon)
 {
 	m_dev = dev;
 	m_devcon = devcon;
-
-	CreateShaderSet(L"VertexShader.cso", L"PixelShader.cso");
+	CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso");
+	CreateShaderSet(L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso");
+	CreateModel(L"cube.obj"); 
+	CreateModel(L"sphere.obj"); 
 }
 
 void AssetManager::CleanUp()
 {
 	//clear all maps 
 	GetMaterials().clear();
+	GetModels().clear();
+	GetFonts().clear();
+	GetShaderSets().clear();
 
 	if (m_dev)
 	{
@@ -68,6 +73,8 @@ std::shared_ptr<Model> AssetManager::CreateModel(const wchar_t* modelPath)
 		ObjFileModel* Tmpmodel = new ObjFileModel((char*)modelPath, m_dev,m_devcon);
 		std::shared_ptr<Model> model = std::make_shared<Model>(m_dev, m_devcon, Tmpmodel);
 		GetModels().insert(std::make_pair(modelPath, model));
+		std::cout << "Model created" << std::endl;
+		std::cout << "Model size: " << GetModels().size() << std::endl;
 		return model;
 
 	}
@@ -81,6 +88,9 @@ std::shared_ptr<SpriteFont> AssetManager::MakeFont(const wchar_t* fontPath)
 
 std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, const wchar_t* psPath)
 {
+	//print out the path of the shaders.
+	std::wcout << "Vertex shader path: " << vsPath << std::endl;
+	std::wcout << "Pixel shader path: " << psPath << std::endl;
 	if (IsShaderSetLoaded(*vsPath, *psPath))
 	{
 		std::cout << "Shader set already loaded" << std::endl;
@@ -163,11 +173,13 @@ std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, 
 		auto shaderSet = std::make_shared<ShaderSet>(m_dev, m_devcon, vertexShader, pixelShader, inputLayout);
 		std::string key = GenerateKeyForShaderSet(vsPath, psPath);
 		GetShaderSets().insert(std::make_pair(key, shaderSet));
-
+		std::cout << "Shader set created" << std::endl;
+		std::cout << "Shader set size: " << GetShaderSets().size() << std::endl;
 
 		delete[] signatureParamDescriptions;
 		delete[] ied;
-		delete m_vertexShaderReflection;
+		if (m_vertexShaderReflection)
+			m_vertexShaderReflection->Release();
 
 		return shaderSet;
 
@@ -260,7 +272,7 @@ bool AssetManager::IsFontLoaded(const wchar_t& fontPath)
 bool AssetManager::IsShaderSetLoaded(const wchar_t& vsPath, const wchar_t& psPath)
 {
 	std::string key = GenerateKeyForShaderSet(&vsPath, &psPath);
-	return GetShaderSets().begin() != GetShaderSets().end();
+	return GetShaderSets().find(key) != GetShaderSets().end();
 
 }
 
@@ -292,6 +304,7 @@ std::shared_ptr<SpriteFont> AssetManager::RetrieveFont(const wchar_t& fontPath)
 	{
 		return it->second;
 	}
+	return nullptr;
 }
 
 std::shared_ptr<ShaderSet> AssetManager::RetrieveShaderSet(const wchar_t& vsPath, const wchar_t& psPath)

@@ -7,11 +7,11 @@
 class SceneManager
 {
 public:
-	static void AddScene(const std::wstring& name, Scene* sc);
+	static void AddScene(const std::wstring& name);
 
 	static Scene* GetActiveScene(); //return the active scene.
 
-	static void SetActiveScene(const wchar_t* name); //set the active scene.
+	static void SetActiveScene(const std::wstring& name); //set the active scene.
 
 	static void DrawScenePreview(); //draw the active scene preview.
 

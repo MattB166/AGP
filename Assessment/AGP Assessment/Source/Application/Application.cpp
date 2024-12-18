@@ -2,6 +2,7 @@
 #include <memory>
 #include <iostream>
 #include "../Input/KeyboardMouse.h"
+#include "../AssetManager/AssetManager.h"
 
 Application::Application() : m_window(nullptr), m_renderer(nullptr), m_input(std::make_unique<KeyboardMouse>())
 {
@@ -73,6 +74,7 @@ void Application::Run()
 {
 	MSG msg = { 0 };
 	SetupBindings();
+	AssetManager::Initialize(m_renderer->GetDevice(), m_renderer->GetDeviceContext());
 
 	while (WM_QUIT != msg.message)
 	{
@@ -91,6 +93,7 @@ void Application::Run()
 			ImGui::NewFrame();
 
 			RunMode();
+			//draw current scene. 
 
 			ImGui::Render();
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

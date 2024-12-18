@@ -180,5 +180,7 @@
   <ItemGroup>
     <FxCompile Include="Source\Shaders\StandardShader\VertexShader.hlsl" />
     <FxCompile Include="Source\Shaders\StandardShader\PixelShader.hlsl" />
+    <FxCompile Include="Source\Shaders\SkyBoxShaders\SkyBoxPShader.hlsl" />
+    <FxCompile Include="Source\Shaders\SkyBoxShaders\SkyBoxVShader.hlsl" />
   </ItemGroup>
 </Project>

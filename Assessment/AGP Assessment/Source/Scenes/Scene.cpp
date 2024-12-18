@@ -1,4 +1,20 @@
 #include "Scene.h"
+#include "../AssetManager/AssetManager.h"
+
+Scene::Scene()
+{
+	//initialize the camera.
+	m_camera = new Camera();
+}
+
+Scene::~Scene()
+{
+	if (m_camera)
+	{
+		delete m_camera;
+		m_camera = nullptr;
+	}
+}
 
 void Scene::Initialize()
 {
@@ -8,6 +24,17 @@ void Scene::Initialize()
 		//call initialize.
 	}
 
+}
+
+void Scene::ChangeSkyBox(const wchar_t* texturePath)
+{
+	//if the skybox is not null, delete it.
+	if (m_skyBox)
+	{
+		m_skyBox.reset();
+	}
+	//create a new skybox through the asset manager.
+	
 }
 
 void Scene::DrawStatics()
