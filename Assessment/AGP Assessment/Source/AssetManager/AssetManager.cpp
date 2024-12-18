@@ -11,6 +11,10 @@ std::unordered_map<const wchar_t*, std::shared_ptr<Material>> AssetManager::m_ma
 std::unordered_map<const wchar_t*, std::shared_ptr<Model>> AssetManager::m_models;
 std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>> AssetManager::m_fonts;
 std::unordered_map<std::string, std::shared_ptr<ShaderSet>> AssetManager::m_shaderSets;
+std::unordered_map<const wchar_t*, std::shared_ptr<ID3D11ShaderResourceView>> AssetManager::m_ddstextures;
+std::unordered_map<const wchar_t*, std::shared_ptr<ID3D11VertexShader>> AssetManager::m_vertexShaders;
+std::unordered_map<const wchar_t*, std::shared_ptr<ID3D11PixelShader>> AssetManager::m_pixelShaders;
+std::unordered_map<const char*, ObjFileModel*> AssetManager::m_objFileModels;
 //std::unordered_map<std::string, std::shared_ptr<SkyBox>> AssetManager::m_skyBoxes;
 
 
@@ -21,8 +25,8 @@ void AssetManager::Initialize(ID3D11Device* dev, ID3D11DeviceContext* devcon)
 	m_devcon = devcon;
 	CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso");
 	CreateShaderSet(L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso");
-	CreateModel(L"cube.obj"); 
-	CreateModel(L"sphere.obj"); 
+	CreateModel(L"Source/SavedModels/cube.obj"); 
+	CreateModel(L"Source/SavedModels/Sphere.obj"); 
 }
 
 void AssetManager::CleanUp()
@@ -32,6 +36,8 @@ void AssetManager::CleanUp()
 	GetModels().clear();
 	GetFonts().clear();
 	GetShaderSets().clear();
+	GetDDSTextures().clear();
+	GetVertexShaders().clear();
 
 	if (m_dev)
 	{
@@ -73,12 +79,30 @@ std::shared_ptr<Model> AssetManager::CreateModel(const wchar_t* modelPath)
 		ObjFileModel* Tmpmodel = new ObjFileModel((char*)modelPath, m_dev,m_devcon);
 		std::shared_ptr<Model> model = std::make_shared<Model>(m_dev, m_devcon, Tmpmodel);
 		GetModels().insert(std::make_pair(modelPath, model));
-		std::cout << "Model created" << std::endl;
-		std::cout << "Model size: " << GetModels().size() << std::endl;
+		//std::cout << "Model created" << std::endl;
+		//std::cout << "Model size: " << GetModels().size() << std::endl;
 		return model;
 
 	}
 	
+}
+
+ObjFileModel* AssetManager::CreateObjFileModel(const char* modelPath)
+{
+	if (IsObjFileModelLoaded(*modelPath))
+	{
+		return RetrieveObjFileModel(*modelPath);
+	}
+	else
+	{
+		
+		//convert wchar_t to char* for the model path.
+		ObjFileModel* model;
+		model = new ObjFileModel{ (char*)modelPath, m_dev, m_devcon };
+
+		GetObjFileModels().insert(std::make_pair(modelPath, model));
+		return model;
+	}
 }
 
 std::shared_ptr<SpriteFont> AssetManager::MakeFont(const wchar_t* fontPath)
@@ -89,16 +113,16 @@ std::shared_ptr<SpriteFont> AssetManager::MakeFont(const wchar_t* fontPath)
 std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, const wchar_t* psPath)
 {
 	//print out the path of the shaders.
-	std::wcout << "Vertex shader path: " << vsPath << std::endl;
-	std::wcout << "Pixel shader path: " << psPath << std::endl;
+	//std::wcout << "Vertex shader path: " << vsPath << std::endl;
+	//std::wcout << "Pixel shader path: " << psPath << std::endl;
 	if (IsShaderSetLoaded(*vsPath, *psPath))
 	{
-		std::cout << "Shader set already loaded" << std::endl;
+		//std::cout << "Shader set already loaded" << std::endl;
 		return RetrieveShaderSet(*vsPath, *psPath);
 	}
 	else
 	{
-		std::cout << "Creating new shader set" << std::endl;
+		//std::cout << "Creating new shader set" << std::endl;
 
 		auto vsData = DX::ReadData(vsPath);
 		auto psData = DX::ReadData(psPath);
@@ -151,7 +175,7 @@ std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, 
 					ied[i].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 					break;
 				case 15:
-					ied[i].Format = DXGI_FORMAT_R32G32B32A32_UINT;
+					ied[i].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 					break;
 				default:
 					break;
@@ -188,31 +212,113 @@ std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, 
 	
 }
 
-std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, const wchar_t* modelPath, const wchar_t* vsPath, const wchar_t* psPath)
+std::shared_ptr<ID3D11VertexShader> AssetManager::CreateVertexShader(const wchar_t* vsPath, LPCSTR entrypoint)
+{
+	if (IsVertexShaderLoaded(*vsPath))
+	{
+		return RetrieveVertexShader(*vsPath);
+	}
+	HRESULT hr;
+	ID3DBlob* VS, * pErrorBlob;
+	ID3D11VertexShader* vertexShader = nullptr;
+	hr = D3DCompileFromFile(vsPath, 0, 0, entrypoint, "vs_4_0", 0, 0, &VS, &pErrorBlob);
+	if (FAILED(hr))
+	{
+		if (pErrorBlob)
+		{
+			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
+			pErrorBlob->Release();
+			return nullptr;
+		}
+	}
+	hr = m_dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), nullptr, &vertexShader);
+	if (FAILED(hr))
+	{
+		OutputDebugString(L"Failed to create vertex shader");
+		VS->Release();
+		return nullptr;
+	}
+
+	D3D11_INPUT_ELEMENT_DESC ied[] =
+	{
+		{"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+		{"COLOR",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+		{"TEXCOORD",0,DXGI_FORMAT_R32G32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+		{"NORMAL",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0},
+	};
+	ID3D11InputLayout* il;
+	hr = m_dev->CreateInputLayout(ied, ARRAYSIZE(ied), VS->GetBufferPointer(), VS->GetBufferSize(), &il);
+	VS->Release();
+	if (FAILED(hr))
+	{
+		OutputDebugString(L"Failed to create input layout");
+		return nullptr;
+	}
+	auto vShader = std::shared_ptr<ID3D11VertexShader>(vertexShader);
+	GetVertexShaders().insert(std::make_pair(vsPath, vShader));
+	return vShader; 
+
+}
+
+std::shared_ptr<ID3D11PixelShader> AssetManager::CreatePixelShader(const wchar_t* psPath, LPCSTR entrypoint)
+{
+	if (IsPixelShaderLoaded(*psPath))
+	{
+		return RetrievePixelShader(*psPath);
+	}
+
+	HRESULT hr;
+	ID3DBlob* PS, * pErrorBlob;
+	ID3D11PixelShader* pixelShader = nullptr;
+	hr = D3DCompileFromFile(psPath, 0, 0, entrypoint, "ps_4_0", 0, 0, &PS, &pErrorBlob);
+	if (FAILED(hr))
+	{
+		if (pErrorBlob)
+		{
+			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
+			pErrorBlob->Release();
+			return nullptr;
+		}
+	}
+	hr = m_dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), nullptr, &pixelShader);
+	if (FAILED(hr))
+	{
+		OutputDebugString(L"Failed to create pixel shader");
+		PS->Release();
+		return nullptr;
+	}
+	auto pShader = std::shared_ptr<ID3D11PixelShader>(pixelShader);
+	GetPixelShaders().insert(std::make_pair(psPath, pShader));
+	return pShader;
+
+}
+
+std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, const char* modelPath, const wchar_t* vsPath, const wchar_t* psPath)
 {
 	//check separately if shaders, model and textures are loaded. if any are not, we load them, and create new skybox.
 	//if all are loaded, we create a new skybox with the loaded resources.
-	bool isModelLoaded = IsModelLoaded(*modelPath);
-	bool isTextureLoaded = IsMaterialLoaded(*texturePath);
+	
+	bool isObjLoaded = IsObjFileModelLoaded(*modelPath);
+	bool isDDSTextureLoaded = IsDDSTextureLoaded(*texturePath);
 	bool isShaderSetLoaded = IsShaderSetLoaded(*vsPath, *psPath); 
 
-	std::shared_ptr<Model> model;
-	if (isModelLoaded)
+	ObjFileModel* model;
+	if (isObjLoaded)
 	{
-		model = RetrieveModel(*modelPath);
+		model = RetrieveObjFileModel(*modelPath);
 	}
 	else
 	{
-		model = CreateModel(modelPath);
+		model = CreateObjFileModel(modelPath);
 	}
-	std::shared_ptr<Material> material;
-	if (isTextureLoaded)
+	std::shared_ptr<ID3D11ShaderResourceView> texture;
+	if (isDDSTextureLoaded)
 	{
-		material = RetrieveMaterial(*texturePath);
+		texture = RetrieveDDSTexture(*texturePath);
 	}
 	else
 	{
-		material = CreateMaterial(texturePath);
+		texture = CreateDDSTexture(texturePath);
 	}
 	std::shared_ptr<ShaderSet> shaderSet;
 	if (isShaderSetLoaded)
@@ -224,13 +330,31 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 		shaderSet = CreateShaderSet(vsPath, psPath);
 	}
 
-	ID3D11ShaderResourceView* srv;
+	auto skyBox = std::make_shared<SkyBox>(m_dev, m_devcon, model, shaderSet->GetVertexShader(), shaderSet->GetPixelShader(), shaderSet->GetInputLayout(), texture.get());
+	return skyBox;
 
-	CreateDDSTextureFromFile(m_dev, m_devcon, L"SkyBox.dds", nullptr,&srv);
+}
 
-	std::shared_ptr<SkyBox> skybox = std::make_shared<SkyBox>(m_dev, m_devcon, model->GetModel(), shaderSet->GetVertexShader(), shaderSet->GetPixelShader(), shaderSet->GetInputLayout(),srv);
-	return skybox;
+std::shared_ptr<ID3D11ShaderResourceView> AssetManager::CreateDDSTexture(const wchar_t* texturePath)
+{
+	assert(texturePath != nullptr && "Texture path is null");
+	if (IsDDSTextureLoaded(*texturePath))
+	{
+		return RetrieveDDSTexture(*texturePath);
+	}
+	else
+	{
+		ID3D11ShaderResourceView* texture = nullptr;
+		HRESULT hr = DirectX::CreateDDSTextureFromFile(m_dev,m_devcon, texturePath, nullptr, &texture);
+		if (FAILED(hr))
+		{
+			OutputDebugString(L"Failed to create DDS texture");
+		}
+		auto sharedTexture = std::shared_ptr<ID3D11ShaderResourceView>(texture, [](ID3D11ShaderResourceView* ptr) { if (ptr)ptr->Release(); });
 
+		GetDDSTextures().insert(std::make_pair(texturePath, sharedTexture));
+		return sharedTexture;
+	}
 }
 
 bool AssetManager::IsMaterialLoaded(const wchar_t& texturePath)
@@ -276,6 +400,51 @@ bool AssetManager::IsShaderSetLoaded(const wchar_t& vsPath, const wchar_t& psPat
 
 }
 
+bool AssetManager::IsDDSTextureLoaded(const wchar_t& texturePath)
+{
+	for (const auto& texture : GetDDSTextures())
+	{
+		if (wcscmp(texture.first, &texturePath) == 0)
+		{
+			return true;
+		}
+	}
+}
+
+bool AssetManager::IsVertexShaderLoaded(const wchar_t& vsPath)
+{
+	for (const auto& vertexShader : GetVertexShaders())
+	{
+		if (wcscmp(vertexShader.first, &vsPath) == 0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool AssetManager::IsPixelShaderLoaded(const wchar_t& psPath)
+{
+	for (const auto& pixelShader : GetPixelShaders())
+	{
+		if (wcscmp(pixelShader.first, &psPath) == 0)
+		{
+			return true;
+		}
+	}
+}
+
+bool AssetManager::IsObjFileModelLoaded(const char& modelPath)
+{
+	for (const auto& model : GetObjFileModels())
+	{
+		if (strcmp(model.first, &modelPath) == 0)
+		{
+			return true;
+		}
+	}
+}
+
 
 std::shared_ptr<Material> AssetManager::RetrieveMaterial(const wchar_t& texturePath)
 {
@@ -312,6 +481,42 @@ std::shared_ptr<ShaderSet> AssetManager::RetrieveShaderSet(const wchar_t& vsPath
 	std::string key = GenerateKeyForShaderSet(&vsPath, &psPath);
 	auto it = GetShaderSets().find(key);
 	return (it != GetShaderSets().end()) ? it->second : nullptr;
+}
+
+std::shared_ptr<ID3D11ShaderResourceView> AssetManager::RetrieveDDSTexture(const wchar_t& texturePath)
+{
+	auto it = GetDDSTextures().find(&texturePath);
+	if (it != GetDDSTextures().end())
+	{
+		return it->second;
+	}
+}
+
+std::shared_ptr<ID3D11VertexShader> AssetManager::RetrieveVertexShader(const wchar_t& vsPath)
+{
+	auto it = GetVertexShaders().find(&vsPath);
+	if (it != GetVertexShaders().end())
+	{
+		return it->second;
+	}
+}
+
+std::shared_ptr<ID3D11PixelShader> AssetManager::RetrievePixelShader(const wchar_t& psPath)
+{
+	auto it = GetPixelShaders().find(&psPath);
+	if (it != GetPixelShaders().end())
+	{
+		return it->second;
+	}
+}
+
+ObjFileModel* AssetManager::RetrieveObjFileModel(const char& modelPath)
+{
+	auto it = GetObjFileModels().find(&modelPath);
+	if (it != GetObjFileModels().end())
+	{
+		return it->second;
+	}
 }
 
 std::string AssetManager::GenerateKeyForShaderSet(const wchar_t* vsPath, const wchar_t* psPath)

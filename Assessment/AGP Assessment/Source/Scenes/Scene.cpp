@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "../AssetManager/AssetManager.h"
+#include <iostream>
 
 Scene::Scene()
 {
@@ -26,23 +27,24 @@ void Scene::Initialize()
 
 }
 
-void Scene::ChangeSkyBox(const wchar_t* texturePath)
+void Scene::ChangeSkyBox(std::shared_ptr<SkyBox> sb)
 {
-	//if the skybox is not null, delete it.
-	if (m_skyBox)
-	{
-		m_skyBox.reset();
-	}
-	//create a new skybox through the asset manager.
-	
+	m_skyBox = sb;
 }
 
 void Scene::DrawStatics()
 {
-	//for each gameobject in the scene, draw it without its behaviour. 
+	
+	//for each gameobject in the scene, draw it and the skybox.
 	for (auto go : m_gameObjects)
 	{
 		//call draw.
+	}
+	//if the skybox is not null, draw it.
+	if (m_skyBox && m_camera)
+	{
+		//std::cout << "Drawing Skybox" << std::endl;
+		m_skyBox->Draw(m_camera);
 	}
 }
 

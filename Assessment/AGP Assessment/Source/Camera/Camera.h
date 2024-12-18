@@ -28,6 +28,12 @@ public:
 
 	XMVECTOR GetUpVector() { return UpVector; } 
 
+	float GetX() { return x; }	
+
+	float GetY() { return y; }
+
+	float GetZ() { return z; }
+
 
 
 

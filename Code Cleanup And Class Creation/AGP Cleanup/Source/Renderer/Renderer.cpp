@@ -204,7 +204,7 @@ void Renderer::RenderFrame()
 	
 
 
-	GameObject::Handler::DrawObjects(g_devcon, pCBuffer, view, projection);
+	//GameObject::Handler::DrawObjects(g_devcon, pCBuffer, view, projection);
 	
 	///loop through and process all font and UI relative stuff after drawing objects. make a UI class 
 	spriteBatch->Begin();

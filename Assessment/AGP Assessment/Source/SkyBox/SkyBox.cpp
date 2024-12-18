@@ -1,12 +1,21 @@
 #include "SkyBox.h"
+#include <iostream>
 
 SkyBox::SkyBox(ID3D11Device* device, ID3D11DeviceContext* deviceContext, ObjFileModel* model, ID3D11VertexShader* vs, ID3D11PixelShader* ps, ID3D11InputLayout* il, ID3D11ShaderResourceView* srv)
-	: m_device(device), m_deviceContext(deviceContext), m_SkyBoxModel(model), m_vertexShader(vs), m_pixelShader(ps), m_inputLayout(il), m_texture(srv)
+	: m_device(device), m_deviceContext(deviceContext), m_SkyBoxModel(model), m_vertexShader(vs), m_pixelShader(ps), m_inputLayout(il), m_texture(srv), m_constBuffer(nullptr), m_rasterizerSolid(nullptr), m_rasterizerSkybox(nullptr), m_depthWriteSolid(nullptr), m_depthWriteSkybox(nullptr)
+
 {
+	InitialiseSkybox();
 }
 
 void SkyBox::Draw(Camera* cam)
 {
+	if (!m_deviceContext || !m_texture || !m_vertexShader || !m_pixelShader || !m_inputLayout || !m_constBuffer)
+	{
+		OutputDebugString(L"SkyBox::Draw - One or more required resources are not initialized.");
+		std::cout << "SkyBox::Draw - One or more required resources are not initialized." << std::endl;
+		return;
+	}
 	m_deviceContext->OMSetDepthStencilState(m_depthWriteSkybox, 1);
 	m_deviceContext->RSSetState(m_rasterizerSkybox);
 
@@ -17,15 +26,16 @@ void SkyBox::Draw(Camera* cam)
 	m_deviceContext->IASetInputLayout(m_inputLayout);
 
 	//set skybox buffers
-	//CBufferSkyBox cBuffer;
-	//XMMATRIX translation, proj, view;
-	//translation = XMMatrixTranslation(cam->GetX(), cam->GetY(), cam->GetZ());
-	//proj = cam->GetProjectionMatrix();
-	//view = cam->GetViewMatrix();
-	//cBuffer.wvp = translation * view * proj;
-	//m_deviceContext->UpdateSubresource(m_constBuffer, 0, 0, &cBuffer, 0, 0);
+	CBufferSkyBox cBuffer;
+	XMMATRIX translation, proj, view;
+	translation = XMMatrixTranslation(cam->GetX(), cam->GetY(), cam->GetZ());
+	proj = XMMatrixPerspectiveFovLH(XMConvertToRadians(90.0f), 1.0f, 0.1f, 1000.0f);
+	view = cam->GetViewMatrix();
+	cBuffer.wvp = translation * view * proj;
+	m_deviceContext->UpdateSubresource(m_constBuffer, 0, 0, &cBuffer, 0, 0);
 
 	m_deviceContext->VSSetConstantBuffers(0, 1, &m_constBuffer);
+	m_deviceContext->PSSetSamplers(0, 1, &m_sampler);
 	m_deviceContext->PSSetShaderResources(0, 1, &m_texture);
 
 	m_SkyBoxModel->Draw();
@@ -78,4 +88,14 @@ void SkyBox::InitialiseSkybox()
 		OutputDebugString(L"Failed to create constant buffer");
 		return;
 	}
+
+	D3D11_SAMPLER_DESC samplerDesc;
+	ZeroMemory(&samplerDesc, sizeof(samplerDesc));
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	m_device->CreateSamplerState(&samplerDesc, &m_sampler);
 }

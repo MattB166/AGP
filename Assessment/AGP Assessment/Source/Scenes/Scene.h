@@ -8,9 +8,10 @@ public:
 	Scene(); //constructor for the scene.
 	~Scene(); //destructor for the scene.
 	void Initialize(); //initialize the scene.
-	void ChangeSkyBox(const wchar_t* texturePath); //change the skybox texture.
+	void ChangeSkyBox(std::shared_ptr<SkyBox> sb); //change the skybox texture.
 	void DrawStatics(); //draw all gameobjects in the scene. 
 	void CycleSelectedGameObject(); //cycle through the gameobjects in the scene. 
+	Camera* GetCamera() { return m_camera; } //get the camera for the scene.
 
 private:
 	//vector of gameobjects, and selected gameobject.

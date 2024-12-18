@@ -247,6 +247,10 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)CompiledShaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Source\SavedSkyBoxTextures\skybox01.dds" />
+    <Image Include="Source\SavedSkyBoxTextures\skybox02.dds" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\directxtk_desktop_win10.2024.10.29.1\build\native\directxtk_desktop_win10.targets" Condition="Exists('packages\directxtk_desktop_win10.2024.10.29.1\build\native\directxtk_desktop_win10.targets')" />

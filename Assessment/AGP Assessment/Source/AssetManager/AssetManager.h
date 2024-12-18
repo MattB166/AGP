@@ -5,9 +5,11 @@
 #include "SpriteFont.h"
 #include "../Component/Material.h"
 #include "../Component/Model.h"
+#include "../ObjectFileModel/objfilemodel.h"
 #include "../Component/ShaderSet.h"
 #include "../ReadData/ReadData.h"
 #include "../SkyBox/SkyBox.h"
+using namespace DirectX;
 
 class AssetManager
 {
@@ -20,11 +22,19 @@ public:
 
 	static std::shared_ptr<Model> CreateModel(const wchar_t* modelPath);
 
+	static ObjFileModel* CreateObjFileModel(const char* modelPath);
+
 	static std::shared_ptr<SpriteFont> MakeFont(const wchar_t* fontPath);
 
 	static std::shared_ptr<ShaderSet> CreateShaderSet(const wchar_t* vsPath, const wchar_t* psPath);
 
-	static std::shared_ptr<SkyBox> CreateSkyBox(const wchar_t* texturePath, const wchar_t* modelPath, const wchar_t* vsPath, const wchar_t* psPath);
+	static std::shared_ptr<ID3D11VertexShader> CreateVertexShader(const wchar_t* vsPath, LPCSTR entrypoint);
+
+	static std::shared_ptr<ID3D11PixelShader> CreatePixelShader(const wchar_t* psPath, LPCSTR entrypoint);
+
+	static std::shared_ptr<SkyBox> CreateSkyBox(const wchar_t* texturePath, const char* modelPath, const wchar_t* vsPath, const wchar_t* psPath);
+
+	static std::shared_ptr<ID3D11ShaderResourceView> CreateDDSTexture(const wchar_t* texturePath);
 
 
 
@@ -52,6 +62,14 @@ private:
 
 	static bool IsShaderSetLoaded(const wchar_t& vsPath, const wchar_t& psPath);
 
+	static bool IsDDSTextureLoaded(const wchar_t& texturePath);
+
+	static bool IsVertexShaderLoaded(const wchar_t& vsPath);
+
+	static bool IsPixelShaderLoaded(const wchar_t& psPath);
+
+	static bool IsObjFileModelLoaded(const char& modelPath);
+
 #pragma endregion
 
 #pragma region InternalRetrievals
@@ -63,7 +81,13 @@ private:
 
 	static std::shared_ptr<ShaderSet> RetrieveShaderSet(const wchar_t& vsPath, const wchar_t& psPath);
 
-	//static std::shared_ptr<SkyBox> RetrieveSkyBox(const wchar_t& texturePath, const wchar_t& modelPath);
+	static std::shared_ptr<ID3D11ShaderResourceView> RetrieveDDSTexture(const wchar_t& texturePath);
+
+	static std::shared_ptr<ID3D11VertexShader> RetrieveVertexShader(const wchar_t& vsPath);
+
+	static std::shared_ptr<ID3D11PixelShader> RetrievePixelShader(const wchar_t& psPath);
+
+	static ObjFileModel* RetrieveObjFileModel(const char& modelPath);
 #pragma endregion
 
 #pragma region Maps
@@ -74,6 +98,14 @@ private:
 	static std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>> m_fonts;
 
 	static std::unordered_map<std::string, std::shared_ptr<ShaderSet>> m_shaderSets;
+
+	static std::unordered_map<const wchar_t*, std::shared_ptr<ID3D11ShaderResourceView>> m_ddstextures;
+
+	static std::unordered_map<const wchar_t*, std::shared_ptr<ID3D11VertexShader>> m_vertexShaders;
+
+	static std::unordered_map<const wchar_t*, std::shared_ptr<ID3D11PixelShader>> m_pixelShaders;
+
+	static std::unordered_map<const char*, ObjFileModel*> m_objFileModels;
 
 	//static std::unordered_map<std::string, std::shared_ptr<SkyBox>> m_skyBoxes; 
 #pragma endregion
@@ -86,6 +118,14 @@ private:
 	static std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>>& GetFonts() { return m_fonts; }
 
 	static std::unordered_map<std::string, std::shared_ptr<ShaderSet>>& GetShaderSets() { return m_shaderSets; }
+
+	static std::unordered_map<const wchar_t*, std::shared_ptr<ID3D11ShaderResourceView>>& GetDDSTextures() { return m_ddstextures; }
+
+	static std::unordered_map<const wchar_t*, std::shared_ptr<ID3D11VertexShader>>& GetVertexShaders() { return m_vertexShaders; }
+
+	static std::unordered_map<const wchar_t*, std::shared_ptr<ID3D11PixelShader>>& GetPixelShaders() { return m_pixelShaders; }
+
+	static std::unordered_map<const char*, ObjFileModel*>& GetObjFileModels() { return m_objFileModels; }
 
 	//static std::unordered_map<std::string, std::shared_ptr<SkyBox>>& GetSkyBoxes() { return m_skyBoxes; }
 #pragma endregion

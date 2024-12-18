@@ -66,6 +66,9 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 
 	ImGui_ImplWin32_Init(m_window->GetHWND());
 	ImGui_ImplDX11_Init(m_renderer->GetDevice(), m_renderer->GetDeviceContext());
+	AssetManager::Initialize(m_renderer->GetDevice(), m_renderer->GetDeviceContext());
+
+	
 
 	return true;
 }
@@ -74,7 +77,9 @@ void Application::Run()
 {
 	MSG msg = { 0 };
 	SetupBindings();
-	AssetManager::Initialize(m_renderer->GetDevice(), m_renderer->GetDeviceContext());
+	SceneManager::AddScene(L"Scene1");
+	SceneManager::SetActiveScene(L"Scene1");
+	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
 
 	while (WM_QUIT != msg.message)
 	{
@@ -93,12 +98,14 @@ void Application::Run()
 			ImGui::NewFrame();
 
 			RunMode();
-			//draw current scene. 
+			//draw current scene.
+			//draw scene preview.
+			SceneManager::DrawScenePreview();
 
 			ImGui::Render();
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-			m_renderer->Present();
+			m_renderer->Present(SceneManager::GetActiveScene()->GetCamera()->GetViewMatrix(), SceneManager::GetActiveScene()->GetCamera()->GetProjectionMatrix());
 		}
 
 	}

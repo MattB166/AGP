@@ -6,12 +6,11 @@ Camera::Camera()
 	y = 0.0f;
 	z = 0.0f;
 	yaw = 0.0f;
-	pitch = 0.0f;
+	//pitch = 0.0f;
 	FOV = 60.0f;
 	nearClip = 0.1f;
 	farClip = 200.0f;
-	aspectRatio = 1.3f;
-	projection = XMMatrixIdentity();
+	SetProjectionMatrix(FOV, 800, 600, nearClip, farClip);
 
 }
 

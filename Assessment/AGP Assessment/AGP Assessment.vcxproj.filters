@@ -183,4 +183,8 @@
     <FxCompile Include="Source\Shaders\SkyBoxShaders\SkyBoxPShader.hlsl" />
     <FxCompile Include="Source\Shaders\SkyBoxShaders\SkyBoxVShader.hlsl" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Source\SavedSkyBoxTextures\skybox01.dds" />
+    <Image Include="Source\SavedSkyBoxTextures\skybox02.dds" />
+  </ItemGroup>
 </Project>

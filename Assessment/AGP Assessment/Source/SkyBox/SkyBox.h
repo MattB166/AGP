@@ -42,5 +42,7 @@ private:
 	ObjFileModel* m_SkyBoxModel = nullptr; 
 
 	ID3D11Buffer* m_constBuffer = nullptr;
+
+	ID3D11SamplerState* m_sampler = nullptr;
 };
 

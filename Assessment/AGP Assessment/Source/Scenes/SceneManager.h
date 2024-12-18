@@ -13,6 +13,8 @@ public:
 
 	static void SetActiveScene(const std::wstring& name); //set the active scene.
 
+	static void AddSkyBoxTextureToActiveScene(const wchar_t* texturePath); //add a skybox to the active scene.
+
 	static void DrawScenePreview(); //draw the active scene preview.
 
 	static void DrawScene(); //draw the active scene. 

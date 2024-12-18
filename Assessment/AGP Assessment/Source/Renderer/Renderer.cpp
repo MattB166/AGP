@@ -157,6 +157,7 @@ void Renderer::CleanRenderer()
 void Renderer::Clear()
 {
 	//std::cout << "Clearing" << std::endl;
+	
 	m_deviceContext->ClearRenderTargetView(m_backBuffer, DirectX::Colors::DeepSkyBlue);
 	m_deviceContext->ClearDepthStencilView(m_zBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -164,11 +165,16 @@ void Renderer::Clear()
 	m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
 	m_deviceContext->OMSetRenderTargets(1, &m_backBuffer, m_zBuffer);
 	m_deviceContext->RSSetViewports(1, &m_viewport);
+
+	//need the wvp matrix here
 }
 
-void Renderer::Present()
+void Renderer::Present(XMMATRIX view, XMMATRIX proj)
 {
+	m_projectionMatrix = proj;
+	m_viewMatrix = view;
 	//std::cout << "Presenting" << std::endl;
+	m_deviceContext->IASetInputLayout(m_inputLayout);
 	m_deviceContext->OMSetRenderTargets(1, &m_backBuffer, m_zBuffer);
 	m_swapChain->Present(0, 0); 
 }
