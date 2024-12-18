@@ -2,6 +2,7 @@
 #include <WICTextureLoader.h>
 #include <d3dcompiler.h>
 #include <d3d11shader.h>
+#include <DDSTextureLoader.h>
 #include <iostream>
 ID3D11Device* AssetManager::m_dev = nullptr;
 ID3D11DeviceContext* AssetManager::m_devcon = nullptr;
@@ -10,6 +11,8 @@ std::unordered_map<const wchar_t*, std::shared_ptr<Material>> AssetManager::m_ma
 std::unordered_map<const wchar_t*, std::shared_ptr<Model>> AssetManager::m_models;
 std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>> AssetManager::m_fonts;
 std::unordered_map<std::string, std::shared_ptr<ShaderSet>> AssetManager::m_shaderSets;
+std::unordered_map<std::string, std::shared_ptr<SkyBox>> AssetManager::m_skyBoxes;
+
 
 
 void AssetManager::Initialize(ID3D11Device* dev, ID3D11DeviceContext* devcon)
@@ -173,6 +176,51 @@ std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, 
 	
 }
 
+std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, const wchar_t* modelPath, const wchar_t* vsPath, const wchar_t* psPath)
+{
+	//check separately if shaders, model and textures are loaded. if any are not, we load them, and create new skybox.
+	//if all are loaded, we create a new skybox with the loaded resources.
+	bool isModelLoaded = IsModelLoaded(*modelPath);
+	bool isTextureLoaded = IsMaterialLoaded(*texturePath);
+	bool isShaderSetLoaded = IsShaderSetLoaded(*vsPath, *psPath); 
+
+	std::shared_ptr<Model> model;
+	if (isModelLoaded)
+	{
+		model = RetrieveModel(*modelPath);
+	}
+	else
+	{
+		model = CreateModel(modelPath);
+	}
+	std::shared_ptr<Material> material;
+	if (isTextureLoaded)
+	{
+		material = RetrieveMaterial(*texturePath);
+	}
+	else
+	{
+		material = CreateMaterial(texturePath);
+	}
+	std::shared_ptr<ShaderSet> shaderSet;
+	if (isShaderSetLoaded)
+	{
+		shaderSet = RetrieveShaderSet(*vsPath, *psPath);
+	}
+	else
+	{
+		shaderSet = CreateShaderSet(vsPath, psPath);
+	}
+
+	ID3D11ShaderResourceView* srv;
+
+	CreateDDSTextureFromFile(m_dev, m_devcon, L"SkyBox.dds", nullptr,&srv);
+
+	std::shared_ptr<SkyBox> skybox = std::make_shared<SkyBox>(m_dev, m_devcon, model->GetModel(), shaderSet->GetVertexShader(), shaderSet->GetPixelShader(), shaderSet->GetInputLayout(),srv);
+	return skybox;
+
+}
+
 bool AssetManager::IsMaterialLoaded(const wchar_t& texturePath)
 {
 	for (const auto& material : GetMaterials())
@@ -215,6 +263,7 @@ bool AssetManager::IsShaderSetLoaded(const wchar_t& vsPath, const wchar_t& psPat
 	return GetShaderSets().begin() != GetShaderSets().end();
 
 }
+
 
 std::shared_ptr<Material> AssetManager::RetrieveMaterial(const wchar_t& texturePath)
 {

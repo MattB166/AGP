@@ -7,6 +7,7 @@
 #include "../Component/Model.h"
 #include "../Component/ShaderSet.h"
 #include "../ReadData/ReadData.h"
+#include "../SkyBox/SkyBox.h"
 
 class AssetManager
 {
@@ -22,6 +23,9 @@ public:
 	static std::shared_ptr<SpriteFont> MakeFont(const wchar_t* fontPath);
 
 	static std::shared_ptr<ShaderSet> CreateShaderSet(const wchar_t* vsPath, const wchar_t* psPath);
+
+	static std::shared_ptr<SkyBox> CreateSkyBox(const wchar_t* texturePath, const wchar_t* modelPath, const wchar_t* vsPath, const wchar_t* psPath);
+
 
 
 #pragma endregion
@@ -47,6 +51,7 @@ private:
 	static bool IsFontLoaded(const wchar_t& fontPath);
 
 	static bool IsShaderSetLoaded(const wchar_t& vsPath, const wchar_t& psPath);
+
 #pragma endregion
 
 #pragma region InternalRetrievals
@@ -57,6 +62,8 @@ private:
 	static std::shared_ptr<SpriteFont> RetrieveFont(const wchar_t& fontPath);
 
 	static std::shared_ptr<ShaderSet> RetrieveShaderSet(const wchar_t& vsPath, const wchar_t& psPath);
+
+	static std::shared_ptr<SkyBox> RetrieveSkyBox(const wchar_t& texturePath, const wchar_t& modelPath);
 #pragma endregion
 
 #pragma region Maps
@@ -67,6 +74,8 @@ private:
 	static std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>> m_fonts;
 
 	static std::unordered_map<std::string, std::shared_ptr<ShaderSet>> m_shaderSets;
+
+	static std::unordered_map<std::string, std::shared_ptr<SkyBox>> m_skyBoxes; 
 #pragma endregion
 
 #pragma region InternalGetters
@@ -77,6 +86,8 @@ private:
 	static std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>>& GetFonts() { return m_fonts; }
 
 	static std::unordered_map<std::string, std::shared_ptr<ShaderSet>>& GetShaderSets() { return m_shaderSets; }
+
+	static std::unordered_map<std::string, std::shared_ptr<SkyBox>>& GetSkyBoxes() { return m_skyBoxes; }
 #pragma endregion
 
 #pragma region InternalFunctions

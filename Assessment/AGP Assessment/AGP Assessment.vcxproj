@@ -131,7 +131,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Source\Camera\Camera.cpp" />
+    <ClCompile Include="Source\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Source\Component\ShaderSet.cpp" />
     <ClCompile Include="Source\Component\Model.cpp" />
     <ClCompile Include="Source\AssetManager\AssetManager.cpp" />
@@ -157,7 +158,8 @@
     <ClCompile Include="Source\Time\TimeClass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Source\Camera\Camera.h" />
+    <ClInclude Include="Source\SkyBox\SkyBox.h" />
     <ClInclude Include="Source\Component\ShaderSet.h" />
     <ClInclude Include="Source\Component\Model.h" />
     <ClInclude Include="Source\AssetManager\AssetManager.h" />

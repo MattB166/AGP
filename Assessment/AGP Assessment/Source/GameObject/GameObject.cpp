@@ -19,10 +19,12 @@ void GameObject::RemoveComponent(std::shared_ptr<Component> component)
 	}
 }
 
-void GameObject::Update(float deltaTime)
+void GameObject::Draw()
 {
-	for (auto& component : m_components)
+	for (auto component : m_components)
 	{
 		component->Apply();
 	}
 }
+
+
