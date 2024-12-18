@@ -11,7 +11,7 @@ std::unordered_map<const wchar_t*, std::shared_ptr<Material>> AssetManager::m_ma
 std::unordered_map<const wchar_t*, std::shared_ptr<Model>> AssetManager::m_models;
 std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>> AssetManager::m_fonts;
 std::unordered_map<std::string, std::shared_ptr<ShaderSet>> AssetManager::m_shaderSets;
-std::unordered_map<std::string, std::shared_ptr<SkyBox>> AssetManager::m_skyBoxes;
+//std::unordered_map<std::string, std::shared_ptr<SkyBox>> AssetManager::m_skyBoxes;
 
 
 

@@ -63,7 +63,7 @@ private:
 
 	static std::shared_ptr<ShaderSet> RetrieveShaderSet(const wchar_t& vsPath, const wchar_t& psPath);
 
-	static std::shared_ptr<SkyBox> RetrieveSkyBox(const wchar_t& texturePath, const wchar_t& modelPath);
+	//static std::shared_ptr<SkyBox> RetrieveSkyBox(const wchar_t& texturePath, const wchar_t& modelPath);
 #pragma endregion
 
 #pragma region Maps
@@ -75,7 +75,7 @@ private:
 
 	static std::unordered_map<std::string, std::shared_ptr<ShaderSet>> m_shaderSets;
 
-	static std::unordered_map<std::string, std::shared_ptr<SkyBox>> m_skyBoxes; 
+	//static std::unordered_map<std::string, std::shared_ptr<SkyBox>> m_skyBoxes; 
 #pragma endregion
 
 #pragma region InternalGetters
@@ -87,7 +87,7 @@ private:
 
 	static std::unordered_map<std::string, std::shared_ptr<ShaderSet>>& GetShaderSets() { return m_shaderSets; }
 
-	static std::unordered_map<std::string, std::shared_ptr<SkyBox>>& GetSkyBoxes() { return m_skyBoxes; }
+	//static std::unordered_map<std::string, std::shared_ptr<SkyBox>>& GetSkyBoxes() { return m_skyBoxes; }
 #pragma endregion
 
 #pragma region InternalFunctions
