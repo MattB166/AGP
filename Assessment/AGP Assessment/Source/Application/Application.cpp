@@ -78,9 +78,9 @@ void Application::Run()
 	MSG msg = { 0 };
 	SetupBindings();
 	SceneManager::AddScene(L"Scene1");
+	SceneManager::AddScene(L"Scene2");
 	SceneManager::SetActiveScene(L"Scene1");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
-	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
 	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
 
 	while (WM_QUIT != msg.message)
@@ -153,6 +153,9 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			SceneManager::CycleSceneSkyBox();
 		}
 		ImGui::End();
+
+		//std::cout << "Active Scene: " << SceneManager::GetActiveSceneName() << std::endl;
+
 	}
 	else if (m_mode == Mode::PLAY)
 	{
@@ -168,8 +171,12 @@ void Application::SetupBindings()
 	if (m_input != nullptr)
 	{
 		m_input->BindKeyToFunction('P', BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
-		m_input->BindKeyToFunction('O', BindingData([]() {SceneManager::CycleSceneSkyBox(); }, KeyState::Pressed));
-		m_input->BindKeyToFunction('I', BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
+		m_input->BindKeyToFunction('C', BindingData([]() {SceneManager::CycleSceneSkyBox(); }, KeyState::Pressed));
+		m_input->BindKeyToFunction('Q', BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
+		m_input->BindKeyToFunction('A', BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
+		m_input->BindKeyToFunction('D', BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
+		m_input->BindKeyToFunction('R', BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
+		m_input->BindKeyToFunction('S', BindingData([]() {SceneManager::CycleActiveScene(); }, KeyState::Pressed));
 	}
 	else
 	{

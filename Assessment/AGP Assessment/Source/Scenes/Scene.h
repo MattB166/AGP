@@ -5,7 +5,7 @@
 class Scene //controls all current gameobjects in the scene. 
 {
 public:
-	Scene(); //constructor for the scene.
+	Scene(const std::wstring name); //constructor for the scene.
 	~Scene(); //destructor for the scene.
 	void Initialize(); //initialize the scene.
 	void ChangeActiveSkyBox(std::shared_ptr<SkyBox> sb); //change the skybox texture.
@@ -15,6 +15,8 @@ public:
 	void DrawStatics(); //draw all gameobjects in the scene. 
 	void CycleSelectedGameObject(); //cycle through the gameobjects in the scene. 
 	Camera* GetCamera() { return m_camera; } //get the camera for the scene.
+	std::string GetName() { return std::string(m_name.begin(), m_name.end()); } //get the name of the scene.
+	std::vector<std::shared_ptr<SkyBox>> GetSkyBoxes() { return m_skyBoxes; } //get the skyboxes in the scene.
 
 private:
 	
@@ -29,6 +31,7 @@ private:
 	std::shared_ptr<SkyBox> m_ActiveSkyBox = nullptr; 
 	int m_skyBoxIndex = 0; 
 
+	std::wstring m_name; //name of the scene.
 	//think about a set position for previewing objects, and moving the camera around the scene. 
 };
 

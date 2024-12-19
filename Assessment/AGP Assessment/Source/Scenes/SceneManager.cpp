@@ -5,12 +5,23 @@
 std::unordered_map<std::wstring, std::unique_ptr<Scene>> SceneManager::m_scenes;
 std::wstring SceneManager::m_activeScene;
 std::unordered_map<const wchar_t*, std::shared_ptr<SkyBox>> SceneManager::m_LoadedSkyBoxes;
+std::unordered_map<std::wstring, std::unique_ptr<Scene>>::iterator SceneManager::m_sceneIterator; 
 
 void SceneManager::AddScene(const std::wstring& name)
 {
-	auto scene = std::make_unique<Scene>();
+	if (m_scenes.find(name) != m_scenes.end())
+	{
+		std::cout << "Scene already exists" << std::endl;
+		return;
+	}
+	auto scene = std::make_unique<Scene>(name);
 	m_scenes.insert(std::make_pair(name, std::move(scene)));
-	
+	if (m_scenes.size() == 1)
+	{
+		m_sceneIterator = m_scenes.begin();
+		m_activeScene = name;
+	}
+	std::cout << "Scene Added" << std::endl; 
 }
 
 Scene* SceneManager::GetActiveScene()
@@ -22,6 +33,32 @@ Scene* SceneManager::GetActiveScene()
 	return nullptr;
 }
 
+std::string SceneManager::GetActiveSceneName()
+{
+	if (m_activeScene.empty())
+	{
+		return "";
+	}
+	auto scene = m_scenes[m_activeScene].get();
+	return scene->GetName();
+}
+
+void SceneManager::CycleActiveScene()
+{
+	if (m_scenes.empty())
+	{
+		return;
+	}
+	m_sceneIterator++;
+	if (m_sceneIterator == m_scenes.end())
+	{
+		m_sceneIterator = m_scenes.begin();
+	}
+	m_activeScene = m_sceneIterator->first;
+	std::cout << "Skyboxes in scene manager: " << m_LoadedSkyBoxes.size() << std::endl;
+
+}
+
 void SceneManager::SetActiveScene(const std::wstring& name)
 {
 	if (m_scenes.find(name) != m_scenes.end())
@@ -31,8 +68,15 @@ void SceneManager::SetActiveScene(const std::wstring& name)
 	}
 }
 
-void SceneManager::AddSkyBoxTextureToActiveScene(const wchar_t* texturePath)
+void SceneManager::AddSkyBoxTextureToActiveScene(const wchar_t* texturePath) //needs amendment as cannot add skyboxes to second scene. 
 {
+	//check whether its already in the loaded skyboxes map.
+	if (m_LoadedSkyBoxes.find(texturePath) != m_LoadedSkyBoxes.end())
+	{
+		std::cout << "Skybox already loaded" << std::endl;
+		return;
+	}
+
 	if (m_activeScene.empty())
 	{
 		return;
@@ -77,6 +121,8 @@ void SceneManager::CycleSceneSkyBox()
 {
 	auto scene = m_scenes[m_activeScene].get();
 	scene->CycleThroughSkyBoxes();
+	//show size of skyboxes in scene manager.
+	
 
 }
 
@@ -98,5 +144,6 @@ void SceneManager::DrawScene()
 void SceneManager::CleanUp()
 {
 	m_scenes.clear();
+	m_sceneIterator = m_scenes.end();
 	m_activeScene.clear();
 }

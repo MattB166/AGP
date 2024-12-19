@@ -304,7 +304,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	if (isObjLoaded)
 	{
 		model = RetrieveObjFileModel(*modelPath);
-		//std::cout << "Model retrieved as already loaded" << std::endl;
+		std::cout << "Model retrieved as already loaded" << std::endl;
 	}
 	else
 	{
@@ -314,7 +314,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	if (isDDSTextureLoaded)
 	{
 		texture = RetrieveDDSTexture(*texturePath);
-		//std::cout << "Texture retrieved as already loaded" << std::endl;
+		std::cout << "Texture retrieved as already loaded" << std::endl;
 	}
 	else
 	{
@@ -324,7 +324,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	if (isShaderSetLoaded)
 	{
 		shaderSet = RetrieveShaderSet(*vsPath, *psPath);
-		//std::cout << "Shader set retrieved as already loaded" << std::endl;
+		std::cout << "Shader set retrieved as already loaded" << std::endl;
 	}
 	else
 	{

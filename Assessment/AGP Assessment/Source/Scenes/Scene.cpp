@@ -2,7 +2,7 @@
 #include "../AssetManager/AssetManager.h"
 #include <iostream>
 
-Scene::Scene()
+Scene::Scene(const std::wstring name) : m_name(name)
 {
 	//initialize the camera.
 	m_camera = new Camera();
@@ -15,6 +15,10 @@ Scene::~Scene()
 		delete m_camera;
 		m_camera = nullptr;
 	}
+	//clear skyboxes
+	m_skyBoxes.clear();
+	//clear gameobjects
+	m_gameObjects.clear();
 }
 
 void Scene::Initialize()
@@ -29,14 +33,17 @@ void Scene::Initialize()
 
 void Scene::ChangeActiveSkyBox(std::shared_ptr<SkyBox> sb)
 {
-	m_ActiveSkyBox = sb;
+	//if the skybox is not null, set it to the active skybox.
+	if (std::find(m_skyBoxes.begin(), m_skyBoxes.end(), sb) != m_skyBoxes.end())
+	{
+		m_ActiveSkyBox = sb;
+	}
+	
 }
 
 void Scene::AddSkyBoxToScene(std::shared_ptr<SkyBox> sb)
 {
 	m_skyBoxes.push_back(sb);
-	//std::cout << "Skybox Added" << std::endl;
-	//std::cout << "Skybox Count: " << m_skyBoxes.size() << std::endl;
 }
 
 void Scene::RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb)
