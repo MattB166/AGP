@@ -47,6 +47,7 @@ void TimeClass::CalculateFrameStats()
 	if (m_elapsedTime >= 1.0f)
 	{
 		m_fps = static_cast<float>(m_frameCount);
+		std::cout << "FPS: " << m_fps << std::endl;
 		m_frameCount = 0;
 		m_elapsedTime = 0.0f;
 	}

@@ -96,6 +96,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		m_InputStatic->ProcessInput(hWnd, message, wParam, lParam); //process input
 	switch (message)
 	{
+
 	case WM_DESTROY:
 
 		PostQuitMessage(0);

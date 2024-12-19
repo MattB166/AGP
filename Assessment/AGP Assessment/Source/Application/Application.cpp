@@ -3,6 +3,7 @@
 #include <iostream>
 #include "../Input/KeyboardMouse.h"
 #include "../AssetManager/AssetManager.h"
+#include "../Time/TimeClass.h"
 
 Application::Application() : m_window(nullptr), m_renderer(nullptr), m_input(std::make_unique<KeyboardMouse>())
 {
@@ -86,6 +87,7 @@ void Application::Run()
 
 	while (WM_QUIT != msg.message)
 	{
+		//m_window->Run();
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
@@ -110,7 +112,11 @@ void Application::Run()
 
 			m_renderer->Present();
 		}
-
+		
+		TimeClass::Tick();
+		//std::cout << "Delta Time: " << TimeClass::GetDeltaTime() << std::endl; 
+		//TimeClass::CalculateFrameStats();
+		
 	}
 }
 
@@ -156,6 +162,8 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 		ImGui::End();
 
 		//std::cout << "Active Scene: " << SceneManager::GetActiveSceneName() << std::endl;
+		auto currentKeyState = m_input->GetCurrentState();
+
 
 	}
 	else if (m_mode == Mode::PLAY)
@@ -178,6 +186,7 @@ void Application::SetupBindings()
 		m_input->BindKeyToFunction('D', BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
 		m_input->BindKeyToFunction('R', BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
 		m_input->BindKeyToFunction('S', BindingData([]() {SceneManager::CycleActiveScene(); }, KeyState::Pressed));
+		m_input->BindKeyToFunction('K', BindingData([]() {SceneManager::RotateActiveSceneCamera(0.0f, 100.0f * TimeClass::GetDeltaTime()); }, KeyState::Pressed)); //little test, need another way to rotate the camera by using mouse. 
 	}
 	else
 	{

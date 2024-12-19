@@ -14,29 +14,31 @@ KeyboardMouse::~KeyboardMouse()
 
 void KeyboardMouse::Update()
 {
-	auto currentState = m_keyboard->GetState();
-	auto mouseState = m_mouse->GetState();
+	m_PrevkeyboardState = m_CurrentkeyboardState;
+	//m_PrevmouseState = m_CurrentmouseState;
 
-	/*for (const auto& binding : m_keyBindings)
+	// Get the current state
+	m_CurrentkeyboardState = m_keyboard->GetState();
+	//m_CurrentmouseState = m_mouse->GetState();
+
+	// Update the trackers
+	m_kBTracker.Update(m_CurrentkeyboardState);
+	//m_mouseTracker.Update(m_CurrentmouseState);
+
+	// Process keyboard input
+	for (const auto& binding : m_keyBindings)
 	{
-		auto keyState = GetKeyState(currentState,static_cast<DirectX::Keyboard::Keys>(binding.first));
-		if (keyState == binding.second.PressState)
+		if (m_kBTracker.IsKeyPressed(static_cast<DirectX::Keyboard::Keys>(binding.first)) && binding.second.PressState == KeyState::Pressed)
+		{
+			std::cout << "Performing action" << std::endl;
+			binding.second.action();
+		}
+		else if (m_kBTracker.IsKeyReleased(static_cast<DirectX::Keyboard::Keys>(binding.first)) && binding.second.PressState == KeyState::Released)
 		{
 			binding.second.action();
 		}
 	}
 
-	for (const auto& binding : m_mouseBindings)
-	{
-		auto keyState = GetMouseState(mouseState, static_cast<MouseButton>(binding.first));
-		if (keyState == binding.second.PressState)
-		{
-			binding.second.action();
-		}
-	}*/
-
-	m_PrevkeyboardState = currentState;
-	m_PrevmouseState = mouseState;
 }
 
 void KeyboardMouse::CleanUp()
@@ -144,6 +146,21 @@ void KeyboardMouse::ProcessInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		}
 		break;
 	}
+}
+
+DirectX::Keyboard::State KeyboardMouse::GetKeyboardState() const
+{
+	return m_CurrentkeyboardState;
+}
+
+DirectX::Keyboard::State KeyboardMouse::GetPrevKeyboardState() const
+{
+	return m_PrevkeyboardState;
+}
+
+const void* KeyboardMouse::GetCurrentState() const
+{
+	return &m_CurrentkeyboardState;
 }
 
 

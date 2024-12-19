@@ -35,5 +35,7 @@ public:
 	virtual void ClearAllBindings() = 0;
 
 	virtual void ProcessInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) = 0;
+
+	virtual const void* GetCurrentState() const = 0;
 };
 

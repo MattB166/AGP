@@ -113,3 +113,21 @@ void Scene::CycleSelectedGameObject()
 	const int NextIndex = (m_selectedObjectIndex + 1) % m_gameObjects.size();
 	m_selectedGameObject = m_gameObjects[NextIndex]; 
 }
+
+void Scene::MoveActiveCamera(float x, float y, float z)
+{
+	//if the camera is not null, move it.
+	if (m_camera)
+	{
+		m_camera->MoveCamera(x, y, z);
+	}
+}
+
+void Scene::RotateActiveCamera(float pitch, float yaw)
+{
+	//if the camera is not null, rotate it.
+	if (m_camera)
+	{
+		m_camera->RotateCamera(pitch, yaw);
+	}
+}

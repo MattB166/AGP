@@ -35,6 +35,13 @@ public:
 
 	void ProcessInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
 
+	DirectX::Keyboard::State GetKeyboardState() const;
+
+	DirectX::Keyboard::State GetPrevKeyboardState() const;
+
+	const void* GetCurrentState() const override;
+
+
 
 
 private:
@@ -47,6 +54,10 @@ private:
 	 std::unordered_map<MouseButton, BindingData> m_mouseBindings;
 
 	 DirectX::Keyboard::State m_PrevkeyboardState;
+
+	 DirectX::Keyboard::State m_CurrentkeyboardState;
+
+	 DirectX::Keyboard::KeyboardStateTracker m_kBTracker;
 
 	 DirectX::Mouse::State m_PrevmouseState;
 

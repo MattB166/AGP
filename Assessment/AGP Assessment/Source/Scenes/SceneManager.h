@@ -29,6 +29,10 @@ public:
 
 	static void DrawScene(); //draw the active scene. 
 
+	static void MoveActiveSceneCamera(float x, float y, float z); //move the active scene camera.
+
+	static void RotateActiveSceneCamera(float pitch, float yaw); //rotate the active scene camera.
+
 	static void CleanUp(); //clean up the scene manager.
 
 private:

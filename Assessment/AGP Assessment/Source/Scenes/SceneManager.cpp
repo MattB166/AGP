@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include <iostream>
 #include "../AssetManager/AssetManager.h"
+#include "../Time/TimeClass.h"
 
 std::unordered_map<std::wstring, std::unique_ptr<Scene>> SceneManager::m_scenes;
 std::wstring SceneManager::m_activeScene;
@@ -152,6 +153,26 @@ void SceneManager::DrawScenePreview()
 
 void SceneManager::DrawScene()
 {
+}
+
+void SceneManager::MoveActiveSceneCamera(float x, float y, float z)
+{
+	auto scene = m_scenes[m_activeScene].get();
+	
+	if (scene)
+	{
+		scene->GetCamera()->MoveCamera(x, y, z);
+	}
+	
+}
+
+void SceneManager::RotateActiveSceneCamera(float pitch, float yaw)
+{
+	auto scene = m_scenes[m_activeScene].get();
+	if (scene)
+	{
+		scene->GetCamera()->RotateCamera(pitch, yaw);
+	}
 }
 
 void SceneManager::CleanUp()

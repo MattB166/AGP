@@ -3,6 +3,7 @@
 #include <d3dcompiler.h>
 #include <WICTextureLoader.h>	
 #include "../../AssetManager.h"
+#include <iostream>
 #include <DirectXColors.h>
 
 
@@ -204,7 +205,7 @@ void Renderer::RenderFrame()
 	
 
 
-	//GameObject::Handler::DrawObjects(g_devcon, pCBuffer, view, projection);
+	GameObject::Handler::DrawObjects(g_devcon, pCBuffer, view, projection);
 	
 	///loop through and process all font and UI relative stuff after drawing objects. make a UI class 
 	spriteBatch->Begin();
@@ -451,6 +452,7 @@ void Renderer::MoveCamera(float x,float y,float z) ////move all of this to camer
 
 
 	//need to clamp pitch to prevent camera flipping. might be able to put this somewhere else inside cam class for cleanliness 
+	std::cout << "X: " << cam.x << " Y: " << cam.y << " Z: " << cam.z << std::endl;
 
 	
 }
