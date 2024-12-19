@@ -28,5 +28,7 @@ private:
 	std::vector<std::shared_ptr<SkyBox>> m_skyBoxes; 
 	std::shared_ptr<SkyBox> m_ActiveSkyBox = nullptr; 
 	int m_skyBoxIndex = 0; 
+
+	//think about a set position for previewing objects, and moving the camera around the scene. 
 };
 
