@@ -55,7 +55,8 @@ void SceneManager::CycleActiveScene()
 		m_sceneIterator = m_scenes.begin();
 	}
 	m_activeScene = m_sceneIterator->first;
-	std::cout << "Skyboxes in scene manager: " << m_LoadedSkyBoxes.size() << std::endl;
+	std::cout << "Active Scene: " << GetActiveSceneName() << std::endl;
+
 
 }
 
@@ -70,24 +71,36 @@ void SceneManager::SetActiveScene(const std::wstring& name)
 
 void SceneManager::AddSkyBoxTextureToActiveScene(const wchar_t* texturePath) //needs amendment as cannot add skyboxes to second scene. 
 {
-	//check whether its already in the loaded skyboxes map.
-	if (m_LoadedSkyBoxes.find(texturePath) != m_LoadedSkyBoxes.end())
-	{
-		std::cout << "Skybox already loaded" << std::endl;
-		return;
-	}
-
+	//check whether the skybox is already loaded, and if the scene already has it.
 	if (m_activeScene.empty())
 	{
 		return;
 	}
 	auto scene = m_scenes[m_activeScene].get();
-	std::shared_ptr<SkyBox> skyBox = AssetManager::CreateSkyBox(texturePath, "Source/SavedModels/cube.obj", L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso");
-	scene->AddSkyBoxToScene(skyBox);
-	m_LoadedSkyBoxes.insert(std::make_pair(texturePath, skyBox));
-	//std::cout << "Skybox Added to scene manager map " << std::endl;
+	const auto& skyBoxesInScene = scene->GetSkyBoxes();
+	for (const auto& skyBox : skyBoxesInScene)
+	{
+		if (skyBox->GetTexturePath() == texturePath)
+		{
+			std::cout << "Scene already has skybox" << std::endl;
+			return;
+		}
+	}
+	
+	std::shared_ptr<SkyBox> skybox;
+	if (m_LoadedSkyBoxes.find(texturePath) == m_LoadedSkyBoxes.end())
+	{
+		skybox = AssetManager::CreateSkyBox(texturePath, "Source/SavedModels/cube.obj", L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso");
+		m_LoadedSkyBoxes.insert(std::make_pair(texturePath, skybox));
+	}
+	else
+	{
+		std::cout << "Skybox already loaded so giving scene the pre loaded one. " << std::endl;
+		skybox = m_LoadedSkyBoxes[texturePath];
+	}
 
-
+	scene->AddSkyBoxToScene(skybox);
+	//scene->ChangeActiveSkyBox(skybox);
 
 }
 

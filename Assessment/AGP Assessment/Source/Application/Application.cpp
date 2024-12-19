@@ -81,6 +81,7 @@ void Application::Run()
 	SceneManager::AddScene(L"Scene2");
 	SceneManager::SetActiveScene(L"Scene1");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
+	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
 	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
 
 	while (WM_QUIT != msg.message)

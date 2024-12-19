@@ -44,6 +44,12 @@ void Scene::ChangeActiveSkyBox(std::shared_ptr<SkyBox> sb)
 void Scene::AddSkyBoxToScene(std::shared_ptr<SkyBox> sb)
 {
 	m_skyBoxes.push_back(sb);
+	//if there is only one skybox, set it to the active skybox.
+	if (m_skyBoxes.size() == 1)
+	{
+		std::cout << "Changing Active Skybox as the scene only has one." << std::endl;
+		ChangeActiveSkyBox(sb);
+	}
 }
 
 void Scene::RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb)
