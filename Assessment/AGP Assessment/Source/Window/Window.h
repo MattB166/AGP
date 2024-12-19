@@ -24,5 +24,7 @@ private:
 	IInputManager* m_Input = nullptr;
 	static IInputManager* m_InputStatic;
 
+	//need keyboard and mouse trackers here from input manager, so can use them for instant movement etc on input. 
+
 };
 

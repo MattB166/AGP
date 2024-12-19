@@ -93,7 +93,8 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return true;
 
 	if (m_InputStatic != nullptr)
-		m_InputStatic->ProcessInput(hWnd, message, wParam, lParam); //process input
+		m_InputStatic->ProcessInput(hWnd, message, wParam, lParam); ///GOING TO BE REWORKED BECAUSE MY INPUTS ARE NOT INSTANT. kb process messages here, input handler needs to get tracker and call update on it.
+	// then go through the bindings and check the kbstates for the keys that are bound to functions. 
 	switch (message)
 	{
 
