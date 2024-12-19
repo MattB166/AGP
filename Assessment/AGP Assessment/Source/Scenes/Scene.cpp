@@ -35,13 +35,14 @@ void Scene::ChangeActiveSkyBox(std::shared_ptr<SkyBox> sb)
 void Scene::AddSkyBoxToScene(std::shared_ptr<SkyBox> sb)
 {
 	m_skyBoxes.push_back(sb);
-	std::cout << "Skybox Added" << std::endl;
+	//std::cout << "Skybox Added" << std::endl;
+	//std::cout << "Skybox Count: " << m_skyBoxes.size() << std::endl;
 }
 
 void Scene::RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb)
 {
 	//if there are no skyboxes, return.
-	if (m_skyBoxes.empty() || m_skyBoxes.size() < 1)
+	if (m_skyBoxes.empty() || m_skyBoxes.size() < 2)
 	{
 		return;
 	}
@@ -55,20 +56,20 @@ void Scene::RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb)
 			CycleThroughSkyBoxes();
 		}
 		m_skyBoxes.erase(it);
-		std::cout << "Skybox Removed" << std::endl;
+		//std::cout << "Skybox Removed" << std::endl;
 	}
 }
 
 void Scene::CycleThroughSkyBoxes()
 {
 	//if there are no skyboxes, return.
-	if (m_skyBoxes.empty())
+	if (m_skyBoxes.empty() || m_skyBoxes.size() == 1)
 	{
 		return;
 	}
 	m_skyBoxIndex = (m_skyBoxIndex + 1) % m_skyBoxes.size();
 	ChangeActiveSkyBox(m_skyBoxes[m_skyBoxIndex]);
-	std::cout << "Skybox Changed" << std::endl;
+	//std::cout << "Skybox Changed" << std::endl;
 
 }
 

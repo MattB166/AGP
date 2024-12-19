@@ -295,8 +295,6 @@ std::shared_ptr<ID3D11PixelShader> AssetManager::CreatePixelShader(const wchar_t
 
 std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, const char* modelPath, const wchar_t* vsPath, const wchar_t* psPath)
 {
-	//check separately if shaders, model and textures are loaded. if any are not, we load them, and create new skybox.
-	//if all are loaded, we create a new skybox with the loaded resources.
 	
 	bool isObjLoaded = IsObjFileModelLoaded(*modelPath);
 	bool isDDSTextureLoaded = IsDDSTextureLoaded(*texturePath);
@@ -306,6 +304,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	if (isObjLoaded)
 	{
 		model = RetrieveObjFileModel(*modelPath);
+		//std::cout << "Model retrieved as already loaded" << std::endl;
 	}
 	else
 	{
@@ -315,6 +314,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	if (isDDSTextureLoaded)
 	{
 		texture = RetrieveDDSTexture(*texturePath);
+		//std::cout << "Texture retrieved as already loaded" << std::endl;
 	}
 	else
 	{
@@ -324,6 +324,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	if (isShaderSetLoaded)
 	{
 		shaderSet = RetrieveShaderSet(*vsPath, *psPath);
+		//std::cout << "Shader set retrieved as already loaded" << std::endl;
 	}
 	else
 	{
@@ -331,6 +332,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	}
 
 	auto skyBox = std::make_shared<SkyBox>(m_dev, m_devcon, model, shaderSet->GetVertexShader(), shaderSet->GetPixelShader(), shaderSet->GetInputLayout(), texture.get(),texturePath);
+	std::cout << "Skybox created" << std::endl;
 	return skyBox;
 
 }

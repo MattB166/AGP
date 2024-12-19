@@ -27,7 +27,7 @@ void SceneManager::SetActiveScene(const std::wstring& name)
 	if (m_scenes.find(name) != m_scenes.end())
 	{
 		m_activeScene = name;
-		std::cout << "Active Scene Set" << std::endl;
+		//std::cout << "Active Scene Set" << std::endl;
 	}
 }
 
@@ -41,6 +41,7 @@ void SceneManager::AddSkyBoxTextureToActiveScene(const wchar_t* texturePath)
 	std::shared_ptr<SkyBox> skyBox = AssetManager::CreateSkyBox(texturePath, "Source/SavedModels/cube.obj", L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso");
 	scene->AddSkyBoxToScene(skyBox);
 	m_LoadedSkyBoxes.insert(std::make_pair(texturePath, skyBox));
+	//std::cout << "Skybox Added to scene manager map " << std::endl;
 
 
 
@@ -63,7 +64,13 @@ void SceneManager::RemoveSkyBoxFromActiveScene(const wchar_t* texturePath)
 void SceneManager::SetActiveSkyBoxTexture(const wchar_t* texturePath)
 {
 	auto scene = m_scenes[m_activeScene].get();
-	scene->ChangeActiveSkyBox(AssetManager::CreateSkyBox(texturePath, "Source/SavedModels/cube.obj", L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso"));
+	//scene->ChangeActiveSkyBox(AssetManager::CreateSkyBox(texturePath, "Source/SavedModels/cube.obj", L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso"));
+	//search for the skybox in the loaded skyboxes map.
+	auto skybox = m_LoadedSkyBoxes[texturePath];
+	if (skybox)
+	{
+		scene->ChangeActiveSkyBox(skybox);
+	}
 }
 
 void SceneManager::CycleSceneSkyBox()
