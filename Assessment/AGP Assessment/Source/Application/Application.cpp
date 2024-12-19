@@ -80,6 +80,8 @@ void Application::Run()
 	SceneManager::AddScene(L"Scene1");
 	SceneManager::SetActiveScene(L"Scene1");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
+	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
+	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
 
 	while (WM_QUIT != msg.message)
 	{
@@ -105,7 +107,7 @@ void Application::Run()
 			ImGui::Render();
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-			m_renderer->Present(SceneManager::GetActiveScene()->GetCamera()->GetViewMatrix(), SceneManager::GetActiveScene()->GetCamera()->GetProjectionMatrix());
+			m_renderer->Present();
 		}
 
 	}
@@ -157,6 +159,8 @@ void Application::SetupBindings()
 	if (m_input != nullptr)
 	{
 		m_input->BindKeyToFunction('P', BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
+		m_input->BindKeyToFunction('O', BindingData([]() {SceneManager::CycleSceneSkyBox(); }, KeyState::Pressed));
+		m_input->BindKeyToFunction('I', BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
 	}
 	else
 	{

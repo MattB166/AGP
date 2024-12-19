@@ -15,6 +15,12 @@ public:
 
 	static void AddSkyBoxTextureToActiveScene(const wchar_t* texturePath); //add a skybox to the active scene.
 
+	static void RemoveSkyBoxFromActiveScene(const wchar_t* texturePath); //remove the skybox from the active scene.
+
+	static void SetActiveSkyBoxTexture(const wchar_t* texturePath); //set the active skybox texture.
+
+	static void CycleSceneSkyBox(); //cycle through the skyboxes in the active scene.
+
 	static void DrawScenePreview(); //draw the active scene preview.
 
 	static void DrawScene(); //draw the active scene. 
@@ -30,6 +36,8 @@ private:
 	static std::unordered_map<std::wstring,std::unique_ptr<Scene>> m_scenes; //list of scenes.
 
 	static std::wstring m_activeScene; //current active scene. 
+
+	static std::unordered_map<const wchar_t*, std::shared_ptr<SkyBox>> m_LoadedSkyBoxes; //list of loaded skyboxes. 
 
 };
 

@@ -27,9 +27,49 @@ void Scene::Initialize()
 
 }
 
-void Scene::ChangeSkyBox(std::shared_ptr<SkyBox> sb)
+void Scene::ChangeActiveSkyBox(std::shared_ptr<SkyBox> sb)
 {
-	m_skyBox = sb;
+	m_ActiveSkyBox = sb;
+}
+
+void Scene::AddSkyBoxToScene(std::shared_ptr<SkyBox> sb)
+{
+	m_skyBoxes.push_back(sb);
+	std::cout << "Skybox Added" << std::endl;
+}
+
+void Scene::RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb)
+{
+	//if there are no skyboxes, return.
+	if (m_skyBoxes.empty() || m_skyBoxes.size() < 1)
+	{
+		return;
+	}
+	//find the skybox in the vector.
+	auto it = std::find(m_skyBoxes.begin(), m_skyBoxes.end(), sb);
+	//if the skybox is found, remove it.
+	if (it != m_skyBoxes.end())
+	{
+		if (m_ActiveSkyBox == sb)
+		{
+			CycleThroughSkyBoxes();
+		}
+		m_skyBoxes.erase(it);
+		std::cout << "Skybox Removed" << std::endl;
+	}
+}
+
+void Scene::CycleThroughSkyBoxes()
+{
+	//if there are no skyboxes, return.
+	if (m_skyBoxes.empty())
+	{
+		return;
+	}
+	m_skyBoxIndex = (m_skyBoxIndex + 1) % m_skyBoxes.size();
+	ChangeActiveSkyBox(m_skyBoxes[m_skyBoxIndex]);
+	std::cout << "Skybox Changed" << std::endl;
+
 }
 
 void Scene::DrawStatics()
@@ -41,10 +81,10 @@ void Scene::DrawStatics()
 		//call draw.
 	}
 	//if the skybox is not null, draw it.
-	if (m_skyBox && m_camera)
+	if (m_ActiveSkyBox && m_camera)
 	{
 		//std::cout << "Drawing Skybox" << std::endl;
-		m_skyBox->Draw(m_camera);
+		m_ActiveSkyBox->Draw(m_camera);
 	}
 }
 
@@ -55,7 +95,7 @@ void Scene::CycleSelectedGameObject()
 	{
 		return;
 	}
-	const int CurrentIndex = m_selectedIndex;
-	const int NextIndex = (m_selectedIndex + 1) % m_gameObjects.size();
+	const int CurrentIndex = m_selectedObjectIndex;
+	const int NextIndex = (m_selectedObjectIndex + 1) % m_gameObjects.size();
 	m_selectedGameObject = m_gameObjects[NextIndex]; 
 }

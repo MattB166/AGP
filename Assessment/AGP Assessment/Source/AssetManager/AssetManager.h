@@ -37,6 +37,10 @@ public:
 	static std::shared_ptr<ID3D11ShaderResourceView> CreateDDSTexture(const wchar_t* texturePath);
 
 
+	//retrieve file paths from the asset manager
+	static const wchar_t* GetTexturePath(const std::shared_ptr<SkyBox>& skyBox);
+
+
 
 #pragma endregion
 

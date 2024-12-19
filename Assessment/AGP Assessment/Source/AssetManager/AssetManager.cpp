@@ -330,7 +330,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 		shaderSet = CreateShaderSet(vsPath, psPath);
 	}
 
-	auto skyBox = std::make_shared<SkyBox>(m_dev, m_devcon, model, shaderSet->GetVertexShader(), shaderSet->GetPixelShader(), shaderSet->GetInputLayout(), texture.get());
+	auto skyBox = std::make_shared<SkyBox>(m_dev, m_devcon, model, shaderSet->GetVertexShader(), shaderSet->GetPixelShader(), shaderSet->GetInputLayout(), texture.get(),texturePath);
 	return skyBox;
 
 }
@@ -355,6 +355,18 @@ std::shared_ptr<ID3D11ShaderResourceView> AssetManager::CreateDDSTexture(const w
 		GetDDSTextures().insert(std::make_pair(texturePath, sharedTexture));
 		return sharedTexture;
 	}
+}
+
+const wchar_t* AssetManager::GetTexturePath(const std::shared_ptr<SkyBox>& skyBox)
+{
+	const wchar_t* texturePath = skyBox->GetTexturePath();
+
+	auto it = GetDDSTextures().find(texturePath);
+	if (it != GetDDSTextures().end())
+	{
+		return it->first;
+	}
+	return nullptr;
 }
 
 bool AssetManager::IsMaterialLoaded(const wchar_t& texturePath)

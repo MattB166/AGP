@@ -169,10 +169,8 @@ void Renderer::Clear()
 	//need the wvp matrix here
 }
 
-void Renderer::Present(XMMATRIX view, XMMATRIX proj)
+void Renderer::Present()
 {
-	m_projectionMatrix = proj;
-	m_viewMatrix = view;
 	//std::cout << "Presenting" << std::endl;
 	m_deviceContext->IASetInputLayout(m_inputLayout);
 	m_deviceContext->OMSetRenderTargets(1, &m_backBuffer, m_zBuffer);

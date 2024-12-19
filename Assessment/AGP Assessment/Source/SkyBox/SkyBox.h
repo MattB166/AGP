@@ -11,9 +11,11 @@ class SkyBox
 {
 public: 
 
-	SkyBox(ID3D11Device* device, ID3D11DeviceContext* deviceContext, ObjFileModel* model, ID3D11VertexShader* vs, ID3D11PixelShader* ps, ID3D11InputLayout* il, ID3D11ShaderResourceView* srv);
+	SkyBox(ID3D11Device* device, ID3D11DeviceContext* deviceContext, ObjFileModel* model, ID3D11VertexShader* vs, ID3D11PixelShader* ps, ID3D11InputLayout* il, ID3D11ShaderResourceView* srv, const wchar_t* TexPath);
 	
 	void Draw(Camera* cam); 
+
+	const wchar_t* GetTexturePath() { return m_texturePath; } 
 
 private:
 	void InitialiseSkybox();
@@ -44,5 +46,7 @@ private:
 	ID3D11Buffer* m_constBuffer = nullptr;
 
 	ID3D11SamplerState* m_sampler = nullptr;
+
+	const wchar_t* m_texturePath; 
 };
 

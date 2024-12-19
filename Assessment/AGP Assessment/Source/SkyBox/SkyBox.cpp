@@ -1,8 +1,8 @@
 #include "SkyBox.h"
 #include <iostream>
 
-SkyBox::SkyBox(ID3D11Device* device, ID3D11DeviceContext* deviceContext, ObjFileModel* model, ID3D11VertexShader* vs, ID3D11PixelShader* ps, ID3D11InputLayout* il, ID3D11ShaderResourceView* srv)
-	: m_device(device), m_deviceContext(deviceContext), m_SkyBoxModel(model), m_vertexShader(vs), m_pixelShader(ps), m_inputLayout(il), m_texture(srv), m_constBuffer(nullptr), m_rasterizerSolid(nullptr), m_rasterizerSkybox(nullptr), m_depthWriteSolid(nullptr), m_depthWriteSkybox(nullptr)
+SkyBox::SkyBox(ID3D11Device* device, ID3D11DeviceContext* deviceContext, ObjFileModel* model, ID3D11VertexShader* vs, ID3D11PixelShader* ps, ID3D11InputLayout* il, ID3D11ShaderResourceView* srv, const wchar_t* TexPath)
+	: m_device(device), m_deviceContext(deviceContext), m_SkyBoxModel(model), m_vertexShader(vs), m_pixelShader(ps), m_inputLayout(il), m_texture(srv), m_constBuffer(nullptr), m_rasterizerSolid(nullptr), m_rasterizerSkybox(nullptr), m_depthWriteSolid(nullptr), m_depthWriteSkybox(nullptr), m_texturePath(TexPath)
 
 {
 	InitialiseSkybox();

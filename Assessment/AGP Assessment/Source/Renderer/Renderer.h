@@ -13,7 +13,7 @@ public:
 
 	void Clear(); // current scene as parameters? 
 
-	void Present(XMMATRIX view, XMMATRIX proj); 
+	void Present(); 
 
 	ID3D11Device* GetDevice() { return m_device; }
 
