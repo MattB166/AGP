@@ -144,6 +144,15 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 		ImGui::Text("Current Mode: Edit Mode. Press P to Play");
 		ImGui::SetWindowPos(ImVec2(0, 0));
 		ImGui::End();
+
+
+		ImGui::Begin("Scene Editor", nullptr);
+		//want a way to call a function when button is pressed.
+		if (ImGui::Button("Cycle SkyBox"))
+		{
+			SceneManager::CycleSceneSkyBox();
+		}
+		ImGui::End();
 	}
 	else if (m_mode == Mode::PLAY)
 	{
