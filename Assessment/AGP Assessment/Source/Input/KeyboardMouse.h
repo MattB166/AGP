@@ -15,8 +15,9 @@ struct BindingData
 {
 	std::function<void()> action;
 	KeyState PressState;
+	int ID;
 
-	BindingData() : action(nullptr), PressState(KeyState::None) {}
+	BindingData() : action(nullptr), PressState(KeyState::None), ID(0) {}
 	BindingData(std::function<void()> action, KeyState PressState) : action(action), PressState(PressState) {}
 };
 enum class MouseButton
@@ -62,6 +63,8 @@ public:
 	DirectX::Keyboard::State GetKeyboardState() const;
 
 	DirectX::Keyboard::State GetPrevKeyboardState() const;
+
+	DirectX::Keyboard::Keys GetKeyFromBinding(std::function<void()> func);
 
 
 

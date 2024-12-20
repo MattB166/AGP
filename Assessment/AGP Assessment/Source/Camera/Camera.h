@@ -51,7 +51,9 @@ private:
 
 	float aspectRatio;
 
-	float sensitivity = XM_2PI * 0.00045f;
+	float sensitivity = XM_2PI * 0.045f;
+
+	float speed = 50.0f;
 
 	//XMVECTOR fwd;
 

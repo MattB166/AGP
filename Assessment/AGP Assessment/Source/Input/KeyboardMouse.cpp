@@ -81,12 +81,16 @@ void KeyboardMouse::ClearMouseMovement()
 
 void KeyboardMouse::BindKeyToFunction(Keyboard::Keys key, BindingData data)
 {
+	static int nextID = 1;
+	data.ID = nextID++;
 	keyBindings.insert(std::make_pair(key, data));
 	std::cout << "Key Binding added" << std::endl;
 }
 
 void KeyboardMouse::BindMouseToFunction(MouseButton button, BindingData data)
 {
+	static int nextID = 1;
+	data.ID = nextID++;
 	mouseBindings.insert(std::make_pair(button, data));
 	std::cout << "Mouse Binding added" << std::endl;
 }
@@ -206,13 +210,43 @@ void KeyboardMouse::ProcessMouseInput(const DirectX::Mouse::State& currentState)
 	}
 	if (mouseMovementAction)
 	{
-		mouseMovementAction(currentState.x, currentState.y);
+		mouseMovementAction(currentState.x , currentState.y);
 		//std::cout << currentState.x << " " << currentState.y << std::endl;
 	}
 	else
 	{
 		//std::cout << "No mouse movement action bound" << std::endl;
 	}
+}
+
+DirectX::Keyboard::Keys KeyboardMouse::GetKeyFromBinding(std::function<void()> func)
+{
+	//searches through mappings for the key that matches the function 
+	int funcID = -1;
+	for (const auto& binding : keyBindings)
+	{
+		if (binding.second.action.target_type() == func.target_type())
+		{	
+			std::cout << "Function found" << std::endl;
+			funcID = binding.second.ID;
+			break;
+		}
+	}
+	if (funcID == -1)
+	{
+		return DirectX::Keyboard::Keys::None;
+	}
+
+	for (const auto& binding : keyBindings)
+	{
+		if (binding.second.ID == funcID)
+		{
+			std::cout << "Key found" << std::endl;
+			return binding.first;
+		}
+	}
+
+	return DirectX::Keyboard::Keys::None;
 }
 
 

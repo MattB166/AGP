@@ -79,6 +79,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 void Application::Run()
 {
 	MSG msg = { 0 };
+	SetupConstantBindings();
 	SetupModeBindings();
 	
 	SceneManager::AddScene(L"Scene1");
@@ -175,9 +176,17 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 	{
 		ImGui::Begin("Play Mode", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
 		ImGui::Text("Current Mode: Play Mode. Press ESC to exit Play.");
-	
 		ImGui::SetWindowPos(ImVec2(0, 0));
 		ImGui::End();
+
+		/*if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
+		{
+			mouse.SetMode(DirectX::Mouse::MODE_ABSOLUTE);
+		}
+		else
+		{
+			mouse.SetMode(DirectX::Mouse::MODE_RELATIVE);
+		}*/
 	}
 
 	
@@ -189,13 +198,13 @@ void Application::ChangeMouseMode()
 	{
 		m_mouseMode = Mouse::MODE_RELATIVE;
 		mouse.SetMode(DirectX::Mouse::MODE_RELATIVE);
-		mouse.SetWindow(m_window->GetHWND());
+		//mouse.SetWindow(m_window->GetHWND());
 	}
 	else if (m_mouseMode == Mouse::MODE_RELATIVE)
 	{
 		m_mouseMode = Mouse::MODE_ABSOLUTE;
 		mouse.SetMode(DirectX::Mouse::MODE_ABSOLUTE);
-		mouse.SetWindow(NULL);
+		//mouse.SetWindow(NULL);
 	}
 }
 
@@ -220,8 +229,9 @@ void Application::SetupModeBindings()
 			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::O, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
 			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::R, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
 			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::S, BindingData([]() {SceneManager::CycleActiveScene(); }, KeyState::Pressed));
-			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::K, BindingData([]() {SceneManager::RotateActiveSceneCamera(0.0f, 2.0f * TimeClass::GetDeltaTime()); }, KeyState::Held));
-			m_inputManager->BindMouseToFunction(MouseButton::Right, BindingData([]() {SceneManager::RotateActiveSceneCamera(0.0f, 2.0f * TimeClass::GetDeltaTime()); }, KeyState::Held));
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::D, BindingData([]() {SceneManager::MoveActiveSceneCamera(0.1f,0.0f,0.0f); }, KeyState::Held));//create editable value for the snap distance. 
+			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::K, BindingData([]() {SceneManager::RotateActiveSceneCamera(10.0f, 0.0f); }, KeyState::Held));
+			//m_inputManager->BindMouseToFunction(MouseButton::Right, BindingData([]() {SceneManager::RotateActiveSceneCamera(10.0f, 0.0f); }, KeyState::Held));
 			m_inputManager->ClearMouseMovement();
 			//mouse.SetMode(DirectX::Mouse::MODE_ABSOLUTE);
 		}
@@ -233,7 +243,7 @@ void Application::SetupModeBindings()
 			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Escape, BindingData(std::bind(&Application::ChangeMouseMode, this), KeyState::Pressed));
 			//mouse.SetMode(DirectX::Mouse::MODE_RELATIVE);
 			// Add play mode specific bindings here
-			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Escape, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
+			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Escape, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
 			// Add other play mode bindings as needed
 		}
 	}
@@ -248,8 +258,9 @@ void Application::HandleInput()
 	auto kbState = keyboard.GetState();
 	auto mouseState = mouse.GetState();
 
-	std::cout << "Mouse State: " << mouseState.x << ", " << mouseState.y << std::endl;
+	//std::cout << "Mouse State: " << mouseState.x << ", " << mouseState.y << std::endl;
 
 	m_inputManager->ProcessKeyboardInput(kbState);
 	m_inputManager->ProcessMouseInput(mouseState);
+	
 }

@@ -54,8 +54,9 @@ void Camera::SetProjectionMatrix(float fov, float screenW, float screenH, float 
 
 void Camera::RotateCamera(float yaw, float pitch)
 {
-	this->pitch += pitch * sensitivity;
-	this->yaw += yaw * sensitivity;
+	float deltaTime = TimeClass::GetDeltaTime();
+	this->pitch += pitch * sensitivity * speed * deltaTime;
+	this->yaw += yaw * sensitivity * speed * deltaTime;
 
 	constexpr float UPPITCH_LIMIT = XMConvertToRadians(179.0f);
 	constexpr float LOWPITCH_LIMIT = XMConvertToRadians(1.0f);
@@ -88,10 +89,11 @@ void Camera::MoveCamera(float x, float y, float z)
 	UpVector = XMVector3Normalize(UpVector);
 	movement = XMVectorAdd(movement, XMVectorScale(UpVector, -y));
 
+	float deltaTime = TimeClass::GetDeltaTime();
 
-	xPos += XMVectorGetX(movement); 
-	yPos += XMVectorGetY(movement);
-	zPos += XMVectorGetZ(movement);
+	xPos += XMVectorGetX(movement) * deltaTime * speed;
+	yPos += XMVectorGetY(movement) * deltaTime * speed;
+	zPos += XMVectorGetZ(movement) * deltaTime * speed;
 
 	
 	std::cout << "Camera Position: " << xPos << " " << yPos << " " << zPos << std::endl;
