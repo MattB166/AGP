@@ -34,7 +34,7 @@ XMMATRIX Camera::GetViewMatrix()
 		cos(pitch),
 		cos(yaw) * sin(pitch)
 	};
-	return XMMatrixLookToLH(eyepos, lookat, camup);
+	return XMMatrixLookToLH(eyepos, lookat, camup); //use look at when locked onto an object in view. 
 
 }
 

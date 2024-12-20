@@ -55,6 +55,8 @@ private:
 
 	float speed = 50.0f;
 
+	bool LockedToObjectView = false;
+
 	//XMVECTOR fwd;
 
 	//XMVECTOR RightVector;

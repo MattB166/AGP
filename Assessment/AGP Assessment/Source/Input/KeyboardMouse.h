@@ -41,8 +41,6 @@ public:
 
 	void ClearAllBindings();
 
-	void ClearTempBindings();
-
 	void ClearKeyBinding(Keyboard::Keys key);
 
 	void ClearMouseBinding(MouseButton button);

@@ -217,7 +217,7 @@ void Application::SetupModeBindings()
 {
 	if (m_inputManager != nullptr)
 	{
-		//m_inputManager->ClearAllBindings();
+		//m_inputManager->ClearAllBindings(); NEED TO CLEAR ALL TEMPORARY BINDINGS BETWEEN EACH STATE CHANGE. BUT KEEP THE CONSTANT BINDINGS THROUGHOUT LOOP. 
 
 		if (m_mode == Mode::EDIT)
 		{
