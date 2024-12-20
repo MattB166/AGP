@@ -2,69 +2,68 @@
 #include <Keyboard.h>
 #include <Mouse.h>
 #include <unordered_map>
-#include "IInputManager.h"
+#include <functional>
 using namespace DirectX;
+enum class KeyState
+{
+	Held,
+	Pressed,
+	Released,
+	None
+};
+struct BindingData
+{
+	std::function<void()> action;
+	KeyState PressState;
+
+	BindingData() : action(nullptr), PressState(KeyState::None) {}
+	BindingData(std::function<void()> action, KeyState PressState) : action(action), PressState(PressState) {}
+};
 enum class MouseButton
 {
 	Left,
 	Right,
 	Middle
 };
-class KeyboardMouse : public IInputManager
+class KeyboardMouse
 {
 public: 
 	KeyboardMouse();
 
 	~KeyboardMouse();
 
-	void Update() override;
+	void Update();
 
-	void CleanUp() override;
+	void CleanUp();
 
-	void BindKeyToFunction(int key, BindingData data) override;
+	void Initialise();
 
-	//void BindAxisToFunction(const std::string& axis, const std::function<void(float)>& action) override;
-
-	void Initialise() override;
-
-	void ClearAllBindings() override;
+	void ClearAllBindings();
 
     void BindKeyToFunction(Keyboard::Keys key, BindingData data);
 
     void BindMouseToFunction(MouseButton button, BindingData data);
 
-	void ProcessInput(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
+	void ProcessKeyboardInput(const DirectX::Keyboard::State& currentState);
+
+	void ProcessMouseInput(const DirectX::Mouse::State& currentState);
+
 
 	DirectX::Keyboard::State GetKeyboardState() const;
 
 	DirectX::Keyboard::State GetPrevKeyboardState() const;
 
-	const void* GetCurrentState() const override;
 
 
 
 
 private:
-	std::unique_ptr<Keyboard> m_keyboard = nullptr;
+	
 
-	std::unique_ptr<Mouse> m_mouse = nullptr;
+	 //UP TO DATE ONES HERE
+	 std::unordered_map<DirectX::Keyboard::Keys, BindingData> keyBindings;
+	 std::unordered_map < DirectX::Mouse::ButtonStateTracker::ButtonState, BindingData> mouseBindings;
 
-	 std::unordered_map<int, BindingData> m_keyBindings;
-
-	 std::unordered_map<MouseButton, BindingData> m_mouseBindings;
-
-	 DirectX::Keyboard::State m_PrevkeyboardState;
-
-	 DirectX::Keyboard::State m_CurrentkeyboardState;
-
-	 DirectX::Keyboard::KeyboardStateTracker m_kBTracker;
-
-	 DirectX::Mouse::State m_PrevmouseState;
-
-	 KeyState GetKeyState(DirectX::Keyboard::State& currentState, DirectX::Keyboard::Keys key);
-
-	 KeyState GetMouseState(DirectX::Mouse::State& currentState, MouseButton button);
-
-
+	 DirectX::Keyboard::KeyboardStateTracker m_keyboardTracker;
 };
 

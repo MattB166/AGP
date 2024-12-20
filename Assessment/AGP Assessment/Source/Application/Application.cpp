@@ -5,7 +5,7 @@
 #include "../AssetManager/AssetManager.h"
 #include "../Time/TimeClass.h"
 
-Application::Application() : m_window(nullptr), m_renderer(nullptr), m_input(std::make_unique<KeyboardMouse>())
+Application::Application() : m_window(nullptr), m_renderer(nullptr), m_inputManager(std::make_unique<KeyboardMouse>())
 {
 
 	
@@ -40,7 +40,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 
 	
 
-	if (FAILED(m_window->InitWindow(hInstance, nCmdShow, m_input.get())))
+	if (FAILED(m_window->InitWindow(hInstance, nCmdShow)))
 	{
 		return false;
 	}
@@ -96,6 +96,7 @@ void Application::Run()
 		else
 		{
 			///Run game code here
+			HandleInput();
 			m_renderer->Clear();
 
 			ImGui_ImplDX11_NewFrame();
@@ -162,7 +163,6 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 		ImGui::End();
 
 		//std::cout << "Active Scene: " << SceneManager::GetActiveSceneName() << std::endl;
-		auto currentKeyState = m_input->GetCurrentState();
 
 
 	}
@@ -177,20 +177,29 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 
 void Application::SetupBindings()
 {
-	if (m_input != nullptr)
+	if (m_inputManager != nullptr)
 	{
-		m_input->BindKeyToFunction('P', BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
-		m_input->BindKeyToFunction('C', BindingData([]() {SceneManager::CycleSceneSkyBox(); }, KeyState::Pressed));
-		m_input->BindKeyToFunction('Q', BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
-		m_input->BindKeyToFunction('A', BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
-		m_input->BindKeyToFunction('D', BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
-		m_input->BindKeyToFunction('R', BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
-		m_input->BindKeyToFunction('S', BindingData([]() {SceneManager::CycleActiveScene(); }, KeyState::Pressed));
-		m_input->BindKeyToFunction('K', BindingData([]() {SceneManager::RotateActiveSceneCamera(0.0f, 100.0f * TimeClass::GetDeltaTime()); }, KeyState::Pressed)); //little test, need another way to rotate the camera by using mouse. 
+		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::P, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
+		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::C, BindingData([]() {SceneManager::CycleSceneSkyBox(); }, KeyState::Pressed));
+		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Q, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
+		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::A, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
+		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::O, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
+		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::R, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
+		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::S, BindingData([]() {SceneManager::CycleActiveScene(); }, KeyState::Pressed));
+		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::K, BindingData([]() {SceneManager::RotateActiveSceneCamera(0.0f, 2.0f * TimeClass::GetDeltaTime()); }, KeyState::Held)); //little test, need another way to rotate the camera by using mouse. 
 	}
 	else
 	{
 		std::cout << "Input is null" << std::endl;
 	}
 	
+}
+
+void Application::HandleInput()
+{
+	auto kbState = keyboard.GetState();
+	auto mouseState = mouse.GetState();
+
+	m_inputManager->ProcessKeyboardInput(kbState);
+	m_inputManager->ProcessMouseInput(mouseState);
 }

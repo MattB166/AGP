@@ -3,7 +3,7 @@
 #include "../IMGUI/imgui.h"
 #include "../IMGUI/imgui_impl_win32.h"
 #include "../IMGUI/imgui_impl_dx11.h"
-IInputManager* Window::m_InputStatic = nullptr;
+//IInputManager* Window::m_InputStatic = nullptr;
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 Window::Window() : m_hInstance(NULL), m_hwnd(NULL), wr{0,0,0,0}
@@ -22,13 +22,13 @@ Window::~Window()
 		UnregisterClass(L"WindowClass1", m_hInstance);
 		m_hInstance = NULL;
 	}
-	if (m_Input)
-	{
-		m_Input = nullptr; //only setting to null because application will delete the input manager, as it owns it. 
-	}
+	//if (m_Input)
+	//{
+	//	m_Input = nullptr; //only setting to null because application will delete the input manager, as it owns it. 
+	//}
 }
 
-HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow, IInputManager* inp)
+HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow)
 {
 	m_hInstance = hInstance;  
 	WNDCLASSEX wc = { };  
@@ -79,8 +79,8 @@ HRESULT Window::InitWindow(HINSTANCE hInstance, int nCmdShow, IInputManager* inp
 
 	//mouse.SetWindow(hWnd);
 	//mouse.SetMode(Mouse::MODE_RELATIVE);
-	m_Input = inp;
-	m_InputStatic = inp;
+	//m_Input = inp;
+	//m_InputStatic = inp;
 	
 
 	return S_OK;
@@ -92,25 +92,46 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
 		return true;
 
-	if (m_InputStatic != nullptr)
-		m_InputStatic->ProcessInput(hWnd, message, wParam, lParam); ///GOING TO BE REWORKED BECAUSE MY INPUTS ARE NOT INSTANT. kb process messages here, input handler needs to get tracker and call update on it.
-	// then go through the bindings and check the kbstates for the keys that are bound to functions. 
 	switch (message)
 	{
+	case WM_ACTIVATE:
+	case WM_ACTIVATEAPP:
+	case WM_INPUT:
+	case WM_SYSKEYDOWN:
+	case WM_KEYDOWN:
+	case WM_KEYUP:
+	case WM_SYSKEYUP:
+		DirectX::Keyboard::ProcessMessage(message, wParam, lParam);
+		break;
+	case WM_MOUSEACTIVATE:
+	case WM_MOUSEMOVE:
+	case WM_LBUTTONDOWN:
+	case WM_LBUTTONUP:
+	case WM_RBUTTONDOWN:
+	case WM_RBUTTONUP:
+	case WM_MBUTTONDOWN:
+	case WM_MBUTTONUP:
+	case WM_MOUSEWHEEL:
+	case WM_XBUTTONDOWN:
+	case WM_XBUTTONUP:
+	case WM_MOUSEHOVER:
+		DirectX::Mouse::ProcessMessage(message, wParam, lParam);
+		break;
 
 	case WM_DESTROY:
-
 		PostQuitMessage(0);
-		break;
+		return 0;
+
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 
-	return DefWindowProc(hWnd, message, wParam, lParam); ///let windows handle everything else with default handling 
-		
+	return 0;
 }
 
 void Window::Run()
 {
-	m_InputStatic->Update();
+	//m_InputStatic->Update();
 }
 
 void Window::OpenConsole()

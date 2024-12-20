@@ -6,6 +6,7 @@
 #include "../IMGUI/imgui_impl_win32.h"
 #include "../IMGUI/imgui_impl_dx11.h"
 #include "../Scenes/SceneManager.h"
+#include "../Input/KeyboardMouse.h"
 enum class Mode
 {
 	EDIT,
@@ -25,12 +26,15 @@ public:
 	Mode GetMode() { return m_mode; }
 	void RunMode(); 
 	void SetupBindings();
+	void HandleInput();
 
 
 private:
 	Window* m_window = nullptr;
 	Renderer* m_renderer = nullptr; 
-	std::unique_ptr<IInputManager> m_input = nullptr;
+	std::unique_ptr<KeyboardMouse> m_inputManager = nullptr;
+	DirectX::Keyboard keyboard;
+	DirectX::Mouse mouse;
 	Mode m_mode = Mode::EDIT;
 	//list/vector of scenes. 
 
