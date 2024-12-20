@@ -7,7 +7,7 @@ KeyboardMouse::KeyboardMouse()
 
 KeyboardMouse::~KeyboardMouse()
 {
-	
+	CleanUp();
 }
 
 
@@ -19,7 +19,9 @@ void KeyboardMouse::Update()
 
 void KeyboardMouse::CleanUp()
 {
-	
+	keyBindings.clear();
+	mouseBindings.clear();
+	mouseMovementAction = nullptr;
 
 }
 
@@ -31,23 +33,78 @@ void KeyboardMouse::Initialise()
 
 void KeyboardMouse::ClearAllBindings()
 {
-	
+	if (keyBindings.empty() && mouseBindings.empty())
+	{
+		return;
+	}
+	keyBindings.clear();
+	mouseBindings.clear();
+	std::cout << "All bindings cleared" << std::endl;
+	std::cout << "KeyBindings size: " << keyBindings.size() << std::endl;
+	std::cout << "MouseBindings size: " << mouseBindings.size() << std::endl;
+}
+
+void KeyboardMouse::ClearKeyBinding(Keyboard::Keys key)
+{
+	auto it = keyBindings.find(key);
+	if (it != keyBindings.end())
+	{
+		keyBindings.erase(it);
+		std::cout << "Key Binding removed" << std::endl;
+	}
+	else
+	{
+		std::cerr << "Key Binding not found" << std::endl;
+	}
+}
+
+void KeyboardMouse::ClearMouseBinding(MouseButton button)
+{
+	auto it = mouseBindings.find(button);
+	if (it != mouseBindings.end())
+	{
+		mouseBindings.erase(it);
+		std::cout << "Mouse Binding removed" << std::endl;
+	}
+	else
+	{
+		std::cerr << "Mouse Binding not found" << std::endl;
+	}
+}
+
+void KeyboardMouse::ClearMouseMovement()
+{
+	mouseMovementAction = nullptr;
+	std::cout << "Mouse Movement Binding removed" << std::endl;
+
 }
 
 void KeyboardMouse::BindKeyToFunction(Keyboard::Keys key, BindingData data)
 {
 	keyBindings.insert(std::make_pair(key, data));
+	std::cout << "Key Binding added" << std::endl;
 }
 
 void KeyboardMouse::BindMouseToFunction(MouseButton button, BindingData data)
 {
 	mouseBindings.insert(std::make_pair(button, data));
+	std::cout << "Mouse Binding added" << std::endl;
+}
+
+void KeyboardMouse::BindMouseMovement(std::function<void(int, int)> action)
+{
+	mouseMovementAction = action;
+	std::cout << "Mouse Movement Binding added" << std::endl;
 }
 
 
 void KeyboardMouse::ProcessKeyboardInput(const DirectX::Keyboard::State& currentState)
 {
 	m_keyboardTracker.Update(currentState);
+	if (keyBindings.empty())
+	{
+		return;
+	}
 
 	for (const auto& binding : keyBindings)
 	{
@@ -65,6 +122,9 @@ void KeyboardMouse::ProcessKeyboardInput(const DirectX::Keyboard::State& current
 			break;
 		case KeyState::None:
 			break;
+		default:
+			std::cerr << "Invalid PressState detected" << std::endl;
+			continue;
 		}
 		if (Condition && binding.second.action)
 		{
@@ -72,10 +132,13 @@ void KeyboardMouse::ProcessKeyboardInput(const DirectX::Keyboard::State& current
 		}
 
 	}
+
+
 }
 
 void KeyboardMouse::ProcessMouseInput(const DirectX::Mouse::State& currentState)
 {
+
 	m_mouseTracker.Update(currentState);
 	for (const auto& binding : mouseBindings)
 	{
@@ -94,6 +157,9 @@ void KeyboardMouse::ProcessMouseInput(const DirectX::Mouse::State& currentState)
 			case MouseButton::Middle:
 				condition = currentState.middleButton;
 				break;
+			default:
+				std::cerr << "Invalid MouseButton detected in ProcessMouseInput" << std::endl;
+				continue;
 			}
 			break;
 		case KeyState::Pressed:
@@ -108,6 +174,9 @@ void KeyboardMouse::ProcessMouseInput(const DirectX::Mouse::State& currentState)
 			case MouseButton::Middle:
 				condition = m_mouseTracker.middleButton == DirectX::Mouse::ButtonStateTracker::PRESSED;
 				break;
+			default:
+				std::cerr << "Invalid MouseButton detected in ProcessMouseInput" << std::endl;
+				continue;
 			}
 			break;
 		case KeyState::Released:
@@ -122,6 +191,9 @@ void KeyboardMouse::ProcessMouseInput(const DirectX::Mouse::State& currentState)
 			case MouseButton::Middle:
 				condition = m_mouseTracker.middleButton == DirectX::Mouse::ButtonStateTracker::RELEASED;
 				break;
+			default:
+				std::cerr << "Invalid MouseButton detected in ProcessMouseInput" << std::endl;
+				continue;
 			}
 			break;
 		case KeyState::None:
@@ -131,6 +203,15 @@ void KeyboardMouse::ProcessMouseInput(const DirectX::Mouse::State& currentState)
 		{
 			binding.second.action();
 		}
+	}
+	if (mouseMovementAction)
+	{
+		mouseMovementAction(currentState.x, currentState.y);
+		//std::cout << currentState.x << " " << currentState.y << std::endl;
+	}
+	else
+	{
+		//std::cout << "No mouse movement action bound" << std::endl;
 	}
 }
 

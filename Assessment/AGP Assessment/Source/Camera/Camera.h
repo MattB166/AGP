@@ -15,7 +15,7 @@ public:
 
 	void SetProjectionMatrix(float fov, float screenW, float screenH, float nClip, float fClip); // Sets the projection matrix
 
-	void RotateCamera(float pitch, float yaw); // Rotates the camera around the x axis
+	void RotateCamera(float yaw, float pitch); // Rotates the camera around the x axis
 
 	void MoveCamera(float x, float y, float z); // Moves the camera
 
@@ -50,6 +50,8 @@ private:
 	float farClip;
 
 	float aspectRatio;
+
+	float sensitivity = XM_2PI * 0.00045f;
 
 	//XMVECTOR fwd;
 

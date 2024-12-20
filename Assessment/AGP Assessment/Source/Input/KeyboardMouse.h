@@ -40,9 +40,19 @@ public:
 
 	void ClearAllBindings();
 
+	void ClearTempBindings();
+
+	void ClearKeyBinding(Keyboard::Keys key);
+
+	void ClearMouseBinding(MouseButton button);
+
+	void ClearMouseMovement();
+
     void BindKeyToFunction(Keyboard::Keys key, BindingData data);
 
     void BindMouseToFunction(MouseButton button, BindingData data);
+
+	void BindMouseMovement(std::function<void(int, int)> action);
 
 	void ProcessKeyboardInput(const DirectX::Keyboard::State& currentState);
 
@@ -63,9 +73,12 @@ private:
 	 //UP TO DATE ONES HERE
 	 std::unordered_map<DirectX::Keyboard::Keys, BindingData> keyBindings;
 	 std::unordered_map <MouseButton, BindingData> mouseBindings;
+	 std::function<void(int, int)> mouseMovementAction;
 
 	 DirectX::Keyboard::KeyboardStateTracker m_keyboardTracker;
 	 DirectX::Mouse::ButtonStateTracker m_mouseTracker;
+
+
 
 };
 

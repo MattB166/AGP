@@ -226,7 +226,7 @@ void Window::HandleInput(float deltaTime) ///make input class later which allows
 	tracker.Update(kbState);
 	auto mouseState = mouse.GetState();
 	mouseTracker.Update(mouseState);
-
+	std::cout << "Mouse X: " << mouseState.x << " Mouse Y: " << mouseState.y << std::endl;
 	float sensitivity = XM_2PI * 0.00045f;
 	s_renderer->RotateCamera(mouseState.y * sensitivity, mouseState.x * sensitivity);
 

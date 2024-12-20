@@ -52,21 +52,21 @@ void Camera::SetProjectionMatrix(float fov, float screenW, float screenH, float 
 	projection = XMMatrixPerspectiveFovLH(XMConvertToRadians(FOV), aspectRatio, nearClip, farClip);
 }
 
-void Camera::RotateCamera(float pitch, float yaw)
+void Camera::RotateCamera(float yaw, float pitch)
 {
-	this->pitch += pitch;
-	this->yaw += yaw;
+	this->pitch += pitch * sensitivity;
+	this->yaw += yaw * sensitivity;
 
 	constexpr float UPPITCH_LIMIT = XMConvertToRadians(179.0f);
 	constexpr float LOWPITCH_LIMIT = XMConvertToRadians(1.0f);
-	if (pitch < LOWPITCH_LIMIT)
+	if (this->pitch < LOWPITCH_LIMIT)
 	{
-		pitch = LOWPITCH_LIMIT;
+		this->pitch = LOWPITCH_LIMIT;
 	}
 	else
-		if (pitch > UPPITCH_LIMIT)
+		if (this->pitch > UPPITCH_LIMIT)
 		{
-			pitch = UPPITCH_LIMIT;
+			this->pitch = UPPITCH_LIMIT;
 		}
 }
 

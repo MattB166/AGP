@@ -25,7 +25,11 @@ public:
 	void SwitchMode();
 	Mode GetMode() { return m_mode; }
 	void RunMode(); 
-	void SetupBindings();
+	void ChangeMouseMode(); 
+	void SetupConstantBindings();
+	void SetupModeBindings();
+	void SetupEditBindings();
+	void SetupPlayBindings();
 	void HandleInput();
 
 
@@ -36,6 +40,7 @@ private:
 	DirectX::Keyboard keyboard;
 	DirectX::Mouse mouse;
 	Mode m_mode = Mode::EDIT;
+	Mouse::Mode m_mouseMode = Mouse::MODE_ABSOLUTE; 
 	//list/vector of scenes. 
 
 	//need a way to determine whether we are in "edit" mode or "play" mode. 

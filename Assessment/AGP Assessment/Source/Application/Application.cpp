@@ -1,7 +1,6 @@
 #include "Application.h"
 #include <memory>
 #include <iostream>
-#include "../Input/KeyboardMouse.h"
 #include "../AssetManager/AssetManager.h"
 #include "../Time/TimeClass.h"
 
@@ -71,13 +70,17 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 
 	
 
+	mouse.SetWindow(m_window->GetHWND());
+	
+
 	return true;
 }
 
 void Application::Run()
 {
 	MSG msg = { 0 };
-	SetupBindings();
+	SetupModeBindings();
+	
 	SceneManager::AddScene(L"Scene1");
 	SceneManager::AddScene(L"Scene2");
 	SceneManager::SetActiveScene(L"Scene1");
@@ -124,20 +127,29 @@ void Application::Run()
 void Application::SetMode(Mode mode)
 {
 	m_mode = mode;
-	//if mode is play, hide IMGUI, if mode is edit, show IMGUI.
-	//send objects back to their original positions if mode is edit, and update behaviours if mode is play. 
-	//do this via the scene manager. 
+	std::string modeString = (m_mode == Mode::EDIT) ? "EDIT" : "PLAY";
+	std::cout << "Mode set to: " << modeString << std::endl;
+	if (m_mode == Mode::EDIT)
+		mouse.SetMode(DirectX::Mouse::MODE_ABSOLUTE);
+	else if (m_mode == Mode::PLAY)
+		mouse.SetMode(DirectX::Mouse::MODE_RELATIVE);
+	else
+
+
+	SetupModeBindings();
 }
 
 void Application::SwitchMode()
 {
 	if (m_mode == Mode::EDIT)
 	{
-		m_mode = Mode::PLAY;
+		SetMode(Mode::PLAY);
+		SetupModeBindings();
 	}
 	else if (m_mode == Mode::PLAY)
 	{
-		m_mode = Mode::EDIT;
+		SetMode(Mode::EDIT);
+		SetupModeBindings();
 	}
 	//if mode is play, hide IMGUI, if mode is edit, show IMGUI.
 	//send objects back to their original positions if mode is edit, and update behaviours if mode is play. 
@@ -149,58 +161,94 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 	if (m_mode == Mode::EDIT)
 	{
 		ImGui::Begin("Edit Mode", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-		ImGui::Text("Current Mode: Edit Mode. Press P to Play");
+		ImGui::Text("Current Mode: Edit Mode.");
+		if (ImGui::Button("Play"))
+		{
+			SwitchMode();
+		}
 		ImGui::SetWindowPos(ImVec2(0, 0));
 		ImGui::End();
-
-
-		ImGui::Begin("Scene Editor", nullptr);
-		//want a way to call a function when button is pressed.
-		if (ImGui::Button("Cycle SkyBox"))
-		{
-			SceneManager::CycleSceneSkyBox();
-		}
-		ImGui::End();
-
-		//std::cout << "Active Scene: " << SceneManager::GetActiveSceneName() << std::endl;
 
 
 	}
 	else if (m_mode == Mode::PLAY)
 	{
 		ImGui::Begin("Play Mode", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-		ImGui::Text("Current Mode: Play Mode. Press P to Exit Play");
+		ImGui::Text("Current Mode: Play Mode. Press ESC to exit Play.");
+	
 		ImGui::SetWindowPos(ImVec2(0, 0));
 		ImGui::End();
 	}
+
+	
 }
 
-void Application::SetupBindings()
+void Application::ChangeMouseMode()
+{
+	if (m_mouseMode == Mouse::MODE_ABSOLUTE)
+	{
+		m_mouseMode = Mouse::MODE_RELATIVE;
+		mouse.SetMode(DirectX::Mouse::MODE_RELATIVE);
+		mouse.SetWindow(m_window->GetHWND());
+	}
+	else if (m_mouseMode == Mouse::MODE_RELATIVE)
+	{
+		m_mouseMode = Mouse::MODE_ABSOLUTE;
+		mouse.SetMode(DirectX::Mouse::MODE_ABSOLUTE);
+		mouse.SetWindow(NULL);
+	}
+}
+
+void Application::SetupConstantBindings()
+{
+	m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Escape, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Released));
+}
+
+void Application::SetupModeBindings()
 {
 	if (m_inputManager != nullptr)
 	{
-		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::P, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
-		//m_inputManager->BindMouseToFunction(MouseButton::Right, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
-		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::C, BindingData([]() {SceneManager::CycleSceneSkyBox(); }, KeyState::Pressed));
-		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Q, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
-		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::A, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
-		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::O, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
-		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::R, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
-		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::S, BindingData([]() {SceneManager::CycleActiveScene(); }, KeyState::Pressed));
-		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::K, BindingData([]() {SceneManager::RotateActiveSceneCamera(0.0f, 2.0f * TimeClass::GetDeltaTime()); }, KeyState::Held)); //little test, need another way to rotate the camera by using mouse. 
-		m_inputManager->BindMouseToFunction(MouseButton::Left, BindingData([]() {SceneManager::RotateActiveSceneCamera(0.0f, 2.0f * TimeClass::GetDeltaTime()); }, KeyState::Held));
+		//m_inputManager->ClearAllBindings();
+
+		if (m_mode == Mode::EDIT)
+		{
+			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::P, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
+			
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::C, BindingData([]() {SceneManager::CycleSceneSkyBox(); }, KeyState::Pressed));
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Q, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::A, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::O, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::R, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::S, BindingData([]() {SceneManager::CycleActiveScene(); }, KeyState::Pressed));
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::K, BindingData([]() {SceneManager::RotateActiveSceneCamera(0.0f, 2.0f * TimeClass::GetDeltaTime()); }, KeyState::Held));
+			m_inputManager->BindMouseToFunction(MouseButton::Right, BindingData([]() {SceneManager::RotateActiveSceneCamera(0.0f, 2.0f * TimeClass::GetDeltaTime()); }, KeyState::Held));
+			m_inputManager->ClearMouseMovement();
+			//mouse.SetMode(DirectX::Mouse::MODE_ABSOLUTE);
+		}
+		else if (m_mode == Mode::PLAY)
+		{
+			m_inputManager->BindMouseMovement([](int x, int y) {SceneManager::RotateActiveSceneCamera(x,y); });
+			
+
+			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Escape, BindingData(std::bind(&Application::ChangeMouseMode, this), KeyState::Pressed));
+			//mouse.SetMode(DirectX::Mouse::MODE_RELATIVE);
+			// Add play mode specific bindings here
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Escape, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
+			// Add other play mode bindings as needed
+		}
 	}
 	else
 	{
 		std::cout << "Input is null" << std::endl;
 	}
-	
 }
 
 void Application::HandleInput()
 {
 	auto kbState = keyboard.GetState();
 	auto mouseState = mouse.GetState();
+
+	std::cout << "Mouse State: " << mouseState.x << ", " << mouseState.y << std::endl;
 
 	m_inputManager->ProcessKeyboardInput(kbState);
 	m_inputManager->ProcessMouseInput(mouseState);
