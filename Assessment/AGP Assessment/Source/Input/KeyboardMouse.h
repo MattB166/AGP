@@ -62,8 +62,10 @@ private:
 
 	 //UP TO DATE ONES HERE
 	 std::unordered_map<DirectX::Keyboard::Keys, BindingData> keyBindings;
-	 std::unordered_map < DirectX::Mouse::ButtonStateTracker::ButtonState, BindingData> mouseBindings;
+	 std::unordered_map <MouseButton, BindingData> mouseBindings;
 
 	 DirectX::Keyboard::KeyboardStateTracker m_keyboardTracker;
+	 DirectX::Mouse::ButtonStateTracker m_mouseTracker;
+
 };
 

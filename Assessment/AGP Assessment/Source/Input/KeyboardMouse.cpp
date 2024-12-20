@@ -41,7 +41,7 @@ void KeyboardMouse::BindKeyToFunction(Keyboard::Keys key, BindingData data)
 
 void KeyboardMouse::BindMouseToFunction(MouseButton button, BindingData data)
 {
-	
+	mouseBindings.insert(std::make_pair(button, data));
 }
 
 
@@ -76,6 +76,62 @@ void KeyboardMouse::ProcessKeyboardInput(const DirectX::Keyboard::State& current
 
 void KeyboardMouse::ProcessMouseInput(const DirectX::Mouse::State& currentState)
 {
+	m_mouseTracker.Update(currentState);
+	for (const auto& binding : mouseBindings)
+	{
+		bool condition = false;
+		switch (binding.second.PressState)
+		{
+		case KeyState::Held:
+			switch (binding.first)
+			{
+			case MouseButton::Left:
+				condition = currentState.leftButton;
+				break;
+			case MouseButton::Right:
+				condition = currentState.rightButton;
+				break;
+			case MouseButton::Middle:
+				condition = currentState.middleButton;
+				break;
+			}
+			break;
+		case KeyState::Pressed:
+			switch (binding.first)
+			{
+			case MouseButton::Left:
+				condition = m_mouseTracker.leftButton == DirectX::Mouse::ButtonStateTracker::PRESSED;
+				break;
+			case MouseButton::Right:
+				condition = m_mouseTracker.rightButton == DirectX::Mouse::ButtonStateTracker::PRESSED;
+				break;
+			case MouseButton::Middle:
+				condition = m_mouseTracker.middleButton == DirectX::Mouse::ButtonStateTracker::PRESSED;
+				break;
+			}
+			break;
+		case KeyState::Released:
+			switch (binding.first)
+			{
+			case MouseButton::Left:
+				condition = m_mouseTracker.leftButton == DirectX::Mouse::ButtonStateTracker::RELEASED;
+				break;
+			case MouseButton::Right:
+				condition = m_mouseTracker.rightButton == DirectX::Mouse::ButtonStateTracker::RELEASED;
+				break;
+			case MouseButton::Middle:
+				condition = m_mouseTracker.middleButton == DirectX::Mouse::ButtonStateTracker::RELEASED;
+				break;
+			}
+			break;
+		case KeyState::None:
+			break;
+		}
+		if (condition && binding.second.action)
+		{
+			binding.second.action();
+		}
+	}
 }
 
 

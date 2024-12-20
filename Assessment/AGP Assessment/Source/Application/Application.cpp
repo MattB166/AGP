@@ -180,6 +180,7 @@ void Application::SetupBindings()
 	if (m_inputManager != nullptr)
 	{
 		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::P, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
+		//m_inputManager->BindMouseToFunction(MouseButton::Right, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
 		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::C, BindingData([]() {SceneManager::CycleSceneSkyBox(); }, KeyState::Pressed));
 		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Q, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
 		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::A, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
@@ -187,6 +188,7 @@ void Application::SetupBindings()
 		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::R, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
 		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::S, BindingData([]() {SceneManager::CycleActiveScene(); }, KeyState::Pressed));
 		m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::K, BindingData([]() {SceneManager::RotateActiveSceneCamera(0.0f, 2.0f * TimeClass::GetDeltaTime()); }, KeyState::Held)); //little test, need another way to rotate the camera by using mouse. 
+		m_inputManager->BindMouseToFunction(MouseButton::Left, BindingData([]() {SceneManager::RotateActiveSceneCamera(0.0f, 2.0f * TimeClass::GetDeltaTime()); }, KeyState::Held));
 	}
 	else
 	{
