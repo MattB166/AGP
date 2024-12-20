@@ -9,6 +9,7 @@ public:
 	Scene(const std::wstring name); //constructor for the scene.
 	~Scene(); //destructor for the scene.
 	void Initialize(); //initialize the scene.
+	void ShowDebugWindow(); //show the debug window for the scene.
 	void ChangeActiveSkyBox(std::shared_ptr<SkyBox> sb); //change the skybox texture.
 	void AddSkyBoxToScene(std::shared_ptr<SkyBox> sb); //add a skybox to the scene.
 	void RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb); //remove a skybox from the scene.

@@ -26,6 +26,7 @@ public:
 	Mode GetMode() { return m_mode; }
 	void RunMode(); 
 	void ChangeMouseMode(); 
+	void ShowInspectorWindow();
 	void SetupConstantBindings();
 	void SetupModeBindings();
 	void SetupEditBindings();
