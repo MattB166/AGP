@@ -7,7 +7,7 @@ class Component
 public:
 	virtual ~Component() = default;
 	virtual void Apply() = 0;
-	virtual void ShowDebugWindow() = 0;
+	//virtual void ShowDebugWindow() = 0;
 	void SetOwner(GameObject* owner) { m_owner = owner; }
 	GameObject* GetOwner() { return m_owner; }
 protected:
