@@ -175,6 +175,16 @@ void SceneManager::RotateActiveSceneCamera(float pitch, float yaw)
 	}
 }
 
+void SceneManager::ResetActiveSceneCamera()
+{
+	auto scene = m_scenes[m_activeScene].get();
+	if (scene)
+	{
+		scene->GetCamera()->Initialise();
+	}
+
+}
+
 void SceneManager::CleanUp()
 {
 	m_scenes.clear();

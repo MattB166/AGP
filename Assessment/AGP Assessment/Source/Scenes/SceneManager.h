@@ -33,6 +33,8 @@ public:
 
 	static void RotateActiveSceneCamera(float pitch, float yaw); //rotate the active scene camera.
 
+	static void ResetActiveSceneCamera(); //reset the active scene camera.
+
 	static void CleanUp(); //clean up the scene manager.
 
 private:

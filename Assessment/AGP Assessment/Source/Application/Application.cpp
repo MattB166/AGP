@@ -142,6 +142,7 @@ void Application::SetMode(Mode mode)
 
 void Application::SwitchMode()
 {
+	SceneManager::ResetActiveSceneCamera();
 	if (m_mode == Mode::EDIT)
 	{
 		SetMode(Mode::PLAY);

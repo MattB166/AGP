@@ -16,6 +16,19 @@ Camera::Camera()
 
 }
 
+void Camera::Initialise()
+{
+	xPos = 0.0f;
+	yPos = 0.0f;
+	zPos = 0.0f;
+	yaw = 0.0f;
+	pitch = XM_PIDIV2;
+	FOV = 60.0f;
+	nearClip = 0.1f;
+	farClip = 200.0f;
+	SetProjectionMatrix(FOV, 800, 600, nearClip, farClip);
+}
+
 void Camera::SetPosition(float x, float y, float z)
 {
 	xPos = x;

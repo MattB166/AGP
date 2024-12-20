@@ -23,7 +23,7 @@ Scene::~Scene()
 
 void Scene::Initialize()
 {
-	//for each gameobject in the scene, initialize it. 
+	//for each gameobject in the scene, initialize it back to its starting position in the scene. 
 	for (auto go : m_gameObjects)
 	{
 		//call initialize.

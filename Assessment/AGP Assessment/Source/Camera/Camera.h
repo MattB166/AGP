@@ -7,6 +7,8 @@ class Camera //this is the scene camera. what we use when editing/viewing the sc
 public:
 	Camera(); 
 
+	void Initialise(); // Initialises the camera
+
 	void SetPosition(float xVal, float yVal, float zVal); // Sets the position of the camera 
 
 	XMMATRIX GetViewMatrix(); // Returns the view matrix
