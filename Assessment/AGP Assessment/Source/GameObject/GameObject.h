@@ -51,6 +51,6 @@ private:
 	CBuffer m_constantBuffer;  //only one type of cbuffer required for gameobject. shader will know what to do with it. 
 	std::vector<std::shared_ptr<Component>> m_components;
 	float BasicAmbientLightValue = 0.5f;
-	float DebugMovementSnappingValue;
+	float DebugMovementSnappingValue = 0.05f;
 };
 

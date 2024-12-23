@@ -95,7 +95,7 @@ void GameObject::ShowComponentDebugWindow()
 	//logic to add the components to the debug window
 
 	ImGui::Text("Position : %f %f %f", m_transform.pos.x, m_transform.pos.y, m_transform.pos.z);
-	ImGui::SliderFloat("Position Snapping value", &DebugMovementSnappingValue, 0.001f, 1.0f);
+	ImGui::SliderFloat("Position Snapping value", &DebugMovementSnappingValue, 0.05f, 1.0f);
 	ImGui::DragFloat("Position X", &m_transform.pos.x, DebugMovementSnappingValue, -30.0f, 30.0f,"%.3f");
 	ImGui::DragFloat("Position Y", &m_transform.pos.y, DebugMovementSnappingValue, - 30.0f, 30.0f, "%.3f");
 	ImGui::DragFloat("Position Z", &m_transform.pos.z, DebugMovementSnappingValue, - 30.0f, 30.0f, "%.3f");

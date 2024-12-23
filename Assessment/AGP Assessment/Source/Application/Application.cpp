@@ -211,8 +211,8 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			float x = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.x;
 			float y = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.y;
 			float z = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.z;
-			ImGui::SetWindowPos(ImVec2(0, 500));
-			ImGui::Begin("Scene Hierarchy", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+
+			ImGui::Begin("Scene Hierarchy", nullptr, ImGuiWindowFlags_NoMove);
 			ImGui::Text("Currently Selected Object:");
 			SceneManager::DisplayActiveObjectDebugWindow();
 			ImGui::Checkbox("Rotate Camera to View Object", &followSelectedObject);
@@ -227,7 +227,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 				SceneManager::ResetActiveObjectPosition();
 				SceneManager::ResetActiveSceneCamera();
 			}
-			ImGui::SetWindowPos(ImVec2(0, 100));
+			ImGui::SetWindowPos(ImVec2(0, 150));
 			ImGui::End();
 		}
 		
