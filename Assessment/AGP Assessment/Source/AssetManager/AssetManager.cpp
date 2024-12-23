@@ -9,7 +9,7 @@ ID3D11DeviceContext* AssetManager::m_devcon = nullptr;
 ID3D11Buffer* AssetManager::m_rendererBuffer = nullptr;
 
 std::unordered_map<const wchar_t*, std::shared_ptr<Material>> AssetManager::m_materials;
-std::unordered_map<const wchar_t*, std::shared_ptr<Model>> AssetManager::m_models;
+std::unordered_map<const char*, std::shared_ptr<Model>> AssetManager::m_models;
 std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>> AssetManager::m_fonts;
 std::unordered_map<std::string, std::shared_ptr<ShaderSet>> AssetManager::m_shaderSets;
 std::unordered_map<const wchar_t*, std::shared_ptr<ID3D11ShaderResourceView>> AssetManager::m_ddstextures;
@@ -26,8 +26,8 @@ void AssetManager::Initialize(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID
 	m_devcon = devcon;
 	CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso");
 	CreateShaderSet(L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso");
-	CreateModel(L"Source/SavedModels/cube.obj"); 
-	CreateModel(L"Source/SavedModels/Sphere.obj"); 
+	CreateModel("Source/SavedModels/cube.obj"); 
+	CreateModel("Source/SavedModels/Sphere.obj"); 
 }
 
 void AssetManager::CleanUp()
@@ -69,7 +69,7 @@ std::shared_ptr<Material> AssetManager::CreateMaterial(const wchar_t* texturePat
 
 }
 
-std::shared_ptr<Model> AssetManager::CreateModel(const wchar_t* modelPath)
+std::shared_ptr<Model> AssetManager::CreateModel(const char* modelPath)
 {
 	if (IsModelLoaded(*modelPath))
 	{
@@ -408,11 +408,11 @@ bool AssetManager::IsMaterialLoaded(const wchar_t& texturePath)
 	return false;
 }
 
-bool AssetManager::IsModelLoaded(const wchar_t& modelPath)
+bool AssetManager::IsModelLoaded(const char& modelPath)
 {
 	for (const auto& model : GetModels())
 	{
-		if (wcscmp(model.first, &modelPath) == 0)
+		if (strcmp(model.first, &modelPath) == 0)
 		{
 			return true;
 		}
@@ -495,7 +495,7 @@ std::shared_ptr<Material> AssetManager::RetrieveMaterial(const wchar_t& textureP
 	return nullptr; 
 }
 
-std::shared_ptr<Model> AssetManager::RetrieveModel(const wchar_t& modelPath)
+std::shared_ptr<Model> AssetManager::RetrieveModel(const char& modelPath)
 {
 	auto it = GetModels().find(&modelPath);
 	if (it != GetModels().end())

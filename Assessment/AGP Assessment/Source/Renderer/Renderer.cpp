@@ -154,10 +154,10 @@ void Renderer::CleanRenderer()
 	if (m_device) m_device->Release();
 }
 
-void Renderer::Clear(ID3D11Buffer* newBuffer)
+void Renderer::Clear()
 {
 	//std::cout << "Clearing" << std::endl;
-	m_CBuffer = newBuffer;
+	//m_CBuffer = newBuffer;
 	
 	m_deviceContext->ClearRenderTargetView(m_backBuffer, DirectX::Colors::DeepSkyBlue);
 	m_deviceContext->ClearDepthStencilView(m_zBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);

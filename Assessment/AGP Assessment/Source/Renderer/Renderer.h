@@ -11,7 +11,7 @@ public:
 	
 	void CleanRenderer();
 
-	void Clear(ID3D11Buffer* newBuffer); // current scene as parameters? 
+	void Clear(); // current scene as parameters? 
 
 	void Present(); 
 

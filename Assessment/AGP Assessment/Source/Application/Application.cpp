@@ -89,12 +89,12 @@ void Application::Run()
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
 	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
 	GameObject* go = new GameObject();
-	std::shared_ptr<Model> model = AssetManager::CreateModel(L"Source/SavedModels/cube.obj");
+	std::shared_ptr<Model> model = AssetManager::CreateModel("Source/SavedModels/cube.obj");
 	std::shared_ptr<ShaderSet> shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso");
 	std::shared_ptr<Material> material = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp");
-	go->AddComponent(model);
 	go->AddComponent(material);
 	go->AddComponent(shaderSet);
+	go->AddComponent(model);
 	SceneManager::AddGameObjectToActiveScene(go);
 
 	while (WM_QUIT != msg.message)
@@ -109,7 +109,7 @@ void Application::Run()
 		{
 			///Run game code here
 			HandleInput();
-			m_renderer->Clear(AssetManager::GetUpdatedConstantBuffer());
+			m_renderer->Clear();
 
 			ImGui_ImplDX11_NewFrame();
 			ImGui_ImplWin32_NewFrame();

@@ -146,6 +146,7 @@ void SceneManager::AddGameObjectToActiveScene(GameObject* go)
 {
 	auto scene = m_scenes[m_activeScene].get();
 	scene->AddGameObject(go);
+	std::cout << "Gameobject Added to scene" << GetActiveSceneName() << std::endl;
 	//show the gameobject in the scene manager.
 }
 

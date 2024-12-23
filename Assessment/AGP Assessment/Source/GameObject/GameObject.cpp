@@ -10,7 +10,7 @@ GameObject::GameObject()
 void GameObject::Initialise()
 {
 	//position, rotation, scale
-	m_transform.pos = { 5,0,0 };
+	m_transform.pos = { 1,0,0 };
 	m_transform.rot = { 0,0,0 };
 	m_transform.scl = { 1,1,1 };
 }
@@ -72,7 +72,7 @@ void GameObject::Draw(XMMATRIX& view, XMMATRIX& proj)
 	{
 		component->Apply();
 	}
-	std::cout << "Position: " << m_transform.pos.x << " " << m_transform.pos.y << " " << m_transform.pos.z << std::endl;
+	//std::cout << "Position: " << m_transform.pos.x << " " << m_transform.pos.y << " " << m_transform.pos.z << std::endl;
 
 }
 

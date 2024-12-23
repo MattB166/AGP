@@ -20,7 +20,7 @@ public:
 #pragma region Externals
 	static std::shared_ptr<Material> CreateMaterial(const wchar_t* texturePath);
 
-	static std::shared_ptr<Model> CreateModel(const wchar_t* modelPath);
+	static std::shared_ptr<Model> CreateModel(const char* modelPath);
 
 	static ObjFileModel* CreateObjFileModel(const char* modelPath);
 
@@ -40,7 +40,7 @@ public:
 
 	static void UpdateConstantBuffer(CBuffer& cBuffer);
 
-	static ID3D11Buffer* GetUpdatedConstantBuffer() { return m_rendererBuffer; }
+	//static ID3D11Buffer* GetUpdatedConstantBuffer() { return m_rendererBuffer; }
 
 
 	//retrieve file paths from the asset manager
@@ -67,7 +67,7 @@ private:
 #pragma region InternalChecks
 	static bool IsMaterialLoaded(const wchar_t& texturePath);
 
-	static bool IsModelLoaded(const wchar_t& modelPath); 
+	static bool IsModelLoaded(const char& modelPath); 
 
 	static bool IsFontLoaded(const wchar_t& fontPath);
 
@@ -86,7 +86,7 @@ private:
 #pragma region InternalRetrievals
 	static std::shared_ptr<Material> RetrieveMaterial(const wchar_t& texturePath);
 
-	static std::shared_ptr<Model> RetrieveModel(const wchar_t& modelPath);
+	static std::shared_ptr<Model> RetrieveModel(const char& modelPath);
 
 	static std::shared_ptr<SpriteFont> RetrieveFont(const wchar_t& fontPath);
 
@@ -104,7 +104,7 @@ private:
 #pragma region Maps
 	static std::unordered_map<const wchar_t*, std::shared_ptr<Material>> m_materials;
 
-	static std::unordered_map<const wchar_t*, std::shared_ptr<Model>> m_models;
+	static std::unordered_map<const char*, std::shared_ptr<Model>> m_models;
 
 	static std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>> m_fonts;
 
@@ -124,7 +124,7 @@ private:
 #pragma region InternalGetters
 	static std::unordered_map<const wchar_t*, std::shared_ptr<Material>>& GetMaterials() { return m_materials; }
 
-	static std::unordered_map<const wchar_t*, std::shared_ptr<Model>>& GetModels() { return m_models; }
+	static std::unordered_map<const char*, std::shared_ptr<Model>>& GetModels() { return m_models; }
 
 	static std::unordered_map<const wchar_t*, std::shared_ptr<SpriteFont>>& GetFonts() { return m_fonts; }
 
