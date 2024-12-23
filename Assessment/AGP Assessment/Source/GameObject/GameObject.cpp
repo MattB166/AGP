@@ -92,6 +92,8 @@ void GameObject::Draw(XMMATRIX& view, XMMATRIX& proj)
 void GameObject::ShowComponentDebugWindow()
 {
 	ImGui::Text( " % s", m_name);
+	//logic to add the components to the debug window
+
 	ImGui::Text("Position : %f %f %f", m_transform.pos.x, m_transform.pos.y, m_transform.pos.z);
 	ImGui::SliderFloat("Position Snapping value", &DebugMovementSnappingValue, 0.001f, 1.0f);
 	ImGui::DragFloat("Position X", &m_transform.pos.x, DebugMovementSnappingValue, -30.0f, 30.0f,"%.3f");
@@ -100,10 +102,15 @@ void GameObject::ShowComponentDebugWindow()
 
 	
 	ImGui::SliderFloat("Ambient Light", &BasicAmbientLightValue, 0.0f, 1.0f);
-	for (auto component : m_components)
+
+	if (m_components.size() > 0)
 	{
-		component->ShowDebugWindow();
+		for (auto component : m_components)
+		{
+			component->ShowDebugWindow();
+		}
 	}
+	
 }
 
 

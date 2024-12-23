@@ -25,7 +25,7 @@ public:
 
 	static void SetActiveSkyBoxTexture(const wchar_t* texturePath); //set the active skybox texture.
 
-	static void AddGameObjectToActiveScene(GameObject* go); //add a gameobject to the active scene.
+	static void AddGameObjectToActiveScene(std::unique_ptr<GameObject> obj); //add a gameobject to the active scene.
 
 	static void CycleGameObjectsInActiveScene(); //cycle through the gameobjects in the active scene.
 

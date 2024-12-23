@@ -142,10 +142,10 @@ void SceneManager::SetActiveSkyBoxTexture(const wchar_t* texturePath)
 	}
 }
 
-void SceneManager::AddGameObjectToActiveScene(GameObject* go)
+void SceneManager::AddGameObjectToActiveScene(std::unique_ptr<GameObject> obj)
 {
 	auto scene = m_scenes[m_activeScene].get();
-	scene->AddGameObject(go);
+	scene->AddGameObject(std::move(obj));
 	std::cout << "Gameobject Added to scene" << GetActiveSceneName() << std::endl;
 	//show the gameobject in the scene manager.
 }

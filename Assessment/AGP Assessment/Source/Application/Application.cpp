@@ -88,14 +88,14 @@ void Application::Run()
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
 	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
-	GameObject* go = new GameObject("Test Object");
+	/*GameObject* go = new GameObject("Test Object");
 	std::shared_ptr<Model> model = AssetManager::CreateModel("Source/SavedModels/cube.obj","Cube");
 	std::shared_ptr<ShaderSet> shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso","Standard Shader");
 	std::shared_ptr<Material> material = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp","Box Texture");
 	go->AddComponent(material);
 	go->AddComponent(shaderSet);
 	go->AddComponent(model);
-	SceneManager::AddGameObjectToActiveScene(go);
+	SceneManager::AddGameObjectToActiveScene(go);*/
 
 	while (WM_QUIT != msg.message)
 	{
@@ -131,8 +131,8 @@ void Application::Run()
 		//TimeClass::CalculateFrameStats();
 		
 	}
-	delete go;
-	go = nullptr;
+	/*delete go;
+	go = nullptr;*/
 }
 
 void Application::SetMode(Mode mode)
@@ -173,9 +173,6 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 	if (m_mode == Mode::EDIT)
 	{
 		
-		float x = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.x;
-		float y = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.y;
-		float z = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.z;
 		ImGui::Begin("Edit Mode", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
 		ImGui::Text("Current Mode: Edit Mode.");
 		ImGui::Text("Current Scene: %s", SceneManager::GetActiveSceneName().c_str());
@@ -183,26 +180,58 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 		{
 			SwitchMode();
 		}
+		if (ImGui::Button("Add GameObject"))
+		{
+			ImGui::OpenPopup("New GameObject");
+		}
+		if (ImGui::BeginPopupModal("New GameObject"))
+		{
+			static char name[128] = "GameObject";
+			ImGui::InputText("Name", name, IM_ARRAYSIZE(name));
+			if (ImGui::Button("Create", ImVec2(120, 0)))
+			{
+				auto go = std::make_unique<GameObject>(name);
+				SceneManager::AddGameObjectToActiveScene(std::move(go));
+				
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel", ImVec2(120, 0)))
+			{
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
 		ImGui::SetWindowPos(ImVec2(0, 0));
 		ImGui::End();
 
-		ImGui::Begin("Scene Hierarchy", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-		ImGui::Text("Currently Selected Object:");
-		SceneManager::DisplayActiveObjectDebugWindow();
-		ImGui::Checkbox("Rotate Camera to View Object", &followSelectedObject);
-		if (followSelectedObject)
+
+		if (SceneManager::GetActiveScene()->GetObjectCount() > 0)
 		{
-			SceneManager::SetActiveSceneCameraTarget(x, y, z, true);
+			float x = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.x;
+			float y = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.y;
+			float z = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.z;
+			ImGui::SetWindowPos(ImVec2(0, 500));
+			ImGui::Begin("Scene Hierarchy", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+			ImGui::Text("Currently Selected Object:");
+			SceneManager::DisplayActiveObjectDebugWindow();
+			ImGui::Checkbox("Rotate Camera to View Object", &followSelectedObject);
+			if (followSelectedObject)
+			{
+				SceneManager::SetActiveSceneCameraTarget(x, y, z, true);
+			}
+			if (ImGui::Button("Reset Position"))
+			{
+				followSelectedObject = false;
+				SceneManager::SetActiveSceneCameraTarget(0.0f, 0.0f, 0.0f, false);
+				SceneManager::ResetActiveObjectPosition();
+				SceneManager::ResetActiveSceneCamera();
+			}
+			ImGui::SetWindowPos(ImVec2(0, 100));
+			ImGui::End();
 		}
-		if (ImGui::Button("Reset Position"))
-		{
-			followSelectedObject = false;
-			SceneManager::SetActiveSceneCameraTarget(0.0f, 0.0f, 0.0f, false);
-			SceneManager::ResetActiveObjectPosition();
-			SceneManager::ResetActiveSceneCamera();
-		}
-		ImGui::SetWindowPos(ImVec2(0, 100));
-		ImGui::End();
+		
+		
 
 
 	}
@@ -258,13 +287,13 @@ void Application::SetupModeBindings()
 		{
 			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::P, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
 			
-			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::C, BindingData([]() {SceneManager::CycleSceneSkyBox(); }, KeyState::Pressed));
-			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Q, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
-			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::A, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
-			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::O, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
-			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::R, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
-			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::S, BindingData([]() {SceneManager::CycleActiveScene(); }, KeyState::Pressed));
-			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::D, BindingData([]() {SceneManager::MoveActiveSceneCamera(0.1f,0.0f,0.0f); }, KeyState::Held));//create editable value for the snap distance. 
+			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::C, BindingData([]() {SceneManager::CycleSceneSkyBox(); }, KeyState::Pressed));
+			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Q, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
+			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::A, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
+			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::O, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
+			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::R, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
+			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::S, BindingData([]() {SceneManager::CycleActiveScene(); }, KeyState::Pressed));
+			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::D, BindingData([]() {SceneManager::MoveActiveSceneCamera(0.1f,0.0f,0.0f); }, KeyState::Held));//create editable value for the snap distance. 
 			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::K, BindingData([]() {SceneManager::RotateActiveSceneCamera(10.0f, 0.0f); }, KeyState::Held));
 			//m_inputManager->BindMouseToFunction(MouseButton::Right, BindingData([]() {SceneManager::RotateActiveSceneCamera(10.0f, 0.0f); }, KeyState::Held));
 			m_inputManager->ClearMouseMovement();

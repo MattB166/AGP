@@ -1,6 +1,5 @@
 #pragma once
 #include <DirectXMath.h>
-//#include "../ObjectFileModel/objfilemodel.h"
 #include "../Constant Buffer/CBuffer.h"
 #include "../Component/Component.h"
 #include <memory>

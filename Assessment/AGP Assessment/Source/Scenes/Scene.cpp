@@ -24,7 +24,7 @@ Scene::~Scene()
 void Scene::Initialize()
 {
 	//for each gameobject in the scene, initialize it back to its starting position in the scene. 
-	for (auto go : m_gameObjects)
+	for (const auto& go : m_gameObjects)
 	{
 		go->Initialise();
 	}
@@ -73,14 +73,14 @@ void Scene::RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb)
 	}
 }
 
-void Scene::AddGameObject(GameObject* go)
+void Scene::AddGameObject(std::unique_ptr<GameObject> obj)
 {
 	//add the gameobject to the scene.
-	m_gameObjects.push_back(go);
+	m_gameObjects.push_back(std::move(obj));
 	//if there is only one gameobject, set it to the selected gameobject.
 	if (m_gameObjects.size() == 1)
 	{
-		m_selectedGameObject = go;
+		m_selectedGameObject = m_gameObjects[0].get();
 		std::cout << "Selected Gameobject Changed" << std::endl;
 	}
 }
@@ -110,7 +110,7 @@ void Scene::DrawStatics()
 	XMMATRIX proj = m_camera->GetProjectionMatrix();
 	
 	//for each gameobject in the scene, draw it and the skybox.
-	for (auto go : m_gameObjects)
+	for (const auto& go : m_gameObjects)
 	{
 		go->Draw(view, proj);
 	}
@@ -125,7 +125,7 @@ void Scene::CycleSelectedGameObject()
 	}
 	const int CurrentIndex = m_selectedObjectIndex;
 	const int NextIndex = (m_selectedObjectIndex + 1) % m_gameObjects.size();
-	m_selectedGameObject = m_gameObjects[NextIndex]; 
+	m_selectedGameObject = m_gameObjects[NextIndex].get();
 }
 
 void Scene::MoveActiveCamera(float x, float y, float z)
