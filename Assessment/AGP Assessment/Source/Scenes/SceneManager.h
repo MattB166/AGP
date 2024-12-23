@@ -31,7 +31,11 @@ public:
 
 	static GameObject* GetSelectedGameObjectInActiveScene(); //get the selected gameobject in the active scene.
 
+	static const char* GetSelectedGameObjectNameInActiveScene(); //get the selected gameobject name in the active scene.
+
 	static void AddComponentToSelectedGameObjectInActiveScene(std::shared_ptr<Component> comp); //add a component to the selected gameobject in the active scene.
+
+	static void DisplayActiveObjectDebugWindow(); //display the active scene debug window.
 
 	static void CycleSceneSkyBox(); //cycle through the skyboxes in the active scene.
 
@@ -43,7 +47,11 @@ public:
 
 	static void RotateActiveSceneCamera(float pitch, float yaw); //rotate the active scene camera.
 
+	static void SetActiveSceneCameraTarget(float x, float y, float z, bool TargetMode); //set the active scene camera target.
+
 	static void ResetActiveSceneCamera(); //reset the active scene camera.
+
+	static void ResetActiveObjectPosition(); //reset the active object position.
 
 	static void CleanUp(); //clean up the scene manager.
 

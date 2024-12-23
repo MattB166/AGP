@@ -1,7 +1,7 @@
 #include "Material.h"
 #include <WICTextureLoader.h>
 
-Material::Material(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11ShaderResourceView* texture) : Component(dev, devcon), m_texture(texture)
+Material::Material(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11ShaderResourceView* texture, const char* name) : Component(dev, devcon,name), m_texture(texture)
 {
 	D3D11_SAMPLER_DESC samplerDesc;
 	ZeroMemory(&samplerDesc, sizeof(samplerDesc));
@@ -32,4 +32,11 @@ void Material::Apply()
 	m_devcon->PSSetShaderResources(0, 1, &m_texture);
 	m_devcon->PSSetSamplers(0, 1, &m_sampler);
 	
+}
+
+void Material::ShowDebugWindow()
+{
+	//std::cout << "Showing Material Debug Window" << std::endl;
+	//ImGui::Text("Material");
+	ImGui::Text("Material : %s", m_name);
 }

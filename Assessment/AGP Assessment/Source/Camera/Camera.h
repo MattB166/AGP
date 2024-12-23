@@ -21,6 +21,12 @@ public:
 
 	void MoveCamera(float x, float y, float z); // Moves the camera
 
+	void SetTargetPos(float x, float y, float z) { TargetPos = XMVectorSet(x, y, z, 1.0f); }
+
+	void SetObjectFocusView(bool value) { ObjectFocusView = value; }
+
+	bool GetObjectFocusView() { return ObjectFocusView; }
+
 
 	///XMVECTOR GetForwardVector() { return fwd; }
 
@@ -57,7 +63,9 @@ private:
 
 	float speed = 50.0f;
 
-	bool LockedToObjectView = false;
+	bool ObjectFocusView = false;
+
+	XMVECTOR TargetPos; 
 
 	//XMVECTOR fwd;
 

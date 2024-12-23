@@ -18,21 +18,21 @@ public:
 	static void CleanUp();
 
 #pragma region Externals
-	static std::shared_ptr<Material> CreateMaterial(const wchar_t* texturePath);
+	static std::shared_ptr<Material> CreateMaterial(const wchar_t* texturePath, const char* name);
 
-	static std::shared_ptr<Model> CreateModel(const char* modelPath);
+	static std::shared_ptr<Model> CreateModel(const char* modelPath, const char* name);
 
 	static ObjFileModel* CreateObjFileModel(const char* modelPath);
 
 	static std::shared_ptr<SpriteFont> MakeFont(const wchar_t* fontPath);
 
-	static std::shared_ptr<ShaderSet> CreateShaderSet(const wchar_t* vsPath, const wchar_t* psPath);
+	static std::shared_ptr<ShaderSet> CreateShaderSet(const wchar_t* vsPath, const wchar_t* psPath, const char* name);
 
 	static std::shared_ptr<ID3D11VertexShader> CreateVertexShader(const wchar_t* vsPath, LPCSTR entrypoint);
 
 	static std::shared_ptr<ID3D11PixelShader> CreatePixelShader(const wchar_t* psPath, LPCSTR entrypoint);
 
-	static std::shared_ptr<SkyBox> CreateSkyBox(const wchar_t* texturePath, const char* modelPath, const wchar_t* vsPath, const wchar_t* psPath);
+	static std::shared_ptr<SkyBox> CreateSkyBox(const wchar_t* texturePath, const char* modelPath, const wchar_t* vsPath, const wchar_t* psPath, const char* ShaderSetName);
 
 	static std::shared_ptr<ID3D11ShaderResourceView> CreateDDSTexture(const wchar_t* texturePath);
 

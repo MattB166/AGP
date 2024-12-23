@@ -46,5 +46,12 @@ private:
 	//list/vector of scenes. 
 
 	//need a way to determine whether we are in "edit" mode or "play" mode. 
+
+
+#pragma region IMGUI Members
+	bool followSelectedObject = false;
+
+
+#pragma	endregion
 };
 

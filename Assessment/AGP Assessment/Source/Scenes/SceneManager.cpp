@@ -102,7 +102,7 @@ void SceneManager::AddSkyBoxTextureToActiveScene(const wchar_t* texturePath) //n
 	std::shared_ptr<SkyBox> skybox;
 	if (m_LoadedSkyBoxes.find(texturePath) == m_LoadedSkyBoxes.end())
 	{
-		skybox = AssetManager::CreateSkyBox(texturePath, "Source/SavedModels/cube.obj", L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso");
+		skybox = AssetManager::CreateSkyBox(texturePath, "Source/SavedModels/cube.obj", L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso","Sky Box Shader");
 		m_LoadedSkyBoxes.insert(std::make_pair(texturePath, skybox));
 	}
 	else
@@ -163,6 +163,16 @@ GameObject* SceneManager::GetSelectedGameObjectInActiveScene()
 	return scene->GetSelectedGameObject();
 }
 
+const char* SceneManager::GetSelectedGameObjectNameInActiveScene()
+{
+	auto go = GetSelectedGameObjectInActiveScene();
+	if (go)
+	{
+		return go->GetName();
+	}
+	return "";
+}
+
 void SceneManager::AddComponentToSelectedGameObjectInActiveScene(std::shared_ptr<Component> comp)
 {
 	auto scene = m_scenes[m_activeScene].get();
@@ -172,6 +182,16 @@ void SceneManager::AddComponentToSelectedGameObjectInActiveScene(std::shared_ptr
 		go->AddComponent(comp);
 	}
 	//show the component in the scene manager.
+}
+
+void SceneManager::DisplayActiveObjectDebugWindow()
+{
+	auto go = GetSelectedGameObjectInActiveScene();
+	if (go)
+	{
+		go->ShowComponentDebugWindow();
+	}
+	//show the debug window in the scene manager.
 }
 
 void SceneManager::CycleSceneSkyBox()
@@ -218,6 +238,18 @@ void SceneManager::RotateActiveSceneCamera(float pitch, float yaw)
 	}
 }
 
+void SceneManager::SetActiveSceneCameraTarget(float x, float y, float z, bool TargetMode)
+{
+	auto scene = m_scenes[m_activeScene].get();
+	if (scene)
+	{
+		scene->GetCamera()->SetTargetPos(x, y, z);
+		scene->GetCamera()->SetObjectFocusView(TargetMode);
+	}
+
+
+}
+
 void SceneManager::ResetActiveSceneCamera()
 {
 	auto scene = m_scenes[m_activeScene].get();
@@ -226,6 +258,15 @@ void SceneManager::ResetActiveSceneCamera()
 		scene->GetCamera()->Initialise();
 	}
 
+}
+
+void SceneManager::ResetActiveObjectPosition()
+{
+	auto go = GetSelectedGameObjectInActiveScene();
+	if (go)
+	{
+		go->Initialise();
+	}
 }
 
 void SceneManager::CleanUp()

@@ -3,9 +3,10 @@
 class ShaderSet : public Component
 {
 public:
-	ShaderSet(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11VertexShader* vs, ID3D11PixelShader* ps, ID3D11InputLayout* il);
+	ShaderSet(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11VertexShader* vs, ID3D11PixelShader* ps, ID3D11InputLayout* il,const char* name);
 	~ShaderSet();
 	void Apply() override;
+	void ShowDebugWindow() override;
 
 	ID3D11VertexShader* GetVertexShader() { return m_vertexShader; }
 	ID3D11PixelShader* GetPixelShader() { return m_pixelShader; }

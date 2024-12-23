@@ -82,16 +82,16 @@ void Application::Run()
 	SetupConstantBindings();
 	SetupModeBindings();
 	
-	SceneManager::AddScene(L"Scene1");
-	SceneManager::AddScene(L"Scene2");
+	SceneManager::AddScene(L"Scene 1");
+	SceneManager::AddScene(L"Scene 2");
 	SceneManager::SetActiveScene(L"Scene1");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
 	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
-	GameObject* go = new GameObject();
-	std::shared_ptr<Model> model = AssetManager::CreateModel("Source/SavedModels/cube.obj");
-	std::shared_ptr<ShaderSet> shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso");
-	std::shared_ptr<Material> material = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp");
+	GameObject* go = new GameObject("Test Object");
+	std::shared_ptr<Model> model = AssetManager::CreateModel("Source/SavedModels/cube.obj","Cube");
+	std::shared_ptr<ShaderSet> shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso","Standard Shader");
+	std::shared_ptr<Material> material = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp","Box Texture");
 	go->AddComponent(material);
 	go->AddComponent(shaderSet);
 	go->AddComponent(model);
@@ -131,8 +131,8 @@ void Application::Run()
 		//TimeClass::CalculateFrameStats();
 		
 	}
-	/*delete go;
-	go = nullptr;*/
+	delete go;
+	go = nullptr;
 }
 
 void Application::SetMode(Mode mode)
@@ -172,8 +172,13 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 {
 	if (m_mode == Mode::EDIT)
 	{
+		
+		float x = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.x;
+		float y = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.y;
+		float z = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.z;
 		ImGui::Begin("Edit Mode", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
 		ImGui::Text("Current Mode: Edit Mode.");
+		ImGui::Text("Current Scene: %s", SceneManager::GetActiveSceneName().c_str());
 		if (ImGui::Button("Play"))
 		{
 			SwitchMode();
@@ -182,7 +187,20 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 		ImGui::End();
 
 		ImGui::Begin("Scene Hierarchy", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-		ImGui::Text("Hierarchy");
+		ImGui::Text("Currently Selected Object:");
+		SceneManager::DisplayActiveObjectDebugWindow();
+		ImGui::Checkbox("Rotate Camera to View Object", &followSelectedObject);
+		if (followSelectedObject)
+		{
+			SceneManager::SetActiveSceneCameraTarget(x, y, z, true);
+		}
+		if (ImGui::Button("Reset Position"))
+		{
+			followSelectedObject = false;
+			SceneManager::SetActiveSceneCameraTarget(0.0f, 0.0f, 0.0f, false);
+			SceneManager::ResetActiveObjectPosition();
+			SceneManager::ResetActiveSceneCamera();
+		}
 		ImGui::SetWindowPos(ImVec2(0, 100));
 		ImGui::End();
 
@@ -192,6 +210,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 	{
 		ImGui::Begin("Play Mode", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
 		ImGui::Text("Current Mode: Play Mode. Press ESC to exit Play.");
+		ImGui::Text("Current Scene: %s", SceneManager::GetActiveSceneName().c_str());
 		ImGui::SetWindowPos(ImVec2(0, 0));
 		ImGui::End();
 

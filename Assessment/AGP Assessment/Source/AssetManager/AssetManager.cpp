@@ -24,10 +24,10 @@ void AssetManager::Initialize(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID
 {
 	m_dev = dev;
 	m_devcon = devcon;
-	CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso");
-	CreateShaderSet(L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso");
-	CreateModel("Source/SavedModels/cube.obj"); 
-	CreateModel("Source/SavedModels/Sphere.obj"); 
+	CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso","Standard Shaders");
+	CreateShaderSet(L"CompiledShaders/SkyBoxVShader.cso", L"CompiledShaders/SkyBoxPShader.cso","Standard Skybox Shaders");
+	CreateModel("Source/SavedModels/cube.obj","Cube");
+	CreateModel("Source/SavedModels/Sphere.obj","Sphere");
 }
 
 void AssetManager::CleanUp()
@@ -52,7 +52,7 @@ void AssetManager::CleanUp()
 	}
 }
 
-std::shared_ptr<Material> AssetManager::CreateMaterial(const wchar_t* texturePath)
+std::shared_ptr<Material> AssetManager::CreateMaterial(const wchar_t* texturePath, const char* name)
 {
 	if (IsMaterialLoaded(*texturePath))
 	{
@@ -62,14 +62,14 @@ std::shared_ptr<Material> AssetManager::CreateMaterial(const wchar_t* texturePat
 	{
 		ID3D11ShaderResourceView* texture = nullptr;
 		DirectX::CreateWICTextureFromFile(m_dev, m_devcon, texturePath, nullptr, &texture);
-		std::shared_ptr<Material> material = std::make_shared<Material>(m_dev, m_devcon, texture);
+		std::shared_ptr<Material> material = std::make_shared<Material>(m_dev, m_devcon, texture,name);
 		GetMaterials().insert(std::make_pair(texturePath, material));
 		return material;
 	}
 
 }
 
-std::shared_ptr<Model> AssetManager::CreateModel(const char* modelPath)
+std::shared_ptr<Model> AssetManager::CreateModel(const char* modelPath, const char* name)
 {
 	if (IsModelLoaded(*modelPath))
 	{
@@ -78,7 +78,7 @@ std::shared_ptr<Model> AssetManager::CreateModel(const char* modelPath)
 	else
 	{
 		ObjFileModel* Tmpmodel = new ObjFileModel((char*)modelPath, m_dev,m_devcon);
-		std::shared_ptr<Model> model = std::make_shared<Model>(m_dev, m_devcon, Tmpmodel);
+		std::shared_ptr<Model> model = std::make_shared<Model>(m_dev, m_devcon, Tmpmodel, name);
 		GetModels().insert(std::make_pair(modelPath, model));
 		//std::cout << "Model created" << std::endl;
 		//std::cout << "Model size: " << GetModels().size() << std::endl;
@@ -111,7 +111,7 @@ std::shared_ptr<SpriteFont> AssetManager::MakeFont(const wchar_t* fontPath)
 	return std::shared_ptr<SpriteFont>();
 }
 
-std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, const wchar_t* psPath)
+std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, const wchar_t* psPath, const char* name)
 {
 	//print out the path of the shaders.
 	//std::wcout << "Vertex shader path: " << vsPath << std::endl;
@@ -195,7 +195,7 @@ std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, 
 		}
 
 		//add vertex shader and input layout to map as a pair. 
-		auto shaderSet = std::make_shared<ShaderSet>(m_dev, m_devcon, vertexShader, pixelShader, inputLayout);
+		auto shaderSet = std::make_shared<ShaderSet>(m_dev, m_devcon, vertexShader, pixelShader, inputLayout,name);
 		std::string key = GenerateKeyForShaderSet(vsPath, psPath);
 		GetShaderSets().insert(std::make_pair(key, shaderSet));
 		std::cout << "Shader set created" << std::endl;
@@ -294,7 +294,7 @@ std::shared_ptr<ID3D11PixelShader> AssetManager::CreatePixelShader(const wchar_t
 
 }
 
-std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, const char* modelPath, const wchar_t* vsPath, const wchar_t* psPath)
+std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, const char* modelPath, const wchar_t* vsPath, const wchar_t* psPath, const char* ShaderSetName)
 {
 	
 	bool isObjLoaded = IsObjFileModelLoaded(*modelPath);
@@ -329,7 +329,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	}
 	else
 	{
-		shaderSet = CreateShaderSet(vsPath, psPath);
+		shaderSet = CreateShaderSet(vsPath, psPath,ShaderSetName);
 	}
 
 	auto skyBox = std::make_shared<SkyBox>(m_dev, m_devcon, model, shaderSet->GetVertexShader(), shaderSet->GetPixelShader(), shaderSet->GetInputLayout(), texture.get(),texturePath);

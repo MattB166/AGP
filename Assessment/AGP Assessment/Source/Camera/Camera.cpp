@@ -13,6 +13,7 @@ Camera::Camera()
 	nearClip = 0.1f;
 	farClip = 200.0f;
 	SetProjectionMatrix(FOV, 800, 600, nearClip, farClip);
+	TargetPos = XMVectorSet(0, 0, 0, 1.0f);
 
 }
 
@@ -27,28 +28,40 @@ void Camera::Initialise()
 	nearClip = 0.1f;
 	farClip = 200.0f;
 	SetProjectionMatrix(FOV, 800, 600, nearClip, farClip);
+	TargetPos = XMVectorSet(0, 0, 0, 1.0f);
 }
 
 void Camera::SetPosition(float x, float y, float z)
 {
 	xPos = x;
-	xPos = y;
-	xPos = z;
+	yPos = y;
+	zPos = z;
 
 }
 
 XMMATRIX Camera::GetViewMatrix()
 {
-	XMVECTOR eyepos = { xPos,yPos,zPos };
-	XMVECTOR camup = { 0,1,0 };
-	XMVECTOR lookat
+	if (!ObjectFocusView)
 	{
-		sin(yaw) * sin(pitch),
-		cos(pitch),
-		cos(yaw) * sin(pitch)
-	};
-	return XMMatrixLookToLH(eyepos, lookat, camup); //use look at when locked onto an object in view. 
+		XMVECTOR eyepos = { xPos,yPos,zPos };
+		XMVECTOR camup = { 0,1,0 };
+		XMVECTOR lookat
+		{
+			sin(yaw) * sin(pitch),
+			cos(pitch),
+			cos(yaw) * sin(pitch)
+		};
+		return XMMatrixLookToLH(eyepos, lookat, camup); //use look at when locked onto an object in view. 
 
+	}
+	else
+	{
+		XMVECTOR eyepos = { xPos,yPos,zPos };
+		XMVECTOR camup = { 0,1,0 };
+		XMVECTOR lookat = TargetPos;
+		return XMMatrixLookAtLH(eyepos, lookat, camup);
+	}
+	
 }
 
 XMMATRIX Camera::GetProjectionMatrix()
