@@ -50,6 +50,7 @@ void GameObject::Draw(XMMATRIX& view, XMMATRIX& proj)
 	XMMATRIX transpose = XMMatrixTranspose(m_transform.GetWorldMatrix());
 	m_constantBuffer.directionalLightDir = XMVector3Transform(directionalLightShinesFrom, transpose);
 
+
 	for (size_t i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
 		if (!m_constantBuffer.pointLights[i].enabled)
