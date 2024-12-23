@@ -63,7 +63,6 @@ void GameObject::Draw(XMMATRIX& view, XMMATRIX& proj)
 		m_constantBuffer.pointLights[i].enabled = m_constantBuffer.pointLights[i].enabled;
 
 	}
-	//update constant buffer with new values
 	AssetManager::UpdateConstantBuffer(m_constantBuffer);
 
 
