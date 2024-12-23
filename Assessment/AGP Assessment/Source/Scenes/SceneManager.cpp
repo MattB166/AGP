@@ -61,6 +61,17 @@ void SceneManager::CycleActiveScene()
 
 }
 
+void SceneManager::InitialiseActiveScene()
+{
+	if (m_activeScene.empty())
+	{
+		return;
+	}
+	auto scene = m_scenes[m_activeScene].get();
+	scene->Initialize();
+	std::cout << "Scene Initialised" << std::endl;
+}
+
 void SceneManager::SetActiveScene(const std::wstring& name)
 {
 	if (m_scenes.find(name) != m_scenes.end())
@@ -129,6 +140,37 @@ void SceneManager::SetActiveSkyBoxTexture(const wchar_t* texturePath)
 	{
 		scene->ChangeActiveSkyBox(skybox);
 	}
+}
+
+void SceneManager::AddGameObjectToActiveScene(GameObject* go)
+{
+	auto scene = m_scenes[m_activeScene].get();
+	scene->AddGameObject(go);
+	//show the gameobject in the scene manager.
+}
+
+void SceneManager::CycleGameObjectsInActiveScene()
+{
+	auto scene = m_scenes[m_activeScene].get();
+	scene->CycleSelectedGameObject();
+	//show the selected gameobject in the scene manager.
+}
+
+GameObject* SceneManager::GetSelectedGameObjectInActiveScene()
+{
+	auto scene = m_scenes[m_activeScene].get();
+	return scene->GetSelectedGameObject();
+}
+
+void SceneManager::AddComponentToSelectedGameObjectInActiveScene(std::shared_ptr<Component> comp)
+{
+	auto scene = m_scenes[m_activeScene].get();
+	auto go = scene->GetSelectedGameObject();
+	if (go)
+	{
+		go->AddComponent(comp);
+	}
+	//show the component in the scene manager.
 }
 
 void SceneManager::CycleSceneSkyBox()

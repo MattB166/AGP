@@ -13,6 +13,7 @@ Model::~Model()
 
 void Model::Apply()
 {
+	//std::cout << "Applying Model" << std::endl;
 	m_model->Draw();
 }
 

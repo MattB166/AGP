@@ -17,11 +17,21 @@ public:
 
 	static void CycleActiveScene(); //cycle through the scenes.
 
+	static void InitialiseActiveScene(); //initialise the active scene.
+
 	static void AddSkyBoxTextureToActiveScene(const wchar_t* texturePath); //add a skybox to the active scene.
 
 	static void RemoveSkyBoxFromActiveScene(const wchar_t* texturePath); //remove the skybox from the active scene.
 
 	static void SetActiveSkyBoxTexture(const wchar_t* texturePath); //set the active skybox texture.
+
+	static void AddGameObjectToActiveScene(GameObject* go); //add a gameobject to the active scene.
+
+	static void CycleGameObjectsInActiveScene(); //cycle through the gameobjects in the active scene.
+
+	static GameObject* GetSelectedGameObjectInActiveScene(); //get the selected gameobject in the active scene.
+
+	static void AddComponentToSelectedGameObjectInActiveScene(std::shared_ptr<Component> comp); //add a component to the selected gameobject in the active scene.
 
 	static void CycleSceneSkyBox(); //cycle through the skyboxes in the active scene.
 

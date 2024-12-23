@@ -13,9 +13,11 @@ public:
 	void ChangeActiveSkyBox(std::shared_ptr<SkyBox> sb); //change the skybox texture.
 	void AddSkyBoxToScene(std::shared_ptr<SkyBox> sb); //add a skybox to the scene.
 	void RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb); //remove a skybox from the scene.
+	void AddGameObject(GameObject* go); //add a gameobject to the scene.
 	void CycleThroughSkyBoxes(); //cycle through the skyboxes in the scene.
 	void DrawStatics(); //draw all gameobjects in the scene. 
 	void CycleSelectedGameObject(); //cycle through the gameobjects in the scene. 
+	GameObject* GetSelectedGameObject() { return m_selectedGameObject; } //get the selected gameobject in the scene.
 	Camera* GetCamera() { return m_camera; } //get the camera for the scene.
 	void MoveActiveCamera(float x, float y, float z); //move the camera in the scene.
 	void RotateActiveCamera(float pitch, float yaw); //rotate the camera in the scene.

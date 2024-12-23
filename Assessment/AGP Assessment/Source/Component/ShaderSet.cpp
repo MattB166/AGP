@@ -18,6 +18,7 @@ ShaderSet::~ShaderSet()
 
 void ShaderSet::Apply()
 {
+	//std::cout << "Applying ShaderSet" << std::endl;
 	m_devcon->VSSetShader(m_vertexShader, 0, 0);
 	m_devcon->PSSetShader(m_pixelShader, 0, 0);
 	m_devcon->IASetInputLayout(m_inputLayout);

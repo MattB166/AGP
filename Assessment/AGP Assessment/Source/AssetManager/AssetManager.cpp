@@ -6,6 +6,7 @@
 #include <iostream>
 ID3D11Device* AssetManager::m_dev = nullptr;
 ID3D11DeviceContext* AssetManager::m_devcon = nullptr;
+ID3D11Buffer* AssetManager::m_rendererBuffer = nullptr;
 
 std::unordered_map<const wchar_t*, std::shared_ptr<Material>> AssetManager::m_materials;
 std::unordered_map<const wchar_t*, std::shared_ptr<Model>> AssetManager::m_models;
@@ -19,7 +20,7 @@ std::unordered_map<const char*, ObjFileModel*> AssetManager::m_objFileModels;
 
 
 
-void AssetManager::Initialize(ID3D11Device* dev, ID3D11DeviceContext* devcon)
+void AssetManager::Initialize(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Buffer* rendererBuffer)
 {
 	m_dev = dev;
 	m_devcon = devcon;
@@ -358,6 +359,30 @@ std::shared_ptr<ID3D11ShaderResourceView> AssetManager::CreateDDSTexture(const w
 		return sharedTexture;
 	}
 }
+
+void AssetManager::CreateConstantBuffer()
+{
+	D3D11_BUFFER_DESC cBufferDesc = {};
+	cBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	cBufferDesc.ByteWidth = sizeof(CBuffer);
+	cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cBufferDesc.CPUAccessFlags = 0;
+	HRESULT hr = m_dev->CreateBuffer(&cBufferDesc, NULL, &m_rendererBuffer);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, L"Error creating constant buffer", L"Error", MB_OK);
+	}
+
+}
+
+void AssetManager::UpdateConstantBuffer(CBuffer& cBuffer)
+{
+	m_devcon->UpdateSubresource(m_rendererBuffer, 0, 0, &cBuffer, 0, 0);
+	m_devcon->VSSetConstantBuffers(0, 1, &m_rendererBuffer);
+
+	//need to update the renderer buffer, as the current "m_rendererBuffer" is only local to asset manager. 
+}
+
 
 const wchar_t* AssetManager::GetTexturePath(const std::shared_ptr<SkyBox>& skyBox)
 {

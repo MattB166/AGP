@@ -28,6 +28,7 @@ Material::~Material()
 
 void Material::Apply()
 {
+	//std::cout << "Applying Material" << std::endl;
 	m_devcon->PSSetShaderResources(0, 1, &m_texture);
 	m_devcon->PSSetSamplers(0, 1, &m_sampler);
 	

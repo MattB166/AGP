@@ -14,7 +14,7 @@ using namespace DirectX;
 class AssetManager
 {
 public:
-	static void Initialize(ID3D11Device* dev, ID3D11DeviceContext* devcon); //const buffer too? 
+	static void Initialize(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Buffer* rendererBuffer); //const buffer too? 
 	static void CleanUp();
 
 #pragma region Externals
@@ -36,6 +36,12 @@ public:
 
 	static std::shared_ptr<ID3D11ShaderResourceView> CreateDDSTexture(const wchar_t* texturePath);
 
+	static void CreateConstantBuffer(); 
+
+	static void UpdateConstantBuffer(CBuffer& cBuffer);
+
+	static ID3D11Buffer* GetUpdatedConstantBuffer() { return m_rendererBuffer; }
+
 
 	//retrieve file paths from the asset manager
 	static const wchar_t* GetTexturePath(const std::shared_ptr<SkyBox>& skyBox);
@@ -48,6 +54,7 @@ private:
 #pragma region Members
 	static ID3D11Device* m_dev;
 	static ID3D11DeviceContext* m_devcon;
+	static ID3D11Buffer* m_rendererBuffer;
 #pragma endregion
 
 #pragma region ConstructorsAndOperators

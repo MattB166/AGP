@@ -26,7 +26,7 @@ void Scene::Initialize()
 	//for each gameobject in the scene, initialize it back to its starting position in the scene. 
 	for (auto go : m_gameObjects)
 	{
-		//call initialize.
+		go->Initialise();
 	}
 
 }
@@ -73,6 +73,18 @@ void Scene::RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb)
 	}
 }
 
+void Scene::AddGameObject(GameObject* go)
+{
+	//add the gameobject to the scene.
+	m_gameObjects.push_back(go);
+	//if there is only one gameobject, set it to the selected gameobject.
+	if (m_gameObjects.size() == 1)
+	{
+		m_selectedGameObject = go;
+		std::cout << "Selected Gameobject Changed" << std::endl;
+	}
+}
+
 void Scene::CycleThroughSkyBoxes()
 {
 	//if there are no skyboxes, return.
@@ -88,17 +100,19 @@ void Scene::CycleThroughSkyBoxes()
 
 void Scene::DrawStatics()
 {
-	
-	//for each gameobject in the scene, draw it and the skybox.
-	for (auto go : m_gameObjects)
-	{
-		//call draw.
-	}
 	//if the skybox is not null, draw it.
 	if (m_ActiveSkyBox && m_camera)
 	{
 		//std::cout << "Drawing Skybox" << std::endl;
 		m_ActiveSkyBox->Draw(m_camera);
+	}
+	XMMATRIX view = m_camera->GetViewMatrix();
+	XMMATRIX proj = m_camera->GetProjectionMatrix();
+	
+	//for each gameobject in the scene, draw it and the skybox.
+	for (auto go : m_gameObjects)
+	{
+		go->Draw(view, proj);
 	}
 }
 

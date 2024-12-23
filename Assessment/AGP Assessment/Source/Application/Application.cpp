@@ -66,7 +66,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 
 	ImGui_ImplWin32_Init(m_window->GetHWND());
 	ImGui_ImplDX11_Init(m_renderer->GetDevice(), m_renderer->GetDeviceContext());
-	AssetManager::Initialize(m_renderer->GetDevice(), m_renderer->GetDeviceContext());
+	AssetManager::Initialize(m_renderer->GetDevice(), m_renderer->GetDeviceContext(),m_renderer->GetCBuffer());
 
 	
 
@@ -88,6 +88,14 @@ void Application::Run()
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
 	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
+	GameObject* go = new GameObject();
+	std::shared_ptr<Model> model = AssetManager::CreateModel(L"Source/SavedModels/cube.obj");
+	std::shared_ptr<ShaderSet> shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso");
+	std::shared_ptr<Material> material = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp");
+	go->AddComponent(model);
+	go->AddComponent(material);
+	go->AddComponent(shaderSet);
+	SceneManager::AddGameObjectToActiveScene(go);
 
 	while (WM_QUIT != msg.message)
 	{
@@ -101,7 +109,7 @@ void Application::Run()
 		{
 			///Run game code here
 			HandleInput();
-			m_renderer->Clear();
+			m_renderer->Clear(AssetManager::GetUpdatedConstantBuffer());
 
 			ImGui_ImplDX11_NewFrame();
 			ImGui_ImplWin32_NewFrame();
@@ -123,6 +131,8 @@ void Application::Run()
 		//TimeClass::CalculateFrameStats();
 		
 	}
+	/*delete go;
+	go = nullptr;*/
 }
 
 void Application::SetMode(Mode mode)
@@ -169,6 +179,11 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			SwitchMode();
 		}
 		ImGui::SetWindowPos(ImVec2(0, 0));
+		ImGui::End();
+
+		ImGui::Begin("Scene Hierarchy", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+		ImGui::Text("Hierarchy");
+		ImGui::SetWindowPos(ImVec2(0, 100));
 		ImGui::End();
 
 

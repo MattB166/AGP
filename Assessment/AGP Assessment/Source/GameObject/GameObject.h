@@ -26,9 +26,10 @@ class GameObject
 {
 public:
 	GameObject(); //need to find way to give it default model 
+	void Initialise(); //initialise the gameobject and its position, rotation and scale.
 	void AddComponent(std::shared_ptr<Component> component);
 	void RemoveComponent(std::shared_ptr<Component> component);
-	void Draw();
+	void Draw(XMMATRIX& view, XMMATRIX& proj);
 	//void Update(float deltaTime);
 	void SetPosition(float x, float y, float z) { m_transform.pos = { x,y,z }; }
 	void SetRotation(float x, float y, float z) { m_transform.rot = { x,y,z }; }
@@ -43,7 +44,7 @@ public:
 
 private:
 	Transform m_transform;
-	std::unique_ptr<CBuffer> m_constantBuffer = nullptr;  //only one type of cbuffer required for gameobject. shader will know what to do with it. 
+	CBuffer m_constantBuffer;  //only one type of cbuffer required for gameobject. shader will know what to do with it. 
 	std::vector<std::shared_ptr<Component>> m_components;
 };
 

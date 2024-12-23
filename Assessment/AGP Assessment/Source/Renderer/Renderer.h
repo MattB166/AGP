@@ -11,13 +11,15 @@ public:
 	
 	void CleanRenderer();
 
-	void Clear(); // current scene as parameters? 
+	void Clear(ID3D11Buffer* newBuffer); // current scene as parameters? 
 
 	void Present(); 
 
 	ID3D11Device* GetDevice() { return m_device; }
 
 	ID3D11DeviceContext* GetDeviceContext() { return m_deviceContext; }
+
+	ID3D11Buffer* GetCBuffer() { return m_CBuffer; }
 
 private:
 	IDXGISwapChain* m_swapChain = nullptr;
