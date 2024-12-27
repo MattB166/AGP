@@ -240,7 +240,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			{
 				ImGui::OpenPopup("Add Component");
 			}
-			if (ImGui::BeginPopupModal("Add Component",nullptr,ImGuiWindowFlags_AlwaysAutoResize))
+			if (ImGui::BeginPopupModal("Add Component",nullptr,ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 			{
 				std::vector<ComponentType> types = Component::GetTypes();
 				bool chosen = false;
