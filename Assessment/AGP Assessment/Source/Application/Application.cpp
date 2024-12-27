@@ -254,9 +254,18 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 						if (chosen)
 						{
 							std::cout << "Chosen " << typeName << std::endl;
+							ImGui::CloseCurrentPopup();
+							ImGui::OpenPopup("Add Component Options");
+							ComponentType compType = Component::StringToType(typeName);
+							if (ImGui::BeginPopupModal("Add Component Options",nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+							{
+								std::cout << "Adding Component of type: " << typeName << std::endl;
+								//ImGui::EndPopup();
+							}
 						}
+
 						//need to downcast to the derived class to instantiate a temp component of that type.
-						ComponentType compType = Component::StringToType(typeName);
+						
 						//get the options for that component type.
 						
 					}
