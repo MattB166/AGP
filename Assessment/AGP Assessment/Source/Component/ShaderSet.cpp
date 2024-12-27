@@ -1,7 +1,7 @@
 #include "ShaderSet.h"
 
 ShaderSet::ShaderSet(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11VertexShader* vs, ID3D11PixelShader* ps, ID3D11InputLayout* il, const char* name) :
-	Component(dev, devcon,name),
+	Component(dev, devcon,name,ComponentType::Shaders),
 	m_vertexShader(vs),
 	m_pixelShader(ps),
 	m_inputLayout(il)

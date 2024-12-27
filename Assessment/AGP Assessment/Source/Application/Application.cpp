@@ -166,6 +166,13 @@ void Application::SwitchMode()
 	//if mode is play, hide IMGUI, if mode is edit, show IMGUI.
 	//send objects back to their original positions if mode is edit, and update behaviours if mode is play. 
 	//do this via the scene manager.
+
+	if (followSelectedObject)
+	{
+		SceneManager::SetActiveSceneCameraTarget(0.0f, 0.0f, 0.0f, false);
+		followSelectedObject = false;
+	}
+
 }
 
 void Application::RunMode() //also in here run all logic for choosing objects and editing them. 
@@ -227,6 +234,37 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 				SceneManager::ResetActiveObjectPosition();
 				SceneManager::ResetActiveSceneCamera();
 			}
+			//combo for adding components of type, and then choice of different options within that type, to the selected object.
+           //if object is selected, show the components of that object, and allow for adding new components to that object.
+			if (ImGui::Button("Add Component"))
+			{
+				ImGui::OpenPopup("Add Component");
+			}
+			if (ImGui::BeginPopupModal("Add Component",nullptr,ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				//list of options for components to add from the component class
+				std::vector<ComponentType> types = Component::GetTypes();
+				for (auto type : types)
+				{
+					std::string typeName = Component::ComponentTypeToString(type);
+					if (ImGui::Button(typeName.c_str()))
+					{
+						ImGui::OpenPopup(typeName.c_str());
+						if (ImGui::BeginPopupModal(typeName.c_str()))
+						{
+							//need each component type to have access to all loaded file types within the explorer so have a choice of them within the program. 
+							ImGui::EndPopup();
+						}
+					}
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Cancel", ImVec2(120, 0)))
+				{
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
+			
 			ImGui::SetWindowPos(ImVec2(0, 150));
 			ImGui::End();
 		}

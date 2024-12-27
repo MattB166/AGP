@@ -37,6 +37,11 @@ void GameObject::AddComponent(std::shared_ptr<Component> component)
 		{
 			return;
 		}
+		if (comp->GetType() == component->GetType())
+		{
+			std::cout << "Component already exists" << std::endl;
+			return;
+		}
 	}
 	component->SetOwner(this);
 	m_components.push_back(component);
