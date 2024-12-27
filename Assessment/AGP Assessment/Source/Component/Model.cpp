@@ -27,6 +27,16 @@ void Model::ShowDebugWindow()
 
 void Model::LoadAllModelNames(const std::string& path)
 {
-	
+	namespace fs = std::experimental::filesystem;
+	for (const auto& entry : fs::directory_iterator(path))
+	{
+		if (fs::is_regular_file(entry) && entry.path().extension() == ".obj")
+		{
+			std::string filename = entry.path().filename().string();
+			m_AvailableModelNames.push_back(entry.path().filename().string());
+			std::string modelName = filename.substr(0, filename.find_last_of('.'));
+			std::cout << "Loaded Model : " << modelName << "\n";
+		}
+	}
 }
 

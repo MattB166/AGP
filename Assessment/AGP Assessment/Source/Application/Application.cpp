@@ -68,7 +68,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 	ImGui_ImplDX11_Init(m_renderer->GetDevice(), m_renderer->GetDeviceContext());
 	AssetManager::Initialize(m_renderer->GetDevice(), m_renderer->GetDeviceContext(),m_renderer->GetCBuffer());
 
-	
+	Model::LoadAllModelNames("Source/SavedModels"); // should work? 
 
 	mouse.SetWindow(m_window->GetHWND());
 	
@@ -252,6 +252,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 						ImGui::OpenPopup(typeName.c_str());
 						if (ImGui::BeginPopupModal(typeName.c_str()))
 						{
+							
 							//need each component type to have access to all loaded file types within the explorer so have a choice of them within the program. 
 							ImGui::EndPopup();
 						}

@@ -10,8 +10,9 @@ public:
 	void Apply() override;
 	void ShowDebugWindow() override;
 	void SetModel(ObjFileModel* model) { m_model = model; }
-	void LoadAllModelNames(const std::string& path);
+	static void LoadAllModelNames(const std::string& path);
 	ObjFileModel* GetModel() { return m_model; }
+	std::vector<std::string> GetOptions() const override { return m_AvailableModelNames; }
 private:
 	ObjFileModel* m_model = nullptr;
 	ID3D11Buffer* m_constBuffer = nullptr;
