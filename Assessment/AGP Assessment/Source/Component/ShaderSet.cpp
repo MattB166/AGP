@@ -1,10 +1,16 @@
 #include "ShaderSet.h"
+std::vector<std::string> ShaderSet::m_AvailableShaderNames;
 
 ShaderSet::ShaderSet(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11VertexShader* vs, ID3D11PixelShader* ps, ID3D11InputLayout* il, const char* name) :
 	Component(dev, devcon,name,ComponentType::Shaders),
 	m_vertexShader(vs),
 	m_pixelShader(ps),
 	m_inputLayout(il)
+{
+}
+
+ShaderSet::ShaderSet(ID3D11Device* dev, ID3D11DeviceContext* devcon) :
+	Component(dev, devcon, "Shader Set", ComponentType::Shaders), m_vertexShader(nullptr), m_pixelShader(nullptr), m_inputLayout(nullptr)
 {
 }
 

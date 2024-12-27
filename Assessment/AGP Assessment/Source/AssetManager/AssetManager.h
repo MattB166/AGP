@@ -40,6 +40,8 @@ public:
 
 	static void UpdateConstantBuffer(CBuffer& cBuffer);
 
+	static std::shared_ptr<Component> CreateTemporaryComponentInstance(ComponentType type); 
+
 	//static ID3D11Buffer* GetUpdatedConstantBuffer() { return m_rendererBuffer; }
 
 

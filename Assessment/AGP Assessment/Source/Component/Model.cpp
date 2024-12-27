@@ -6,6 +6,10 @@ Model::Model(ID3D11Device* dev, ID3D11DeviceContext* devcon, ObjFileModel* model
 
 }
 
+Model::Model(ID3D11Device* dev, ID3D11DeviceContext* devcon) : Component(dev, devcon, "Model", ComponentType::Model)
+{
+}
+
 Model::~Model()
 {
 	delete m_model;
@@ -33,8 +37,8 @@ void Model::LoadAllModelNames(const std::string& path)
 		if (fs::is_regular_file(entry) && entry.path().extension() == ".obj")
 		{
 			std::string filename = entry.path().filename().string();
-			m_AvailableModelNames.push_back(entry.path().filename().string());
 			std::string modelName = filename.substr(0, filename.find_last_of('.'));
+			m_AvailableModelNames.push_back(modelName);
 			std::cout << "Loaded Model : " << modelName << "\n";
 		}
 	}

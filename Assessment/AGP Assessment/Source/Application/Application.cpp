@@ -242,21 +242,26 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			}
 			if (ImGui::BeginPopupModal("Add Component",nullptr,ImGuiWindowFlags_AlwaysAutoResize))
 			{
-				//list of options for components to add from the component class
 				std::vector<ComponentType> types = Component::GetTypes();
+				bool chosen = false;
 				for (auto type : types)
 				{
 					std::string typeName = Component::ComponentTypeToString(type);
 					if (ImGui::Button(typeName.c_str()))
 					{
-						ImGui::OpenPopup(typeName.c_str());
-						if (ImGui::BeginPopupModal(typeName.c_str()))
+						std::cout << "Adding Component of type: " << typeName << std::endl;
+						chosen = true; 
+						if (chosen)
 						{
-							
-							//need each component type to have access to all loaded file types within the explorer so have a choice of them within the program. 
-							ImGui::EndPopup();
+							std::cout << "Chosen " << typeName << std::endl;
 						}
+						//need to downcast to the derived class to instantiate a temp component of that type.
+						ComponentType compType = Component::StringToType(typeName);
+						//get the options for that component type.
+						
 					}
+					
+
 				}
 				ImGui::SameLine();
 				if (ImGui::Button("Cancel", ImVec2(120, 0)))
@@ -265,6 +270,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 				}
 				ImGui::EndPopup();
 			}
+			
 			
 			ImGui::SetWindowPos(ImVec2(0, 150));
 			ImGui::End();

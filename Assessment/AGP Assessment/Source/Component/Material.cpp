@@ -1,5 +1,6 @@
 #include "Material.h"
 #include <WICTextureLoader.h>
+std::vector<std::string> Material::m_AvailableTextureNames;
 
 Material::Material(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11ShaderResourceView* texture, const char* name) : Component(dev, devcon,name,ComponentType::Texture), m_texture(texture)
 {
@@ -12,6 +13,10 @@ Material::Material(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11ShaderR
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	m_dev->CreateSamplerState(&samplerDesc, &m_sampler);
+}
+
+Material::Material(ID3D11Device* dev, ID3D11DeviceContext* devcon) : Component(dev, devcon, "Material", ComponentType::Texture)
+{
 }
 
 Material::~Material()

@@ -27,7 +27,18 @@ public:
 	ComponentType GetType() { return m_type; }
 	static std::vector<ComponentType> GetTypes() { return m_types; }
 	static std::string ComponentTypeToString(ComponentType type); 
-	virtual std::vector<std::string> GetOptions() const = 0; 
+	static ComponentType StringToType(const std::string& type)
+	{
+		if (type == "Model")
+			return ComponentType::Model;
+		else if (type == "Shaders")
+			return ComponentType::Shaders;
+		else if (type == "Texture")
+			return ComponentType::Texture;
+		else
+			return ComponentType::Model;
+	}
+	virtual std::vector<std::string> GetComponentOptions() const = 0; 
 protected:
 	Component(ID3D11Device* dev, ID3D11DeviceContext* devcon, const char* name, ComponentType type) : m_dev(dev), m_devcon(devcon),m_name(name),m_type(type) {}
 	const char* m_name = nullptr;

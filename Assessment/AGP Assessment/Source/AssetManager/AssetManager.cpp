@@ -383,6 +383,24 @@ void AssetManager::UpdateConstantBuffer(CBuffer& cBuffer)
 	//need to update the renderer buffer, as the current "m_rendererBuffer" is only local to asset manager. 
 }
 
+std::shared_ptr<Component> AssetManager::CreateTemporaryComponentInstance(ComponentType type)
+{
+	switch (type)
+	{
+	case ComponentType::Model:
+		return std::make_shared<Model>(m_dev, m_devcon);
+		break;
+	case ComponentType::Shaders:
+		return std::make_shared<ShaderSet>(m_dev, m_devcon);
+		break;
+	case ComponentType::Texture:
+		return std::make_shared<Material>(m_dev, m_devcon);
+		break;
+	default:
+		break;
+	}
+}
+
 
 const wchar_t* AssetManager::GetTexturePath(const std::shared_ptr<SkyBox>& skyBox)
 {

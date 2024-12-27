@@ -16,3 +16,4 @@ std::string Component::ComponentTypeToString(ComponentType type)
 		return "Unknown";
 	}
 }
+
