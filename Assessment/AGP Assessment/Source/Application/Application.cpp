@@ -236,6 +236,8 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			}
 			//combo for adding components of type, and then choice of different options within that type, to the selected object.
            //if object is selected, show the components of that object, and allow for adding new components to that object.
+			static ComponentType selectedComponentType;
+			static bool showComponentOptions = false;
 			if (ImGui::Button("Add Component"))
 			{
 				ImGui::OpenPopup("Add Component");
@@ -249,25 +251,10 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 					std::string typeName = Component::ComponentTypeToString(type);
 					if (ImGui::Button(typeName.c_str()))
 					{
-						std::cout << "Adding Component of type: " << typeName << std::endl;
-						chosen = true; 
-						if (chosen)
-						{
-							std::cout << "Chosen " << typeName << std::endl;
-							ImGui::CloseCurrentPopup();
-							ImGui::OpenPopup("Add Component Options");
-							ComponentType compType = Component::StringToType(typeName);
-							if (ImGui::BeginPopupModal("Add Component Options",nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
-							{
-								std::cout << "Adding Component of type: " << typeName << std::endl;
-								//ImGui::EndPopup();
-							}
-						}
-
-						//need to downcast to the derived class to instantiate a temp component of that type.
-						
-						//get the options for that component type.
-						
+						showComponentOptions = true;
+						selectedComponentType = type;
+						std::cout << "Selected Component Type: " << typeName << std::endl;
+						ImGui::CloseCurrentPopup();
 					}
 					
 
@@ -278,6 +265,27 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::EndPopup();
+			}
+			if(showComponentOptions)
+			{
+				ImGui::OpenPopup("Component Options");
+				if (ImGui::BeginPopupModal("Component Options"))
+				{
+					std::string selectedComponentTypeString = Component::ComponentTypeToString(selectedComponentType);
+					ImGui::Text("Select a %s", selectedComponentTypeString.c_str());
+					std::shared_ptr<Component> component = AssetManager::CreateTemporaryComponentInstance(selectedComponentType);
+					std::vector<std::string> options = component->GetComponentOptions();
+					for (auto option : options)
+					{
+						if (ImGui::Button(option.c_str()))
+						{
+							std::cout << "Creating " << option << " " << selectedComponentTypeString << " Component" << std::endl;
+							//amend each component class to store its name and filepath in a map so i can easily create this component from here. 
+						}
+					}
+					
+					ImGui::EndPopup();
+				}
 			}
 			
 			
