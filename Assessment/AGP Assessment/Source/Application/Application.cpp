@@ -281,11 +281,20 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 						{
 							std::cout << "Creating " << option << " " << selectedComponentTypeString << " Component" << std::endl;
 							//amend each component class to store its name and filepath in a map so i can easily create this component from here. 
+							showComponentOptions = false;
+							ImGui::CloseCurrentPopup();
 						}
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("Cancel", ImVec2(120, 0)))
+					{
+						showComponentOptions = false;
+						ImGui::CloseCurrentPopup();
 					}
 					
 					ImGui::EndPopup();
 				}
+				//ImGui::EndPopup();
 			}
 			
 			
