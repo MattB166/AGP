@@ -215,7 +215,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 
 		if (SceneManager::GetActiveScene()->GetObjectCount() > 0)
 		{
-			float x = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.x;
+			float x = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.x; 
 			float y = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.y;
 			float z = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.z;
 
@@ -280,6 +280,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 						if (ImGui::Button(option.c_str()))
 						{
 							std::cout << "Creating " << option << " " << selectedComponentTypeString << " Component" << std::endl;
+							//get option file path so can load it in. 
 							//amend each component class to store its name and filepath in a map so i can easily create this component from here. 
 							showComponentOptions = false;
 							ImGui::CloseCurrentPopup();
