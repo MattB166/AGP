@@ -4,7 +4,7 @@ std::unordered_map<std::string, std::string> Model::m_ModelNameToPath = {};
 
 Model::Model(ID3D11Device* dev, ID3D11DeviceContext* devcon, ObjFileModel* model, const char* name) : Component(dev, devcon,name,ComponentType::Model), m_model(model)
 {
-
+	
 }
 
 Model::Model(ID3D11Device* dev, ID3D11DeviceContext* devcon) : Component(dev, devcon, "Model", ComponentType::Model)

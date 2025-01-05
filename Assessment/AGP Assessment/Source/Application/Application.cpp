@@ -285,7 +285,14 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 					{
 						std::cout << "Creating " << option << " " << selectedComponentTypeString << " Component" << std::endl;
 					
-						/////asset creation logic still needed in here. 
+						/////asset creation logic still needed in here.
+						//retrieve option file path
+						std::string filePath = component->GetComponentFilePath(option);
+						std::shared_ptr<Component> newComponent = AssetManager::CreateComponentFromFilePath(filePath, selectedComponentType, option.c_str());
+						SceneManager::GetSelectedGameObjectInActiveScene()->AddComponent(newComponent);
+
+
+
 						showComponentOptions = false;
 						ImGui::CloseCurrentPopup();
 					}

@@ -43,7 +43,7 @@ public:
 	virtual std::vector<std::string> GetComponentOptions() const = 0; 
 protected:
 	Component(ID3D11Device* dev, ID3D11DeviceContext* devcon, const char* name, ComponentType type) : m_dev(dev), m_devcon(devcon),m_name(name),m_type(type) {}
-	const char* m_name = nullptr;
+	std::string m_name = nullptr;
 	GameObject* m_owner = nullptr;
 	ID3D11Device* m_dev = nullptr;
 	ID3D11DeviceContext* m_devcon = nullptr; 
