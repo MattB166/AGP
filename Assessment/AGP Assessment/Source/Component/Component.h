@@ -15,6 +15,7 @@ enum class ComponentType
 	Model,
 	Shaders,
 	Texture,
+	None
 
 };
 class Component

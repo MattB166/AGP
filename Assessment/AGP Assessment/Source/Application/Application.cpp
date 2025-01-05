@@ -177,6 +177,8 @@ void Application::SwitchMode()
 
 void Application::RunMode() //also in here run all logic for choosing objects and editing them. 
 {
+	static std::shared_ptr<Component> component = nullptr;
+	static std::vector<std::string> options = {};
 	if (m_mode == Mode::EDIT)
 	{
 		
@@ -239,6 +241,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			
 			if (ImGui::Button("Add Component"))
 			{
+				selectedComponentType = ComponentType::None;
 				ImGui::OpenPopup("Add Component");
 			}
 			if (ImGui::BeginPopupModal("Add Component",nullptr,ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
@@ -252,6 +255,8 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 					{
 						showComponentOptions = true;
 						selectedComponentType = type;
+						component = AssetManager::CreateTemporaryComponentInstance(type);
+						options = component->GetComponentOptions();
 						std::cout << "Selected Component Type: " << typeName << std::endl;
 						ImGui::CloseCurrentPopup();
 					}
@@ -271,29 +276,18 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			}
 			if (ImGui::BeginPopupModal("Component Options"))
 			{
-				//showComponentOptions = true;
-				//std::cout << "Showing Component Options" << std::endl;
 				std::string selectedComponentTypeString = Component::ComponentTypeToString(selectedComponentType);
 				ImGui::Text("Select a %s", selectedComponentTypeString.c_str());
-				static std::shared_ptr<Component> component = AssetManager::CreateTemporaryComponentInstance(selectedComponentType);
-				static std::vector<std::string> options = component->GetComponentOptions();
+				
 				for (auto option : options)
 				{
-
-					//std::cout << "Option: " << option << std::endl;
 					if (ImGui::Button(option.c_str()))
 					{
-						std::cout << "Creating " << option << " " << selectedComponentTypeString << " Component" << std::endl;
-					
-						/////asset creation logic still needed in here.
-						//retrieve option file path
 						std::string filePath = component->GetComponentFilePath(option);
 						std::shared_ptr<Component> newComponent = AssetManager::CreateComponentFromFilePath(filePath, selectedComponentType, option.c_str());
 						SceneManager::GetSelectedGameObjectInActiveScene()->AddComponent(newComponent);
-
-
-
 						showComponentOptions = false;
+						selectedComponentType = ComponentType::None;
 						ImGui::CloseCurrentPopup();
 					}
 				}
