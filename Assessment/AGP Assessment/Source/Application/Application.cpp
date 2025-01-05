@@ -236,8 +236,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			}
 			//combo for adding components of type, and then choice of different options within that type, to the selected object.
            //if object is selected, show the components of that object, and allow for adding new components to that object.
-			static ComponentType selectedComponentType;
-			static bool showComponentOptions = false;
+			
 			if (ImGui::Button("Add Component"))
 			{
 				ImGui::OpenPopup("Add Component");
@@ -269,34 +268,38 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			if(showComponentOptions)
 			{
 				ImGui::OpenPopup("Component Options");
-				if (ImGui::BeginPopupModal("Component Options"))
+			}
+			if (ImGui::BeginPopupModal("Component Options"))
+			{
+				//showComponentOptions = true;
+				//std::cout << "Showing Component Options" << std::endl;
+				std::string selectedComponentTypeString = Component::ComponentTypeToString(selectedComponentType);
+				ImGui::Text("Select a %s", selectedComponentTypeString.c_str());
+				static std::shared_ptr<Component> component = AssetManager::CreateTemporaryComponentInstance(selectedComponentType);
+				static std::vector<std::string> options = component->GetComponentOptions();
+				for (auto option : options)
 				{
-					std::string selectedComponentTypeString = Component::ComponentTypeToString(selectedComponentType);
-					ImGui::Text("Select a %s", selectedComponentTypeString.c_str());
-					std::shared_ptr<Component> component = AssetManager::CreateTemporaryComponentInstance(selectedComponentType);
-					std::vector<std::string> options = component->GetComponentOptions();
-					for (auto option : options)
+
+					//std::cout << "Option: " << option << std::endl;
+					if (ImGui::Button(option.c_str()))
 					{
-						if (ImGui::Button(option.c_str()))
-						{
-							std::cout << "Creating " << option << " " << selectedComponentTypeString << " Component" << std::endl;
-							//get option file path so can load it in. 
-							//amend each component class to store its name and filepath in a map so i can easily create this component from here. 
-							showComponentOptions = false;
-							ImGui::CloseCurrentPopup();
-						}
-					}
-					ImGui::SameLine();
-					if (ImGui::Button("Cancel", ImVec2(120, 0)))
-					{
+						std::cout << "Creating " << option << " " << selectedComponentTypeString << " Component" << std::endl;
+					
+						/////asset creation logic still needed in here. 
 						showComponentOptions = false;
 						ImGui::CloseCurrentPopup();
 					}
-					
-					ImGui::EndPopup();
 				}
-				//ImGui::EndPopup();
+				ImGui::Separator();
+				if (ImGui::Button("Cancel", ImVec2(120, 0)))
+				{
+					showComponentOptions = false;
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
 			}
+			//ImGui::EndPopup();
 			
 			
 			ImGui::SetWindowPos(ImVec2(0, 150));

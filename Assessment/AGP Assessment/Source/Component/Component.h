@@ -5,6 +5,7 @@
 #include <memory>
 #include "../IMGUI/imgui.h"
 #include <vector>
+#include <unordered_map>
 #include <experimental/filesystem>
 using namespace std::experimental::filesystem;
 
@@ -22,6 +23,7 @@ public:
 	virtual ~Component() = default;
 	virtual void Apply() = 0;
 	virtual void ShowDebugWindow() = 0;
+	virtual std::string GetComponentFilePath(const std::string& name)const = 0;
 	void SetOwner(GameObject* owner) { m_owner = owner; }
 	GameObject* GetOwner() { return m_owner; }
 	ComponentType GetType() { return m_type; }

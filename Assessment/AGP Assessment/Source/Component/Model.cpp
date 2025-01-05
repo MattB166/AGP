@@ -1,5 +1,6 @@
 #include "Model.h"
 std::vector<std::string> Model::m_AvailableModelNames = {};
+std::unordered_map<std::string, std::string> Model::m_ModelNameToPath = {};
 
 Model::Model(ID3D11Device* dev, ID3D11DeviceContext* devcon, ObjFileModel* model, const char* name) : Component(dev, devcon,name,ComponentType::Model), m_model(model)
 {
@@ -12,6 +13,9 @@ Model::Model(ID3D11Device* dev, ID3D11DeviceContext* devcon) : Component(dev, de
 
 Model::~Model()
 {
+	//clear maps
+	m_ModelNameToPath.clear();
+	m_AvailableModelNames.clear();
 	delete m_model;
 	m_model = nullptr;
 }
@@ -39,8 +43,19 @@ void Model::LoadAllModelNames(const std::string& path)
 			std::string filename = entry.path().filename().string();
 			std::string modelName = filename.substr(0, filename.find_last_of('.'));
 			m_AvailableModelNames.push_back(modelName);
+			m_ModelNameToPath.insert(std::make_pair(modelName, entry.path().string()));
 			std::cout << "Loaded Model : " << modelName << "\n";
 		}
 	}
+}
+
+std::string Model::GetComponentFilePath(const std::string& name) const
+{
+	auto it = m_ModelNameToPath.find(name);
+	if (it != m_ModelNameToPath.end())
+	{
+		return it->second;
+	}
+	return "";
 }
 

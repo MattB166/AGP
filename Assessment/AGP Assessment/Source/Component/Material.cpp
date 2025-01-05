@@ -45,3 +45,8 @@ void Material::ShowDebugWindow()
 	//ImGui::Text("Material");
 	ImGui::Text("Material : %s", m_name);
 }
+
+std::string Material::GetComponentFilePath(const std::string& name) const
+{
+	return std::string();
+}

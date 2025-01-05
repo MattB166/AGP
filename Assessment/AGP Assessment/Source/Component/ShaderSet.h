@@ -13,6 +13,7 @@ public:
 	ID3D11PixelShader* GetPixelShader() { return m_pixelShader; }
 	ID3D11InputLayout* GetInputLayout() { return m_inputLayout; }
 	std::vector<std::string> GetComponentOptions() const override { return m_AvailableShaderNames; }
+	std::string GetComponentFilePath(const std::string& name)const override;
 
 
 private:

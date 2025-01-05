@@ -34,3 +34,8 @@ void ShaderSet::ShowDebugWindow()
 	//ImGui::Text("ShaderSet");
 	ImGui::Text("Shader : %s" , m_name);
 }
+
+std::string ShaderSet::GetComponentFilePath(const std::string& name) const
+{
+	return std::string();
+}

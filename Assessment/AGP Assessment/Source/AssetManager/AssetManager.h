@@ -18,6 +18,11 @@ public:
 	static void CleanUp();
 
 #pragma region Externals
+
+	static std::shared_ptr<Component> CreateComponentFromFilePath(const std::string& filePath, ComponentType type, const char* name);
+
+	static std::shared_ptr<Component> CreateComponentFromFilePath(const std::string& vsFilePath, const std::string& psFilePath, const char* name);
+
 	static std::shared_ptr<Material> CreateMaterial(const wchar_t* texturePath, const char* name);
 
 	static std::shared_ptr<Model> CreateModel(const char* modelPath, const char* name);

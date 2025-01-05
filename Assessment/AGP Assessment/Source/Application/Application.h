@@ -50,6 +50,8 @@ private:
 
 #pragma region IMGUI Members
 	bool followSelectedObject = false;
+    ComponentType selectedComponentType;
+	bool showComponentOptions = false;
 
 
 #pragma	endregion

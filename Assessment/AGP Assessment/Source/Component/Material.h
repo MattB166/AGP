@@ -14,6 +14,8 @@ public:
 	void SetTexture(ID3D11ShaderResourceView* texture) { m_texture = texture; }
 	ID3D11ShaderResourceView* GetTexture() { return m_texture; }
 	std::vector<std::string> GetComponentOptions() const override { return m_AvailableTextureNames; }
+	std::string GetComponentFilePath(const std::string& name)const override;
+
 
 private:
 	ID3D11ShaderResourceView* m_texture = nullptr;

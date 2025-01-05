@@ -14,10 +14,13 @@ public:
 	static void LoadAllModelNames(const std::string& path);
 	ObjFileModel* GetModel() { return m_model; }
 	std::vector<std::string> GetComponentOptions() const override { return m_AvailableModelNames; }
+	std::string GetComponentFilePath(const std::string& name)const override; 
 private:
 	ObjFileModel* m_model = nullptr;
 	ID3D11Buffer* m_constBuffer = nullptr;
-	static vector<std::string> m_AvailableModelNames; 
+	static vector<std::string> m_AvailableModelNames;
+	static std::unordered_map<std::string, std::string> m_ModelNameToPath;
+
 	///need a vector of all models available through the file explorer 
 };
 

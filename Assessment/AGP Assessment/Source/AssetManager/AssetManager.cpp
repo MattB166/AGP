@@ -52,6 +52,30 @@ void AssetManager::CleanUp()
 	}
 }
 
+std::shared_ptr<Component> AssetManager::CreateComponentFromFilePath(const std::string& filePath, ComponentType type, const char* name)
+{
+	switch (type)
+	{
+	case ComponentType::Model:
+		return CreateModel(filePath.c_str(), name);
+		break;
+	case ComponentType::Shaders:
+		std::cout << "Cannot create shader set with only one filepath given." << std::endl; 
+		break;
+	case ComponentType::Texture:
+		return CreateMaterial(std::wstring(filePath.begin(), filePath.end()).c_str(), name);
+		break;
+	default:
+		break;
+	}
+}
+
+std::shared_ptr<Component> AssetManager::CreateComponentFromFilePath(const std::string& vsFilePath, const std::string& psFilePath, const char* name)
+{
+	return CreateShaderSet(std::wstring(vsFilePath.begin(), vsFilePath.end()).c_str(), std::wstring(psFilePath.begin(), psFilePath.end()).c_str(), name);
+
+}
+
 std::shared_ptr<Material> AssetManager::CreateMaterial(const wchar_t* texturePath, const char* name)
 {
 	if (IsMaterialLoaded(*texturePath))
