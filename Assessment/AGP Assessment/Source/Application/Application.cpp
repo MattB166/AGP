@@ -71,7 +71,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 	SkyBox::LoadAllSkyBoxNames("Source/SavedSkyBoxTextures");
 	Model::LoadAllModelNames("Source/SavedModels"); // should work? 
 	Material::LoadAllTextureNames("Source/SavedTextures");
-	ShaderSet::LoadAllShaderNames("Source/Shaders/StandardShader"); 
+	ShaderSet::LoadAllShaderNames("CompiledShaders/StandardShader"); 
 	//do the same for textures and shaders.
 	//and skyboxes 
 

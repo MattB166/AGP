@@ -103,8 +103,20 @@ std::string ShaderSet::GetComponentFilePath(const std::string& name) const
 	auto it = m_shaderNameToPaths.find(name);
 	if (it != m_shaderNameToPaths.end())
 	{
-		return it->second.vertexShaderPath + it->second.pixelShaderPath;
+		const ShaderPath& Paths = it->second;
+
+		if (!Paths.vertexShaderPath.empty() && !Paths.pixelShaderPath.empty())
+		{
+			return Paths.vertexShaderPath + ";" + Paths.pixelShaderPath;
+		}
+		else
+		{
+			std::cout << "Error: Shader Paths incomplete" << std::endl;
+		}
 	}
-	return "";
+	else
+	{
+		std::cout << "Error: Shader Name not found" << std::endl;
+	}
 
 }

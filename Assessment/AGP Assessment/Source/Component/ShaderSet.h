@@ -4,6 +4,9 @@ struct ShaderPath
 {
 	std::string pixelShaderPath;
 	std::string vertexShaderPath;
+
+	std::string GetPixelShaderPath() { return pixelShaderPath; }
+	std::string GetVertexShaderPath() { return vertexShaderPath; }
 };
 class ShaderSet : public Component
 {
