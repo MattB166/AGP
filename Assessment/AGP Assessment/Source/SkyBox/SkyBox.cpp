@@ -1,5 +1,8 @@
 #include "SkyBox.h"
 #include <iostream>
+std::vector<std::string> SkyBox::m_AvailableSkyBoxNames{};
+std::unordered_map<std::string, std::string> SkyBox::m_SkyBoxNameToPath{};
+
 
 SkyBox::SkyBox(ID3D11Device* device, ID3D11DeviceContext* deviceContext, ObjFileModel* model, ID3D11VertexShader* vs, ID3D11PixelShader* ps, ID3D11InputLayout* il, ID3D11ShaderResourceView* srv, const wchar_t* TexPath)
 	: m_device(device), m_deviceContext(deviceContext), m_SkyBoxModel(model), m_vertexShader(vs), m_pixelShader(ps), m_inputLayout(il), m_texture(srv), m_constBuffer(nullptr), m_rasterizerSolid(nullptr), m_rasterizerSkybox(nullptr), m_depthWriteSolid(nullptr), m_depthWriteSkybox(nullptr), m_texturePath(TexPath)
@@ -42,6 +45,22 @@ void SkyBox::Draw(Camera* cam)
 	m_deviceContext->OMSetDepthStencilState(m_depthWriteSolid, 1);
 	m_deviceContext->RSSetState(m_rasterizerSolid);
 
+}
+
+void SkyBox::LoadAllSkyBoxNames(const std::string& path)
+{
+	namespace fs = std::experimental::filesystem;
+	for (const auto& entry : fs::directory_iterator(path))
+	{
+		if (fs::is_regular_file(entry) && entry.path().extension() == ".dds")
+		{
+			std::string filename = entry.path().filename().string();
+			std::string skyboxName = filename.substr(0, filename.find_last_of('.'));
+			m_AvailableSkyBoxNames.push_back(skyboxName);
+			m_SkyBoxNameToPath.insert(std::make_pair(skyboxName, entry.path().string()));
+			std::cout << "Loaded SkyBox : " << skyboxName << "\n";
+		}
+	}
 }
 
 void SkyBox::InitialiseSkybox()

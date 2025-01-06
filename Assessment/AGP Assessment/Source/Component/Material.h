@@ -11,6 +11,7 @@ public:
 	void Apply() override;
 	void ShowDebugWindow() override;
 
+	static void LoadAllTextureNames(const std::string& path);
 	void SetTexture(ID3D11ShaderResourceView* texture) { m_texture = texture; }
 	ID3D11ShaderResourceView* GetTexture() { return m_texture; }
 	std::vector<std::string> GetComponentOptions() const override { return m_AvailableTextureNames; }
@@ -21,6 +22,7 @@ private:
 	ID3D11ShaderResourceView* m_texture = nullptr;
 	ID3D11SamplerState* m_sampler = nullptr;
 	static std::vector<std::string> m_AvailableTextureNames;
+	static std::unordered_map<std::string, std::string> m_textureNameToPath;
 	
 };
 

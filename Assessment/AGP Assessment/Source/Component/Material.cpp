@@ -1,6 +1,7 @@
 #include "Material.h"
 #include <WICTextureLoader.h>
-std::vector<std::string> Material::m_AvailableTextureNames;
+std::vector<std::string> Material::m_AvailableTextureNames = {};
+std::unordered_map<std::string, std::string> Material::m_textureNameToPath = {};
 
 Material::Material(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11ShaderResourceView* texture, const char* name) : Component(dev, devcon,name,ComponentType::Texture), m_texture(texture)
 {
@@ -44,6 +45,22 @@ void Material::ShowDebugWindow()
 	//std::cout << "Showing Material Debug Window" << std::endl;
 	//ImGui::Text("Material");
 	ImGui::Text("Material : %s", m_name);
+}
+
+void Material::LoadAllTextureNames(const std::string& path)
+{
+	namespace fs = std::experimental::filesystem;
+	for (const auto& entry : fs::directory_iterator(path))
+	{
+		if (fs::is_regular_file(entry) && entry.path().extension() == ".bmp")
+		{
+			std::string filename = entry.path().filename().string();
+			std::string textureName = filename.substr(0, filename.find_last_of('.'));
+			m_AvailableTextureNames.push_back(textureName);
+			m_textureNameToPath.insert(std::make_pair(textureName, entry.path().string()));
+			std::cout << "Loaded Model : " << textureName << "\n";
+		}
+	}
 }
 
 std::string Material::GetComponentFilePath(const std::string& name) const

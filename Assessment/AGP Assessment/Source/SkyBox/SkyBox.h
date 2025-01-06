@@ -1,8 +1,12 @@
 #pragma once
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <d3d11.h>
 #include "../Constant Buffer/CBuffer.h" //maybe make this class a component but don't allow gameobjects to have one of these ones. 
 #include "../ObjectFileModel/objfilemodel.h"
+#include <unordered_map>
 #include "../Camera/Camera.h"
+#include <experimental/filesystem>
+using namespace std::experimental::filesystem;
 struct CBufferSkyBox
 {
 	XMMATRIX wvp;
@@ -16,6 +20,10 @@ public:
 	void Draw(Camera* cam); 
 
 	const wchar_t* GetTexturePath() { return m_texturePath; } 
+
+	static void LoadAllSkyBoxNames(const std::string& path);
+
+	std::vector<std::string> GetSkyBoxOptions() const { return m_AvailableSkyBoxNames; }
 
 private:
 	void InitialiseSkybox();
@@ -48,5 +56,10 @@ private:
 	ID3D11SamplerState* m_sampler = nullptr;
 
 	const wchar_t* m_texturePath; 
+
+	static std::vector<std::string> m_AvailableSkyBoxNames;
+
+	static std::unordered_map<std::string, std::string> m_SkyBoxNameToPath;
+
 };
 
