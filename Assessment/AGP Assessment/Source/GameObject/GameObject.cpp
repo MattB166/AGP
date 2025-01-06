@@ -30,6 +30,12 @@ void GameObject::Initialise()
 
 void GameObject::AddComponent(std::shared_ptr<Component> component)
 {
+	if (component == nullptr)
+	{
+		std::cout << "Component is null" << std::endl;
+		return;
+
+	}
 	//check to make sure doesnt already exist
 	for (const auto& comp : m_components)
 	{
@@ -42,6 +48,7 @@ void GameObject::AddComponent(std::shared_ptr<Component> component)
 			std::cout << "Component already exists" << std::endl;
 			return;
 		}
+		
 	}
 	component->SetOwner(this);
 	m_components.push_back(component);

@@ -303,9 +303,10 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 				for (const auto& option : options)
 				{
 					if (ImGui::Button(option.c_str()))
-					{
+					{ 
+						/////need different way to account for shaders. 
 						std::string fPath = component->GetComponentFilePath(option);
-						std::shared_ptr<Component> comp = AssetManager::CreateComponentFromFilePath(fPath, selectedComponentType,option.c_str());
+						std::shared_ptr<Component> comp = AssetManager::CreateComponentFromFilePath(fPath, selectedComponentType,option.c_str()); ////CURRENTLY FAILS HERE WITH SHADERS 
 						SceneManager::GetSelectedGameObjectInActiveScene()->AddComponent(comp);
 						showComponentOptions = false;
 						ImGui::CloseCurrentPopup();

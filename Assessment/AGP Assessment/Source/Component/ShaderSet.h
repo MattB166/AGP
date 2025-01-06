@@ -2,8 +2,8 @@
 #include "../Component/Component.h"
 struct ShaderPath
 {
-	std::string vertexShaderPath;
 	std::string pixelShaderPath;
+	std::string vertexShaderPath;
 };
 class ShaderSet : public Component
 {
@@ -26,8 +26,8 @@ private:
 	ID3D11VertexShader* m_vertexShader;
 	ID3D11PixelShader* m_pixelShader;
 	ID3D11InputLayout* m_inputLayout;
-	std::string m_vertexShaderPath;
 	std::string m_pixelShaderPath;
+	std::string m_vertexShaderPath;
 	static std::vector<std::string> m_AvailableShaderNames; 
 	std::unordered_map<std::string, std::string> m_shaderPaths;
 	static std::unordered_map<std::string, ShaderPath> m_shaderNameToPaths;

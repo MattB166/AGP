@@ -57,6 +57,7 @@ std::shared_ptr<Component> AssetManager::CreateComponentFromFilePath(const std::
 	std::string path = filePath;
 	std::wstring wpath = std::wstring(path.begin(), path.end());
 	const wchar_t* wFilePath = wpath.c_str();
+	size_t delimiterPos = std::string::npos;
 
 	switch (type)
 	{
@@ -64,7 +65,18 @@ std::shared_ptr<Component> AssetManager::CreateComponentFromFilePath(const std::
 		return CreateModel(filePath.c_str(), name);
 		break;
 	case ComponentType::Shaders:
-		std::cout << "Cannot create shader set with only one filepath given." << std::endl; 
+		delimiterPos = filePath.find(';');
+		if (delimiterPos != std::string::npos)
+		{
+			std::string vsFilePath = filePath.substr(0, delimiterPos);
+			std::string psFilePath = filePath.substr(delimiterPos + 1);
+			return CreateShaderSet(std::wstring(vsFilePath.begin(), vsFilePath.end()).c_str(), std::wstring(psFilePath.begin(), psFilePath.end()).c_str(), name);
+		}
+		else
+		{
+			std::cout << "Invalid shader file path format. Expected format: 'vsPath;psPath'" << std::endl;
+			return nullptr;
+		}
 		break;
 	case ComponentType::Texture:
 		return CreateMaterial(wFilePath, name);
