@@ -1,6 +1,6 @@
 #include "Model.h"
-std::vector<std::string> Model::m_AvailableModelNames = {};
-std::unordered_map<std::string, std::string> Model::m_ModelNameToPath = {};
+std::vector<std::string> Model::m_AvailableModelNames;
+std::unordered_map<std::string, std::string> Model::m_ModelNameToPath;
 
 Model::Model(ID3D11Device* dev, ID3D11DeviceContext* devcon, ObjFileModel* model, const char* name) : Component(dev, devcon,name,ComponentType::Model), m_model(model)
 {
@@ -14,8 +14,8 @@ Model::Model(ID3D11Device* dev, ID3D11DeviceContext* devcon) : Component(dev, de
 Model::~Model()
 {
 	//clear maps
-	m_ModelNameToPath.clear();
-	m_AvailableModelNames.clear();
+	//m_ModelNameToPath.clear();
+	//m_AvailableModelNames.clear();
 	delete m_model;
 	m_model = nullptr;
 }

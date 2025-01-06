@@ -22,8 +22,8 @@ Material::Material(ID3D11Device* dev, ID3D11DeviceContext* devcon) : Component(d
 
 Material::~Material()
 {
-	m_AvailableTextureNames.clear();
-	m_textureNameToPath.clear();
+	//m_AvailableTextureNames.clear();
+	//m_textureNameToPath.clear();
 
 	if (m_texture)
 	{
@@ -61,7 +61,7 @@ void Material::LoadAllTextureNames(const std::string& path)
 			std::string textureName = filename.substr(0, filename.find_last_of('.'));
 			m_AvailableTextureNames.push_back(textureName);
 			m_textureNameToPath.insert(std::make_pair(textureName, entry.path().string()));
-			std::cout << "Loaded Model : " << textureName << "\n";
+			std::cout << "Loaded Texture : " << textureName << "\n";
 		}
 	}
 }

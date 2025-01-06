@@ -234,7 +234,14 @@ std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, 
 		}
 
 		//add vertex shader and input layout to map as a pair. 
-		auto shaderSet = std::make_shared<ShaderSet>(m_dev, m_devcon, vertexShader, pixelShader, inputLayout,name);
+		//convert wchar_t to string 
+		std::wstring vsWPath(vsPath);
+		std::wstring psWPath(psPath);
+		std::string SvsPath(vsWPath.begin(), vsWPath.end());
+		std::string SpsPath(psWPath.begin(), psWPath.end());
+
+
+		auto shaderSet = std::make_shared<ShaderSet>(m_dev, m_devcon, vertexShader, pixelShader, inputLayout,name,SvsPath,SpsPath);
 		std::string key = GenerateKeyForShaderSet(vsPath, psPath);
 		GetShaderSets().insert(std::make_pair(key, shaderSet));
 		std::cout << "Shader set created" << std::endl;
@@ -424,24 +431,29 @@ void AssetManager::UpdateConstantBuffer(CBuffer& cBuffer)
 
 std::shared_ptr<Component> AssetManager::CreateTemporaryComponentInstance(ComponentType type)
 {
+	std::shared_ptr<Component> component = nullptr;
+
 	switch (type)
 	{
 	case ComponentType::Model:
 		std::cout << "Creating temporary model" << std::endl;
-		return std::make_shared<Model>(m_dev, m_devcon);
+		component = std::make_shared<Model>(m_dev, m_devcon);
 		break;
 	case ComponentType::Shaders:
 		std::cout << "Creating temporary shader set" << std::endl;
-		return std::make_shared<ShaderSet>(m_dev, m_devcon);
+		component = std::make_shared<ShaderSet>(m_dev, m_devcon);
 		break;
 	case ComponentType::Texture:
 		std::cout << "Creating temporary material" << std::endl;
-		return std::make_shared<Material>(m_dev, m_devcon);
+		component = std::make_shared<Material>(m_dev, m_devcon);
 		break;
 	default:
-		return nullptr;
+		std::cout << "Invalid component type" << std::endl;
 		break;
 	}
+
+	return component;
+
 }
 
 

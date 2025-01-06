@@ -32,6 +32,7 @@ public:
 	void SetupEditBindings();
 	void SetupPlayBindings();
 	void HandleInput();
+	void AddComponent(ComponentType type);
 
 
 

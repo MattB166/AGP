@@ -71,6 +71,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 	SkyBox::LoadAllSkyBoxNames("Source/SavedSkyBoxTextures");
 	Model::LoadAllModelNames("Source/SavedModels"); // should work? 
 	Material::LoadAllTextureNames("Source/SavedTextures");
+	ShaderSet::LoadAllShaderNames("Source/Shaders/StandardShader"); 
 	//do the same for textures and shaders.
 	//and skyboxes 
 
@@ -269,23 +270,16 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			if (ImGui::BeginPopupModal("Add Component",nullptr,ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 			{
 				std::vector<ComponentType> types = Component::GetTypes();
-				bool chosen = false;
 				for (auto type : types)
 				{
 					std::string typeName = Component::ComponentTypeToString(type);
 					if (ImGui::Button(typeName.c_str()))
 					{
-						showComponentOptions = true;
 						selectedComponentType = type;
-						component = AssetManager::CreateTemporaryComponentInstance(type);
-						if (!component)
-						{
-							std::cout << "Component is null" << std::endl;
-							ImGui::CloseCurrentPopup();
-							continue;
-						}
-						options = component->GetComponentOptions();
 						std::cout << "Selected Component Type: " << typeName << std::endl;
+						showComponentOptions = true;
+						
+						AddComponent(selectedComponentType);
 						ImGui::CloseCurrentPopup();
 					}
 					
@@ -294,7 +288,6 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 				ImGui::SameLine();
 				if (ImGui::Button("Cancel", ImVec2(120, 0)))
 				{
-					//options.clear();
 					showComponentOptions = false;
 					ImGui::CloseCurrentPopup();
 				}
@@ -306,26 +299,25 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			}
 			if (ImGui::BeginPopupModal("Component Options"))
 			{
-				std::string selectedComponentTypeString = Component::ComponentTypeToString(selectedComponentType);
-				ImGui::Text("Select a %s", selectedComponentTypeString.c_str());
-				
-				for (auto option : options)
+				//show options for the selected component type.
+				for (const auto& option : options)
 				{
 					if (ImGui::Button(option.c_str()))
 					{
-						std::string filePath = component->GetComponentFilePath(option);
-						std::shared_ptr<Component> newComponent = AssetManager::CreateComponentFromFilePath(filePath, selectedComponentType, option.c_str());
-						SceneManager::GetSelectedGameObjectInActiveScene()->AddComponent(newComponent);
+						std::string fPath = component->GetComponentFilePath(option);
+						std::shared_ptr<Component> comp = AssetManager::CreateComponentFromFilePath(fPath, selectedComponentType,option.c_str());
+						SceneManager::GetSelectedGameObjectInActiveScene()->AddComponent(comp);
 						showComponentOptions = false;
-						selectedComponentType = ComponentType::None;
 						ImGui::CloseCurrentPopup();
+
 					}
 				}
+			
 				ImGui::Separator();
 				if (ImGui::Button("Cancel", ImVec2(120, 0)))
 				{
 					showComponentOptions = false;
-					options.clear();
+					//options.clear();
 					ImGui::CloseCurrentPopup();
 				}
 
@@ -434,4 +426,24 @@ void Application::HandleInput()
 	m_inputManager->ProcessKeyboardInput(kbState);
 	m_inputManager->ProcessMouseInput(mouseState);
 	
+}
+
+void Application::AddComponent(ComponentType type)
+{
+	options.clear();
+	component = AssetManager::CreateTemporaryComponentInstance(type);
+	if (component)
+	{
+		options = component->GetComponentOptions(); 
+		std::cout << "Options size" << options.size() << std::endl;
+		for (const auto& option : options)
+		{
+			std::cout << option << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "Component is null" << std::endl;
+	}
+		
 }
