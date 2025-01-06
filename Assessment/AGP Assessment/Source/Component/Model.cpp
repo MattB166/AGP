@@ -44,7 +44,7 @@ void Model::LoadAllModelNames(const std::string& path)
 			std::string modelName = filename.substr(0, filename.find_last_of('.'));
 			m_AvailableModelNames.push_back(modelName);
 			m_ModelNameToPath.insert(std::make_pair(modelName, entry.path().string()));
-			std::cout << "Loaded Model : " << modelName << "\n";
+			std::cout << "Loaded Model Name : " << modelName << "\n";
 		}
 	}
 }

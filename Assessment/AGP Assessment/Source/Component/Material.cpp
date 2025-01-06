@@ -61,7 +61,7 @@ void Material::LoadAllTextureNames(const std::string& path)
 			std::string textureName = filename.substr(0, filename.find_last_of('.'));
 			m_AvailableTextureNames.push_back(textureName);
 			m_textureNameToPath.insert(std::make_pair(textureName, entry.path().string()));
-			std::cout << "Loaded Texture : " << textureName << "\n";
+			std::cout << "Loaded Texture Name : " << textureName << "\n";
 		}
 	}
 }

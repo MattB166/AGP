@@ -10,6 +10,7 @@ ShaderSet::ShaderSet(ID3D11Device* dev, ID3D11DeviceContext* devcon, ID3D11Verte
 	m_vertexShaderPath(vsPath),
 	m_pixelShaderPath(psPath)
 {
+	//std::cout << "Path: " << vsPath << " " << psPath << std::endl;
 }
 
 ShaderSet::ShaderSet(ID3D11Device* dev, ID3D11DeviceContext* devcon) :
@@ -49,7 +50,7 @@ void ShaderSet::LoadAllShaderNames(const std::string& path)
 			std::string filename = entry.path().filename().string();
 			std::string folderName = entry.path().parent_path().filename().string();
 			std::string shaderName = filename.substr(0, filename.find_last_of('.'));
-			std::cout << "Folder Name of this shader: " + folderName << std::endl; 
+			std::cout << "Folder Name of this shader: " + folderName << std::endl;
 		}
 	}
 }
