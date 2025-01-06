@@ -117,7 +117,7 @@ std::shared_ptr<Material> AssetManager::CreateMaterial(const wchar_t* texturePat
 		GetMaterials().insert(std::make_pair(texturePath, material));
 		return material;
 	}
-
+	return nullptr;
 }
 
 std::shared_ptr<Model> AssetManager::CreateModel(const char* modelPath, const char* name)
@@ -136,6 +136,7 @@ std::shared_ptr<Model> AssetManager::CreateModel(const char* modelPath, const ch
 		return model;
 
 	}
+	return nullptr;
 	
 }
 
@@ -155,6 +156,7 @@ ObjFileModel* AssetManager::CreateObjFileModel(const char* modelPath)
 		GetObjFileModels().insert(std::make_pair(modelPath, model));
 		return model;
 	}
+	return nullptr;
 }
 
 std::shared_ptr<SpriteFont> AssetManager::MakeFont(const wchar_t* fontPath)
@@ -267,7 +269,7 @@ std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, 
 		return shaderSet;
 
 	}
-
+	return nullptr;
 	
 }
 
@@ -416,6 +418,7 @@ std::shared_ptr<ID3D11ShaderResourceView> AssetManager::CreateDDSTexture(const w
 		GetDDSTextures().insert(std::make_pair(texturePath, sharedTexture));
 		return sharedTexture;
 	}
+	return nullptr;
 }
 
 void AssetManager::CreateConstantBuffer()
@@ -533,6 +536,7 @@ bool AssetManager::IsDDSTextureLoaded(const wchar_t& texturePath)
 			return true;
 		}
 	}
+	return false;
 }
 
 bool AssetManager::IsVertexShaderLoaded(const wchar_t& vsPath)
@@ -556,6 +560,7 @@ bool AssetManager::IsPixelShaderLoaded(const wchar_t& psPath)
 			return true;
 		}
 	}
+	return false;
 }
 
 bool AssetManager::IsObjFileModelLoaded(const char& modelPath)
@@ -567,6 +572,7 @@ bool AssetManager::IsObjFileModelLoaded(const char& modelPath)
 			return true;
 		}
 	}
+	return false;
 }
 
 
@@ -614,6 +620,7 @@ std::shared_ptr<ID3D11ShaderResourceView> AssetManager::RetrieveDDSTexture(const
 	{
 		return it->second;
 	}
+	return nullptr;
 }
 
 std::shared_ptr<ID3D11VertexShader> AssetManager::RetrieveVertexShader(const wchar_t& vsPath)
@@ -623,6 +630,7 @@ std::shared_ptr<ID3D11VertexShader> AssetManager::RetrieveVertexShader(const wch
 	{
 		return it->second;
 	}
+	return nullptr;
 }
 
 std::shared_ptr<ID3D11PixelShader> AssetManager::RetrievePixelShader(const wchar_t& psPath)
@@ -632,6 +640,7 @@ std::shared_ptr<ID3D11PixelShader> AssetManager::RetrievePixelShader(const wchar
 	{
 		return it->second;
 	}
+	return nullptr;
 }
 
 ObjFileModel* AssetManager::RetrieveObjFileModel(const char& modelPath)
@@ -641,6 +650,7 @@ ObjFileModel* AssetManager::RetrieveObjFileModel(const char& modelPath)
 	{
 		return it->second;
 	}
+	return nullptr;
 }
 
 std::string AssetManager::GenerateKeyForShaderSet(const wchar_t* vsPath, const wchar_t* psPath)

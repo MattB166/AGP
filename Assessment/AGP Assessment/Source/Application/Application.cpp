@@ -69,7 +69,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 	AssetManager::Initialize(m_renderer->GetDevice(), m_renderer->GetDeviceContext(),m_renderer->GetCBuffer());
 
 	SkyBox::LoadAllSkyBoxNames("Source/SavedSkyBoxTextures");
-	Model::LoadAllModelNames("Source/SavedModels"); // should work? 
+	Model::LoadAllModelNames("Source/SavedModels");  
 	Material::LoadAllTextureNames("Source/SavedTextures");
 	ShaderSet::LoadAllShaderNames("CompiledShaders/StandardShader"); 
 	//do the same for textures and shaders.
@@ -93,8 +93,9 @@ void Application::Run()
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
 	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
-	/*GameObject* go = new GameObject("Test Object");
-	std::shared_ptr<Model> model = AssetManager::CreateModel("Source/SavedModels/cube.obj","Cube");
+	//GameObject* go = new GameObject("Test Object");
+	//std::make_unique<GameObject>("Test Object");
+	/*std::shared_ptr<Model> model = AssetManager::CreateModel("Source/SavedModels/cube.obj","Cube");
 	std::shared_ptr<ShaderSet> shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso","Standard Shader");
 	std::shared_ptr<Material> material = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp","Box Texture");
 	go->AddComponent(material);
