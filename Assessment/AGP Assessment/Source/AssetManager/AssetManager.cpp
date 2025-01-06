@@ -54,6 +54,10 @@ void AssetManager::CleanUp()
 
 std::shared_ptr<Component> AssetManager::CreateComponentFromFilePath(const std::string& filePath, ComponentType type, const char* name)
 {
+	std::string path = filePath;
+	std::wstring wpath = std::wstring(path.begin(), path.end());
+	const wchar_t* wFilePath = wpath.c_str();
+
 	switch (type)
 	{
 	case ComponentType::Model:
@@ -63,7 +67,7 @@ std::shared_ptr<Component> AssetManager::CreateComponentFromFilePath(const std::
 		std::cout << "Cannot create shader set with only one filepath given." << std::endl; 
 		break;
 	case ComponentType::Texture:
-		return CreateMaterial(std::wstring(filePath.begin(), filePath.end()).c_str(), name);
+		return CreateMaterial(wFilePath, name);
 		break;
 	default:
 		break;
@@ -78,6 +82,11 @@ std::shared_ptr<Component> AssetManager::CreateComponentFromFilePath(const std::
 
 std::shared_ptr<Material> AssetManager::CreateMaterial(const wchar_t* texturePath, const char* name)
 {
+	if (texturePath == nullptr)
+	{
+		std::cout << "Texture path is null" << std::endl;
+		return nullptr;
+	}
 	if (IsMaterialLoaded(*texturePath))
 	{
 		return RetrieveMaterial(*texturePath);
@@ -85,7 +94,13 @@ std::shared_ptr<Material> AssetManager::CreateMaterial(const wchar_t* texturePat
 	else
 	{
 		ID3D11ShaderResourceView* texture = nullptr;
-		DirectX::CreateWICTextureFromFile(m_dev, m_devcon, texturePath, nullptr, &texture);
+		HRESULT hr = DirectX::CreateWICTextureFromFile(m_dev, m_devcon, texturePath, nullptr, &texture);
+		if (FAILED(hr))
+		{
+			OutputDebugString(L"Failed to create WIC texture");
+			std::cout << "Failed to create WIC texture" << std::endl;
+			return nullptr;
+		}
 		std::shared_ptr<Material> material = std::make_shared<Material>(m_dev, m_devcon, texture,name);
 		GetMaterials().insert(std::make_pair(texturePath, material));
 		return material;
@@ -412,15 +427,19 @@ std::shared_ptr<Component> AssetManager::CreateTemporaryComponentInstance(Compon
 	switch (type)
 	{
 	case ComponentType::Model:
+		std::cout << "Creating temporary model" << std::endl;
 		return std::make_shared<Model>(m_dev, m_devcon);
 		break;
 	case ComponentType::Shaders:
+		std::cout << "Creating temporary shader set" << std::endl;
 		return std::make_shared<ShaderSet>(m_dev, m_devcon);
 		break;
 	case ComponentType::Texture:
+		std::cout << "Creating temporary material" << std::endl;
 		return std::make_shared<Material>(m_dev, m_devcon);
 		break;
 	default:
+		return nullptr;
 		break;
 	}
 }

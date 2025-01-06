@@ -21,5 +21,6 @@ private:
 	ID3D11PixelShader* m_pixelShader;
 	ID3D11InputLayout* m_inputLayout;
 	static std::vector<std::string> m_AvailableShaderNames; 
+
 };
 

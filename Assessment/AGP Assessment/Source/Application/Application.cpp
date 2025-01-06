@@ -70,6 +70,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 
 	SkyBox::LoadAllSkyBoxNames("Source/SavedSkyBoxTextures");
 	Model::LoadAllModelNames("Source/SavedModels"); // should work? 
+	Material::LoadAllTextureNames("Source/SavedTextures");
 	//do the same for textures and shaders.
 	//and skyboxes 
 
@@ -180,8 +181,7 @@ void Application::SwitchMode()
 
 void Application::RunMode() //also in here run all logic for choosing objects and editing them. 
 {
-	static std::shared_ptr<Component> component = nullptr;
-	static std::vector<std::string> options = {};
+	
 	if (m_mode == Mode::EDIT)
 	{
 		
@@ -263,7 +263,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			
 			if (ImGui::Button("Add Component"))
 			{
-				selectedComponentType = ComponentType::None;
+				//selectedComponentType = ComponentType::None;
 				ImGui::OpenPopup("Add Component");
 			}
 			if (ImGui::BeginPopupModal("Add Component",nullptr,ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
@@ -278,6 +278,12 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 						showComponentOptions = true;
 						selectedComponentType = type;
 						component = AssetManager::CreateTemporaryComponentInstance(type);
+						if (!component)
+						{
+							std::cout << "Component is null" << std::endl;
+							ImGui::CloseCurrentPopup();
+							continue;
+						}
 						options = component->GetComponentOptions();
 						std::cout << "Selected Component Type: " << typeName << std::endl;
 						ImGui::CloseCurrentPopup();
@@ -288,6 +294,8 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 				ImGui::SameLine();
 				if (ImGui::Button("Cancel", ImVec2(120, 0)))
 				{
+					//options.clear();
+					showComponentOptions = false;
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::EndPopup();
@@ -317,6 +325,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 				if (ImGui::Button("Cancel", ImVec2(120, 0)))
 				{
 					showComponentOptions = false;
+					options.clear();
 					ImGui::CloseCurrentPopup();
 				}
 

@@ -52,6 +52,8 @@ private:
 	bool followSelectedObject = false;
     ComponentType selectedComponentType;
 	bool showComponentOptions = false;
+    std::shared_ptr<Component> component = nullptr;
+	std::vector<std::string> options = {};
 
 
 #pragma	endregion

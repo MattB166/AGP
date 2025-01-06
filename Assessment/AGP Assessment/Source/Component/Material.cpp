@@ -22,6 +22,9 @@ Material::Material(ID3D11Device* dev, ID3D11DeviceContext* devcon) : Component(d
 
 Material::~Material()
 {
+	m_AvailableTextureNames.clear();
+	m_textureNameToPath.clear();
+
 	if (m_texture)
 	{
 		m_texture->Release();
@@ -65,5 +68,10 @@ void Material::LoadAllTextureNames(const std::string& path)
 
 std::string Material::GetComponentFilePath(const std::string& name) const
 {
-	return std::string();
+	auto it = m_textureNameToPath.find(name);
+	if (it != m_textureNameToPath.end())
+	{
+		return it->second;
+	}
+	return "";
 }
