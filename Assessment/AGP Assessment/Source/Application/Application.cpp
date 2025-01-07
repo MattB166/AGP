@@ -92,7 +92,8 @@ void Application::Run()
 	SceneManager::SetActiveScene(L"Scene1");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
-	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
+	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/CustomSpace.dds");
+	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/CustomSpace.dds");
 	//GameObject* go = new GameObject("Test Object");
 	//std::make_unique<GameObject>("Test Object");
 	/*std::shared_ptr<Model> model = AssetManager::CreateModel("Source/SavedModels/cube.obj","Cube");
@@ -194,16 +195,20 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 		{
 			SceneManager::CycleActiveScene();
 		}
+		if (ImGui::Button("Add Skybox"))
+		{
+			ImGui::OpenPopup("Add SkyBox");
+		}
+		if (ImGui::Button("Cycle SkyBox"))
+		{
+			SceneManager::CycleSceneSkyBox();
+		}
 		if (SceneManager::GetActiveScene()->GetObjectCount() > 1)
 		{
 			if (ImGui::Button("Cycle Object"))
 			{
 				SceneManager::CycleGameObjectsInActiveScene();
 			}
-		}
-		if (ImGui::Button("Add SkyBox"))
-		{
-			ImGui::OpenPopup("Add SkyBox");
 		}
 		if (ImGui::Button("Play"))
 		{
@@ -414,8 +419,10 @@ void Application::SetupModeBindings()
 		else if (m_mode == Mode::PLAY)
 		{
 			m_inputManager->BindMouseMovement([](int x, int y) {SceneManager::RotateActiveSceneCamera(x,y); });
-			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::D, BindingData([]() {SceneManager::MoveActiveSceneCamera(0.1f, 0.0f, 0.0f); }, KeyState::Held));
-
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::D, BindingData([]() {SceneManager::MoveActiveSceneCamera(0.1f, 0.0f, 0.0f); }, KeyState::Held));
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::A, BindingData([]() {SceneManager::MoveActiveSceneCamera(-0.1f, 0.0f, 0.0f); }, KeyState::Held));
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::W, BindingData([]() {SceneManager::MoveActiveSceneCamera(0.0f, 0.0f, 0.1f); }, KeyState::Held));
+			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::S, BindingData([]() {SceneManager::MoveActiveSceneCamera(0.0f, 0.0f, -0.1f); }, KeyState::Held));
 			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Escape, BindingData(std::bind(&Application::ChangeMouseMode, this), KeyState::Pressed));
 			//mouse.SetMode(DirectX::Mouse::MODE_RELATIVE);
 			// Add play mode specific bindings here

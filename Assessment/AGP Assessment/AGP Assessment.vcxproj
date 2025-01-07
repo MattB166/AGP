@@ -276,6 +276,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Source\SavedSkyBoxTextures\CustomSpace.dds" />
     <Image Include="Source\SavedSkyBoxTextures\skybox01.dds" />
     <Image Include="Source\SavedSkyBoxTextures\skybox02.dds" />
   </ItemGroup>

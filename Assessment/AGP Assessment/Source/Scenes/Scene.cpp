@@ -76,8 +76,14 @@ void Scene::RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb)
 void Scene::AddGameObject(std::unique_ptr<GameObject> obj)
 {
 	//add the gameobject to the scene.
+	static int count = 0;
+	std::string BaseName = obj->GetName();
+	std::string uniqueName = BaseName + std::to_string(count);
+
+	obj->SetName(uniqueName.c_str());
 
 	m_gameObjects.push_back(std::move(obj));
+	count++;
 	//if there is only one gameobject, set it to the selected gameobject.
 	if (m_gameObjects.size() == 1)
 	{

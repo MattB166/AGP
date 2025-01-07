@@ -122,5 +122,5 @@ void Camera::MoveCamera(float x, float y, float z)
 	zPos += XMVectorGetZ(movement) * deltaTime * speed;
 
 	
-	std::cout << "Camera Position: " << xPos << " " << yPos << " " << zPos << std::endl;
+	//std::cout << "Camera Position: " << xPos << " " << yPos << " " << zPos << std::endl;
 }
