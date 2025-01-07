@@ -35,12 +35,6 @@ void Scene::Update()
 {
 	if (m_deletionQueue.size() > 0)
 	{
-		//for each gameobject in the deletion queue, remove it from the scene.
-		for (auto& go : m_deletionQueue)
-		{
-			
-			std::cout << "Gameobject Deleted" << std::endl;
-		}
 		m_deletionQueue.clear();
 		std::cout << "Deletion queue size: " << m_deletionQueue.size() << std::endl;
 		std::cout << "Game Objects in Scene: " << m_gameObjects.size() << std::endl;

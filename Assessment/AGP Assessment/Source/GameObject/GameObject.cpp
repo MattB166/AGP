@@ -11,6 +11,7 @@ GameObject::~GameObject()
 {
 	//clear components
 	m_components.clear();
+	std::cout << "Gameobject Deleted" << std::endl;
 
 }
 
