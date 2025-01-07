@@ -38,6 +38,12 @@ public:
 	void ChangeYPosition(float y) { m_transform.pos.y += y; }
 	void ChangeXPosition(float x) { m_transform.pos.x += x; }
 	void ChangeZPosition(float z) { m_transform.pos.z += z; }
+	void ChangeXScl(float x) { m_transform.scl.x += x; }
+	void ChangeYScl(float y) { m_transform.scl.y += y; }
+	void ChangeZScl(float z) { m_transform.scl.z += z; }
+	void ChangeXRot(float x) { m_transform.rot.x += x; }
+	void ChangeYRot(float y) { m_transform.rot.y += y; }
+	void ChangeZRot(float z) { m_transform.rot.z += z; }
 	void ChangeAmbientLight(float value) { BasicAmbientLightValue += value; }
 	void ToggleReflectiveObject(); 
 

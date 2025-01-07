@@ -112,7 +112,30 @@ void GameObject::ShowComponentDebugWindow()
 	ImGui::DragFloat("Position X", &m_transform.pos.x, DebugMovementSnappingValue, -30.0f, 30.0f,"%.3f");
 	ImGui::DragFloat("Position Y", &m_transform.pos.y, DebugMovementSnappingValue, - 30.0f, 30.0f, "%.3f");
 	ImGui::DragFloat("Position Z", &m_transform.pos.z, DebugMovementSnappingValue, - 30.0f, 30.0f, "%.3f");
+	if (ImGui::Button("Reset Position"))
+	{
+		m_transform.pos = { 0,0,3 };
+	}
 
+
+	ImGui::Text("Rotation : %f %f %f", m_transform.rot.x, m_transform.rot.y, m_transform.rot.z);
+	ImGui::DragFloat("Rotation X", &m_transform.rot.x, 0.01f, -XM_2PI, XM_2PI, "%.3f");
+	ImGui::DragFloat("Rotation Y", &m_transform.rot.y, 0.01f, -XM_2PI, XM_2PI, "%.3f");
+	ImGui::DragFloat("Rotation Z", &m_transform.rot.z, 0.01f, -XM_2PI, XM_2PI, "%.3f");
+	if (ImGui::Button("Reset Rotation"))
+	{
+		m_transform.rot = { 0,0,0 };
+	}
+
+
+	ImGui::Text("Scale : %f %f %f", m_transform.scl.x, m_transform.scl.y, m_transform.scl.z);
+	ImGui::DragFloat("Scale X", &m_transform.scl.x, 0.01f, 0.1f, 10.0f, "%.3f");
+	ImGui::DragFloat("Scale Y", &m_transform.scl.y, 0.01f, 0.1f, 10.0f, "%.3f");
+	ImGui::DragFloat("Scale Z", &m_transform.scl.z, 0.01f, 0.1f, 10.0f, "%.3f");
+	if (ImGui::Button("Reset Scale"))
+	{
+		m_transform.scl = { 1,1,1 };
+	}
 	
 	ImGui::SliderFloat("Ambient Light", &BasicAmbientLightValue, 0.0f, 1.0f);
 

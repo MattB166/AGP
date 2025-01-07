@@ -275,13 +275,13 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			{
 				SceneManager::SetActiveSceneCameraTarget(x, y, z, true);
 			}
-			if (ImGui::Button("Reset Position"))
+			/*if (ImGui::Button("Reset Position"))
 			{
 				followSelectedObject = false;
 				SceneManager::SetActiveSceneCameraTarget(0.0f, 0.0f, 0.0f, false);
 				SceneManager::ResetActiveObjectPosition();
 				SceneManager::ResetActiveSceneCamera();
-			}
+			}*/
 			//combo for adding components of type, and then choice of different options within that type, to the selected object.
            //if object is selected, show the components of that object, and allow for adding new components to that object.
 			
