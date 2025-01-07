@@ -11,12 +11,6 @@ GameObject::~GameObject()
 {
 	//clear components
 	m_components.clear();
-	if (m_name)
-	{
-		delete m_name;
-		m_name = nullptr;
-	}
-
 
 }
 

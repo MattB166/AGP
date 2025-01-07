@@ -41,8 +41,10 @@ void Scene::Update()
 			
 			std::cout << "Gameobject Deleted" << std::endl;
 		}
-		//m_deletionQueue.clear();
+		m_deletionQueue.clear();
 		std::cout << "Deletion queue size: " << m_deletionQueue.size() << std::endl;
+		std::cout << "Game Objects in Scene: " << m_gameObjects.size() << std::endl;
+
 	}
 }
 
@@ -114,7 +116,7 @@ void Scene::RemoveActiveGameObject()
 	{
 		m_deletionQueue.push_back(std::move(m_gameObjects[m_selectedObjectIndex]));
 		m_gameObjects.erase(m_gameObjects.begin() + m_selectedObjectIndex);
-		std::cout << "Game Objects in Scene: " << m_gameObjects.size() << std::endl;
+		//std::cout << "Game Objects in Scene: " << m_gameObjects.size() << std::endl;
 		//std::cout << "Gameobject Removed" << std::endl;
 	}
 

@@ -43,11 +43,11 @@ public:
 
 
 	Transform GetTransform() { return m_transform; }
-	const char* GetName() { return m_name; }
+	const char* GetName() { return m_name.c_str(); }
 
 
 private:
-	const char* m_name; 
+	std::string m_name; 
 	Transform m_transform;
 	CBuffer m_constantBuffer;  //only one type of cbuffer required for gameobject. shader will know what to do with it. 
 	std::vector<std::shared_ptr<Component>> m_components;
