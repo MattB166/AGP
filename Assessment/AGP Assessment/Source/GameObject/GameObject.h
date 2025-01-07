@@ -39,6 +39,7 @@ public:
 	void ChangeXPosition(float x) { m_transform.pos.x += x; }
 	void ChangeZPosition(float z) { m_transform.pos.z += z; }
 	void ChangeAmbientLight(float value) { BasicAmbientLightValue += value; }
+	void ToggleReflectiveObject(); 
 
 
 	Transform GetTransform() { return m_transform; }
@@ -52,5 +53,7 @@ private:
 	std::vector<std::shared_ptr<Component>> m_components;
 	float BasicAmbientLightValue = 0.5f;
 	float DebugMovementSnappingValue = 0.05f;
+	bool m_reflectiveObject = false; 
+	std::shared_ptr<Component> temp = nullptr;
 };
 

@@ -26,6 +26,10 @@ void GameObject::Initialise()
 	m_transform.pos = { 0,0,3 };
 	m_transform.rot = { 0,0,0 }; 
 	m_transform.scl = { 1,1,1 };
+	std::shared_ptr<ShaderSet> shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso", "Standard Shader");
+	AddComponent(shaderSet);
+	std::shared_ptr<Material> mat = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp", "Box Texture");
+	AddComponent(mat);
 }
 
 void GameObject::AddComponent(std::shared_ptr<Component> component)
@@ -46,7 +50,7 @@ void GameObject::AddComponent(std::shared_ptr<Component> component)
 		if (comp->GetType() == component->GetType())
 		{
 			std::cout << "Component already exists" << std::endl;
-			return;
+			RemoveComponent(comp);
 		}
 		
 	}
@@ -122,7 +126,49 @@ void GameObject::ShowComponentDebugWindow()
 			component->ShowDebugWindow();
 		}
 	}
+	ImGui::Checkbox("Reflective Object", &m_reflectiveObject);
 	
+
+	if (ImGui::Button("Edit Component"))
+	{
+		//selectedComponentType = ComponentType::None;
+		ImGui::OpenPopup("Components");
+	}
+	if (ImGui::BeginPopupModal("Components", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+	{
+		std::vector<ComponentType> types = Component::GetTypes();
+		types.erase(std::remove(types.begin(), types.end(), ComponentType::Shaders), types.end()); //dont want to manually be messing with shaders. will let behind the scenes handle it. 
+		for (auto type : types)
+		{
+			if (ImGui::Button(Component::ComponentTypeToString(type).c_str()))
+			{
+				//give options to switch component type 
+				ImGui::CloseCurrentPopup();
+			}
+		}
+		
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+}
+
+void GameObject::ToggleReflectiveObject()
+{
+	m_reflectiveObject = !m_reflectiveObject;
+
+	if (m_reflectiveObject)
+	{
+		//AssetManager::CreateShaderSet
+	}
+	else
+	{
+		std::shared_ptr<ShaderSet> shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso", "Standard Shader");
+		AddComponent(shaderSet);
+	}
 }
 
 

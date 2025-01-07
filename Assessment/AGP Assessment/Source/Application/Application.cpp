@@ -271,6 +271,8 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			if (ImGui::BeginPopupModal("Add Component",nullptr,ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 			{
 				std::vector<ComponentType> types = Component::GetTypes();
+				types.erase(std::remove(types.begin(), types.end(), ComponentType::Shaders), types.end());
+				types.erase(std::remove(types.begin(), types.end(), ComponentType::Texture), types.end());
 				for (auto type : types)
 				{
 					std::string typeName = Component::ComponentTypeToString(type);
