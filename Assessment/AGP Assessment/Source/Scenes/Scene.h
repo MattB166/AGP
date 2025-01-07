@@ -3,6 +3,7 @@
 #include "../Camera/Camera.h"
 #include "../SkyBox/SkyBox.h"
 #include <memory>
+#include <queue>
 
 class Scene //controls all current gameobjects in the scene. 
 {
@@ -10,11 +11,13 @@ public:
 	Scene(const std::wstring name); //constructor for the scene.
 	~Scene(); //destructor for the scene.
 	void Initialize(); //initialize the scene.
+	void Update(); //update the scene and process deletions. 
 	void ShowDebugWindow(); //show the debug window for the scene.
 	void ChangeActiveSkyBox(std::shared_ptr<SkyBox> sb); //change the skybox texture.
 	void AddSkyBoxToScene(std::shared_ptr<SkyBox> sb); //add a skybox to the scene.
 	void RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb); //remove a skybox from the scene.
 	void AddGameObject(std::unique_ptr<GameObject> obj); //add a gameobject to the scene.
+	void RemoveActiveGameObject(); //remove a gameobject from the scene.
 	void CycleThroughSkyBoxes(); //cycle through the skyboxes in the scene.
 	void DrawStatics(); //draw all gameobjects in the scene. 
 	void CycleSelectedGameObject(); //cycle through the gameobjects in the scene. 
@@ -42,5 +45,8 @@ private:
 
 	std::wstring m_name; //name of the scene.
 	//think about a set position for previewing objects, and moving the camera around the scene. 
+
+	//deletion queue for gameobjects.
+	std::vector<std::unique_ptr<GameObject>> m_deletionQueue;
 };
 

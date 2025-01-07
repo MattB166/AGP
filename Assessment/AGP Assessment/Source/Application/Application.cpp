@@ -125,6 +125,7 @@ void Application::Run()
 			RunMode();
 			//draw current scene.
 			//draw scene preview.
+			SceneManager::GetActiveScene()->Update();
 			SceneManager::DrawScenePreview();
 
 			ImGui::Render();
@@ -217,6 +218,13 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 		if (ImGui::Button("Add GameObject"))
 		{
 			ImGui::OpenPopup("New GameObject");
+		}
+		if (SceneManager::GetActiveScene()->GetObjectCount() > 0)
+		{
+			if (ImGui::Button("Remove GameObject"))
+			{
+				SceneManager::GetActiveScene()->RemoveActiveGameObject();
+			}
 		}
 		if (ImGui::BeginPopupModal("New GameObject"))
 		{
@@ -344,7 +352,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			//ImGui::EndPopup();
 			
 			
-			ImGui::SetWindowPos(ImVec2(0, 170));
+			ImGui::SetWindowPos(ImVec2(0, 180));
 			ImGui::End();
 		}
 		

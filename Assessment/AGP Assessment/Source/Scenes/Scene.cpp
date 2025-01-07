@@ -31,6 +31,21 @@ void Scene::Initialize()
 
 }
 
+void Scene::Update()
+{
+	if (m_deletionQueue.size() > 0)
+	{
+		//for each gameobject in the deletion queue, remove it from the scene.
+		for (auto& go : m_deletionQueue)
+		{
+			
+			std::cout << "Gameobject Deleted" << std::endl;
+		}
+		//m_deletionQueue.clear();
+		std::cout << "Deletion queue size: " << m_deletionQueue.size() << std::endl;
+	}
+}
+
 void Scene::ChangeActiveSkyBox(std::shared_ptr<SkyBox> sb)
 {
 	//if the skybox is not null, set it to the active skybox.
@@ -90,6 +105,19 @@ void Scene::AddGameObject(std::unique_ptr<GameObject> obj)
 		m_selectedGameObject = m_gameObjects[0].get();
 		//std::cout << "Selected Gameobject Changed" << std::endl;
 	}
+}
+
+void Scene::RemoveActiveGameObject()
+{
+	//add the object to deletion queue and remove from the scene.
+	if (m_selectedGameObject)
+	{
+		m_deletionQueue.push_back(std::move(m_gameObjects[m_selectedObjectIndex]));
+		m_gameObjects.erase(m_gameObjects.begin() + m_selectedObjectIndex);
+		std::cout << "Game Objects in Scene: " << m_gameObjects.size() << std::endl;
+		//std::cout << "Gameobject Removed" << std::endl;
+	}
+
 }
 
 void Scene::CycleThroughSkyBoxes()
