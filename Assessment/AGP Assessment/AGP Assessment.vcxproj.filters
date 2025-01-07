@@ -182,6 +182,8 @@
     <FxCompile Include="Source\Shaders\StandardShader\PixelShader.hlsl" />
     <FxCompile Include="Source\Shaders\SkyBoxShaders\SkyBoxPShader.hlsl" />
     <FxCompile Include="Source\Shaders\SkyBoxShaders\SkyBoxVShader.hlsl" />
+    <FxCompile Include="Source\Shaders\ReflectiveShader\ReflectiveVertexShader.hlsl" />
+    <FxCompile Include="Source\Shaders\ReflectiveShader\ReflectivePixelShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\SavedSkyBoxTextures\skybox01.dds" />

@@ -76,12 +76,13 @@ void Scene::RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb)
 void Scene::AddGameObject(std::unique_ptr<GameObject> obj)
 {
 	//add the gameobject to the scene.
+
 	m_gameObjects.push_back(std::move(obj));
 	//if there is only one gameobject, set it to the selected gameobject.
 	if (m_gameObjects.size() == 1)
 	{
 		m_selectedGameObject = m_gameObjects[0].get();
-		std::cout << "Selected Gameobject Changed" << std::endl;
+		//std::cout << "Selected Gameobject Changed" << std::endl;
 	}
 }
 
@@ -123,9 +124,12 @@ void Scene::CycleSelectedGameObject()
 	{
 		return;
 	}
-	const int CurrentIndex = m_selectedObjectIndex;
-	const int NextIndex = (m_selectedObjectIndex + 1) % m_gameObjects.size();
-	m_selectedGameObject = m_gameObjects[NextIndex].get();
+	//cycle through the gameobjects.
+	m_selectedObjectIndex = (m_selectedObjectIndex + 1) % m_gameObjects.size();
+	m_selectedGameObject = m_gameObjects[m_selectedObjectIndex].get();
+	std::cout << "Selected Gameobject Changed to: " << m_selectedGameObject->GetName() << std::endl;
+
+
 }
 
 void Scene::MoveActiveCamera(float x, float y, float z)

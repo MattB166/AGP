@@ -194,6 +194,13 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 		{
 			SceneManager::CycleActiveScene();
 		}
+		if (SceneManager::GetActiveScene()->GetObjectCount() > 1)
+		{
+			if (ImGui::Button("Cycle Object"))
+			{
+				SceneManager::CycleGameObjectsInActiveScene();
+			}
+		}
 		if (ImGui::Button("Add SkyBox"))
 		{
 			ImGui::OpenPopup("Add SkyBox");
@@ -208,6 +215,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 		}
 		if (ImGui::BeginPopupModal("New GameObject"))
 		{
+		
 			static char name[128] = "GameObject";
 			ImGui::InputText("Name", name, IM_ARRAYSIZE(name));
 			if (ImGui::Button("Create", ImVec2(120, 0)))
@@ -245,6 +253,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 			float z = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.z;
 
 			ImGui::Begin("Scene Hierarchy", nullptr, ImGuiWindowFlags_NoMove);
+			
 			
 			ImGui::Text("Currently Selected Object:");
 			SceneManager::DisplayActiveObjectDebugWindow();

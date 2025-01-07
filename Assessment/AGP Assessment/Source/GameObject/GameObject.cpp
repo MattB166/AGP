@@ -26,9 +26,11 @@ void GameObject::Initialise()
 	m_transform.pos = { 0,0,3 };
 	m_transform.rot = { 0,0,0 }; 
 	m_transform.scl = { 1,1,1 };
-	std::shared_ptr<ShaderSet> shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso", "Standard Shader");
-	AddComponent(shaderSet);
-	std::shared_ptr<Material> mat = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp", "Box Texture");
+
+	shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/StandardShader/VertexShader.cso", L"CompiledShaders/StandardShader/PixelShader.cso", "Basic Shader");
+	reflectiveShaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/ReflectiveShader/ReflectiveVertexShader.cso", L"CompiledShaders/ReflectiveShader/ReflectivePixelShader.cso", "Reflective Shader");
+	AddComponent(reflectiveShaderSet);
+	std::shared_ptr<Material> mat = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp", "Box Texture"); //adding placeholder components which can be switched out.
 	AddComponent(mat);
 }
 
@@ -126,7 +128,10 @@ void GameObject::ShowComponentDebugWindow()
 			component->ShowDebugWindow();
 		}
 	}
-	ImGui::Checkbox("Reflective Object", &m_reflectiveObject);
+	if (ImGui::Checkbox("Reflective Object", &m_reflectiveObject))
+	{
+		ToggleReflectiveObject();
+	}
 	
 
 	if (ImGui::Button("Edit Component"))
@@ -158,17 +163,7 @@ void GameObject::ShowComponentDebugWindow()
 
 void GameObject::ToggleReflectiveObject()
 {
-	m_reflectiveObject = !m_reflectiveObject;
-
-	if (m_reflectiveObject)
-	{
-		//AssetManager::CreateShaderSet
-	}
-	else
-	{
-		std::shared_ptr<ShaderSet> shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/VertexShader.cso", L"CompiledShaders/PixelShader.cso", "Standard Shader");
-		AddComponent(shaderSet);
-	}
+	
 }
 
 

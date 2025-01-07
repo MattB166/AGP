@@ -2,6 +2,7 @@
 #include <DirectXMath.h>
 #include "../Constant Buffer/CBuffer.h"
 #include "../Component/Component.h"
+#include "../Component/ShaderSet.h"
 #include <memory>
 #include <vector>
 using namespace DirectX;
@@ -13,11 +14,9 @@ struct Transform
 	XMMATRIX GetWorldMatrix() const
 	{
 		XMMATRIX translation = XMMatrixTranslation(pos.x, pos.y, pos.z);
-		XMMATRIX rotationX = XMMatrixRotationX(rot.x);
-		XMMATRIX rotationY = XMMatrixRotationY(rot.y);
-		XMMATRIX rotationZ = XMMatrixRotationZ(rot.z);
+		XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z);
 		XMMATRIX scale = XMMatrixScaling(scl.x, scl.y, scl.z);
-		XMMATRIX world = scale * rotationX * rotationY * rotationZ * translation; 
+		XMMATRIX world = scale * rotationMatrix * translation; 
 		return world;
 	}
 };
@@ -35,6 +34,7 @@ public:
 	void SetPosition(float x, float y, float z) { m_transform.pos = { x,y,z }; }
 	void SetRotation(float x, float y, float z) { m_transform.rot = { x,y,z }; }
 	void SetScale(float x, float y, float z) { m_transform.scl = { x,y,z }; }
+	void SetName(const char* name) { m_name = name; }
 	void ChangeYPosition(float y) { m_transform.pos.y += y; }
 	void ChangeXPosition(float x) { m_transform.pos.x += x; }
 	void ChangeZPosition(float z) { m_transform.pos.z += z; }
@@ -54,6 +54,8 @@ private:
 	float BasicAmbientLightValue = 0.5f;
 	float DebugMovementSnappingValue = 0.05f;
 	bool m_reflectiveObject = false; 
+	std::shared_ptr<ShaderSet> shaderSet = nullptr;
+	std::shared_ptr<ShaderSet> reflectiveShaderSet = nullptr;
 	std::shared_ptr<Component> temp = nullptr;
 };
 
