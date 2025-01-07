@@ -29,7 +29,7 @@ public:
 
 private:
 	
-	std::vector<std::shared_ptr<GameObject>> m_gameObjects;
+	std::vector<std::unique_ptr<GameObject>> m_gameObjects;
 	GameObject* m_selectedGameObject = nullptr;
 	int m_selectedObjectIndex = 0;
 
