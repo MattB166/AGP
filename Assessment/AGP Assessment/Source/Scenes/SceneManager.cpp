@@ -12,7 +12,7 @@ void SceneManager::AddScene(const std::wstring& name)
 {
 	if (m_scenes.find(name) != m_scenes.end())
 	{
-		std::cout << "Scene already exists" << std::endl;
+		//std::cout << "Scene already exists" << std::endl;
 		return;
 	}
 	auto scene = std::make_unique<Scene>(name);
@@ -22,7 +22,7 @@ void SceneManager::AddScene(const std::wstring& name)
 		m_sceneIterator = m_scenes.begin();
 		m_activeScene = name;
 	}
-	std::cout << "Scene Added" << std::endl; 
+	//std::cout << "Scene Added" << std::endl; 
 }
 
 Scene* SceneManager::GetActiveScene()
@@ -56,7 +56,7 @@ void SceneManager::CycleActiveScene()
 		m_sceneIterator = m_scenes.begin();
 	}
 	m_activeScene = m_sceneIterator->first;
-	std::cout << "Active Scene: " << GetActiveSceneName() << std::endl;
+	//std::cout << "Active Scene: " << GetActiveSceneName() << std::endl;
 
 
 }
@@ -69,7 +69,7 @@ void SceneManager::InitialiseActiveScene()
 	}
 	auto scene = m_scenes[m_activeScene].get();
 	scene->Initialize();
-	std::cout << "Scene Initialised" << std::endl;
+	//std::cout << "Scene Initialised" << std::endl;
 }
 
 void SceneManager::DeleteCurrentScene()
@@ -106,7 +106,7 @@ void SceneManager::AddSkyBoxTextureToActiveScene(const wchar_t* texturePath) //n
 	{
 		if (skyBox->GetTexturePath() == texturePath)
 		{
-			std::cout << "Scene already has skybox" << std::endl;
+			//std::cout << "Scene already has skybox" << std::endl;
 			return;
 		}
 	}
@@ -119,7 +119,7 @@ void SceneManager::AddSkyBoxTextureToActiveScene(const wchar_t* texturePath) //n
 	}
 	else
 	{
-		std::cout << "Skybox already loaded so giving scene the pre loaded one. " << std::endl;
+		//std::cout << "Skybox already loaded so giving scene the pre loaded one. " << std::endl;
 		skybox = m_LoadedSkyBoxes[texturePath];
 	}
 

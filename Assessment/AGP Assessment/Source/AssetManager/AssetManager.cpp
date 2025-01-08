@@ -258,8 +258,8 @@ std::shared_ptr<ShaderSet> AssetManager::CreateShaderSet(const wchar_t* vsPath, 
 		auto shaderSet = std::make_shared<ShaderSet>(m_dev, m_devcon, vertexShader, pixelShader, inputLayout,name,SvsPath,SpsPath);
 		std::string key = GenerateKeyForShaderSet(vsPath, psPath);
 		GetShaderSets().insert(std::make_pair(key, shaderSet));
-		std::cout << "Shader set created" << std::endl;
-		std::cout << "Shader set size: " << GetShaderSets().size() << std::endl;
+		//std::cout << "Shader set created" << std::endl;
+		//std::cout << "Shader set size: " << GetShaderSets().size() << std::endl;
 
 		delete[] signatureParamDescriptions;
 		delete[] ied;
@@ -365,7 +365,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	if (isObjLoaded)
 	{
 		model = RetrieveObjFileModel(*modelPath);
-		std::cout << "Model retrieved as already loaded" << std::endl;
+		//std::cout << "Model retrieved as already loaded" << std::endl;
 	}
 	else
 	{
@@ -375,7 +375,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	if (isDDSTextureLoaded)
 	{
 		texture = RetrieveDDSTexture(*texturePath);
-		std::cout << "Texture retrieved as already loaded" << std::endl;
+		//std::cout << "Texture retrieved as already loaded" << std::endl;
 	}
 	else
 	{
@@ -385,7 +385,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	if (isShaderSetLoaded)
 	{
 		shaderSet = RetrieveShaderSet(*vsPath, *psPath);
-		std::cout << "Shader set retrieved as already loaded" << std::endl;
+		//std::cout << "Shader set retrieved as already loaded" << std::endl;
 	}
 	else
 	{
@@ -393,7 +393,7 @@ std::shared_ptr<SkyBox> AssetManager::CreateSkyBox(const wchar_t* texturePath, c
 	}
 
 	auto skyBox = std::make_shared<SkyBox>(m_dev, m_devcon, model, shaderSet->GetVertexShader(), shaderSet->GetPixelShader(), shaderSet->GetInputLayout(), texture.get(),texturePath);
-	std::cout << "Skybox created" << std::endl;
+	//std::cout << "Skybox created" << std::endl;
 	return skyBox;
 
 }
@@ -451,19 +451,19 @@ std::shared_ptr<Component> AssetManager::CreateTemporaryComponentInstance(Compon
 	switch (type)
 	{
 	case ComponentType::Model:
-		std::cout << "Creating temporary model" << std::endl;
+		//std::cout << "Creating temporary model" << std::endl;
 		component = std::make_shared<Model>(m_dev, m_devcon);
 		break;
 	case ComponentType::Shaders:
-		std::cout << "Creating temporary shader set" << std::endl;
+		//std::cout << "Creating temporary shader set" << std::endl;
 		component = std::make_shared<ShaderSet>(m_dev, m_devcon);
 		break;
 	case ComponentType::Texture:
-		std::cout << "Creating temporary material" << std::endl;
+		//std::cout << "Creating temporary material" << std::endl;
 		component = std::make_shared<Material>(m_dev, m_devcon);
 		break;
 	default:
-		std::cout << "Invalid component type" << std::endl;
+		//std::cout << "Invalid component type" << std::endl;
 		break;
 	}
 

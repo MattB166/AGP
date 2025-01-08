@@ -39,9 +39,9 @@ void KeyboardMouse::ClearAllBindings()
 	}
 	keyBindings.clear();
 	mouseBindings.clear();
-	std::cout << "All bindings cleared" << std::endl;
-	std::cout << "KeyBindings size: " << keyBindings.size() << std::endl;
-	std::cout << "MouseBindings size: " << mouseBindings.size() << std::endl;
+	//std::cout << "All bindings cleared" << std::endl;
+	//std::cout << "KeyBindings size: " << keyBindings.size() << std::endl;
+	//std::cout << "MouseBindings size: " << mouseBindings.size() << std::endl;
 }
 
 void KeyboardMouse::ClearKeyBinding(Keyboard::Keys key)
@@ -50,11 +50,11 @@ void KeyboardMouse::ClearKeyBinding(Keyboard::Keys key)
 	if (it != keyBindings.end())
 	{
 		keyBindings.erase(it);
-		std::cout << "Key Binding removed" << std::endl;
+		//std::cout << "Key Binding removed" << std::endl;
 	}
 	else
 	{
-		std::cerr << "Key Binding not found" << std::endl;
+		//std::cerr << "Key Binding not found" << std::endl;
 	}
 }
 
@@ -64,18 +64,18 @@ void KeyboardMouse::ClearMouseBinding(MouseButton button)
 	if (it != mouseBindings.end())
 	{
 		mouseBindings.erase(it);
-		std::cout << "Mouse Binding removed" << std::endl;
+		//std::cout << "Mouse Binding removed" << std::endl;
 	}
 	else
 	{
-		std::cerr << "Mouse Binding not found" << std::endl;
+		//std::cerr << "Mouse Binding not found" << std::endl;
 	}
 }
 
 void KeyboardMouse::ClearMouseMovement()
 {
 	mouseMovementAction = nullptr;
-	std::cout << "Mouse Movement Binding removed" << std::endl;
+	//std::cout << "Mouse Movement Binding removed" << std::endl;
 
 }
 
@@ -84,7 +84,7 @@ void KeyboardMouse::BindKeyToFunction(Keyboard::Keys key, BindingData data)
 	static int nextID = 1;
 	data.ID = nextID++;
 	keyBindings.insert(std::make_pair(key, data));
-	std::cout << "Key Binding added" << std::endl;
+	//std::cout << "Key Binding added" << std::endl;
 }
 
 void KeyboardMouse::BindMouseToFunction(MouseButton button, BindingData data)
@@ -92,13 +92,13 @@ void KeyboardMouse::BindMouseToFunction(MouseButton button, BindingData data)
 	static int nextID = 1;
 	data.ID = nextID++;
 	mouseBindings.insert(std::make_pair(button, data));
-	std::cout << "Mouse Binding added" << std::endl;
+	//std::cout << "Mouse Binding added" << std::endl;
 }
 
 void KeyboardMouse::BindMouseMovement(std::function<void(int, int)> action)
 {
 	mouseMovementAction = action;
-	std::cout << "Mouse Movement Binding added" << std::endl;
+	//std::cout << "Mouse Movement Binding added" << std::endl;
 }
 
 

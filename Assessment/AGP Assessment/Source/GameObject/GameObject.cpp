@@ -28,7 +28,7 @@ void GameObject::Initialise()
 		AddComponent(reflectiveShaderSet);
 	else
 		AddComponent(shaderSet);
-	std::shared_ptr<Material> mat = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp", "Box Texture"); //adding placeholder components which can be switched out.
+	std::shared_ptr<Material> mat = AssetManager::CreateMaterial(L"Source/SavedTextures/brick.jpg", "Brick Texture"); //adding placeholder components which can be switched out.
 	AddComponent(mat);
 }
 
@@ -51,11 +51,13 @@ void GameObject::AddComponent(std::shared_ptr<Component> component)
 		{
 			std::cout << "Component already exists" << std::endl;
 			RemoveComponent(comp);
+			break;
 		}
 		
 	}
 	component->SetOwner(this);
 	m_components.push_back(component);
+	std::cout << "Components are now : " << m_components.size() << std::endl;
 }
 
 void GameObject::RemoveComponent(std::shared_ptr<Component> component)
@@ -118,7 +120,7 @@ void GameObject::ShowComponentDebugWindow()
 	{
 		std::vector<ComponentType> types = Component::GetTypes();
 		types.erase(std::remove(types.begin(), types.end(), ComponentType::Shaders), types.end());
-		types.erase(std::remove(types.begin(), types.end(), ComponentType::Texture), types.end());
+		//types.erase(std::remove(types.begin(), types.end(), ComponentType::Texture), types.end());
 		for (auto type : types)
 		{
 			std::string typeName = Component::ComponentTypeToString(type);
@@ -176,28 +178,18 @@ void GameObject::ShowComponentDebugWindow()
 	if (ImGui::Button("Edit Component"))
 	{
 		//selectedComponentType = ComponentType::None;
-		ImGui::OpenPopup("Components");
+		ImGui::OpenPopup("Add Component");
 	}
-	if (ImGui::BeginPopupModal("Components", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+	/*if (ImGui::BeginPopupModal("Components", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 	{
-		std::vector<ComponentType> types = Component::GetTypes();
-		types.erase(std::remove(types.begin(), types.end(), ComponentType::Shaders), types.end()); //dont want to manually be messing with shaders. will let behind the scenes handle it. 
-		for (auto type : types)
-		{
-			if (ImGui::Button(Component::ComponentTypeToString(type).c_str()))
-			{
-				//give options to switch component type 
-				ImGui::CloseCurrentPopup();
-			}
-		}
-		
+
 		ImGui::SameLine();
 		if (ImGui::Button("Cancel", ImVec2(120, 0)))
 		{
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
-	}
+	}*/
 
 	ImGui::Text("Position : %f %f %f", m_transform.pos.x, m_transform.pos.y, m_transform.pos.z);
 	ImGui::SliderFloat("Position Snapping value", &DebugMovementSnappingValue, 0.05f, 1.0f);

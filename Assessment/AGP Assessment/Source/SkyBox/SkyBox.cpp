@@ -58,7 +58,7 @@ void SkyBox::LoadAllSkyBoxNames(const std::string& path)
 			std::string skyboxName = filename.substr(0, filename.find_last_of('.'));
 			m_AvailableSkyBoxNames.push_back(skyboxName);
 			m_SkyBoxNameToPath.insert(std::make_pair(skyboxName, entry.path().string()));
-			std::cout << "Loaded SkyBox Name : " << skyboxName << "\n";
+			//std::cout << "Loaded SkyBox Name : " << skyboxName << "\n";
 		}
 	}
 }

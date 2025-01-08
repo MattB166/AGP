@@ -64,7 +64,7 @@ void Scene::AddSkyBoxToScene(std::shared_ptr<SkyBox> sb)
 	//if there is only one skybox, set it to the active skybox.
 	if (m_skyBoxes.size() == 1)
 	{
-		std::cout << "Changing Active Skybox as the scene only has one." << std::endl;
+		//std::cout << "Changing Active Skybox as the scene only has one." << std::endl;
 		ChangeActiveSkyBox(sb);
 	}
 }
@@ -164,7 +164,7 @@ void Scene::CycleSelectedGameObject()
 	//cycle through the gameobjects.
 	m_selectedObjectIndex = (m_selectedObjectIndex + 1) % m_gameObjects.size();
 	m_selectedGameObject = m_gameObjects[m_selectedObjectIndex].get();
-	std::cout << "Selected Gameobject Changed to: " << m_selectedGameObject->GetName() << std::endl;
+	//std::cout << "Selected Gameobject Changed to: " << m_selectedGameObject->GetName() << std::endl;
 
 
 }

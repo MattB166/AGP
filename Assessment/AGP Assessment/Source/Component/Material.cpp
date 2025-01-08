@@ -55,13 +55,13 @@ void Material::LoadAllTextureNames(const std::string& path)
 	namespace fs = std::experimental::filesystem;
 	for (const auto& entry : fs::directory_iterator(path))
 	{
-		if (fs::is_regular_file(entry) && entry.path().extension() == ".bmp")
+		if (fs::is_regular_file(entry) && entry.path().extension() == ".bmp" || fs::is_regular_file(entry) && entry.path().extension() == ".jpg")
 		{
 			std::string filename = entry.path().filename().string();
 			std::string textureName = filename.substr(0, filename.find_last_of('.'));
 			m_AvailableTextureNames.push_back(textureName);
 			m_textureNameToPath.insert(std::make_pair(textureName, entry.path().string()));
-			std::cout << "Loaded Texture Name : " << textureName << "\n";
+			//std::cout << "Loaded Texture Name : " << textureName << "\n";
 		}
 	}
 }

@@ -69,16 +69,16 @@ void ShaderSet::LoadAllShaderNames(const std::string& path)
 				auto it = m_shaderNameToPaths.find(folderName);
 				if (it != m_shaderNameToPaths.end())
 				{
-					std::cout << "folder already exists" << std::endl;
+					//std::cout << "folder already exists" << std::endl;
 					if (!shaderPath.vertexShaderPath.empty())
 					{
 						it->second.vertexShaderPath = shaderPath.vertexShaderPath;
-						std::cout << "Assigned Vertex Shader Path : " << shaderPath.vertexShaderPath << std::endl;
+						//std::cout << "Assigned Vertex Shader Path : " << shaderPath.vertexShaderPath << std::endl;
 					}
 					if (!shaderPath.pixelShaderPath.empty())
 					{
 						it->second.pixelShaderPath = shaderPath.pixelShaderPath;
-						std::cout << "Assigned Pixel Shader Path : " << shaderPath.pixelShaderPath << std::endl;
+						//std::cout << "Assigned Pixel Shader Path : " << shaderPath.pixelShaderPath << std::endl;
 					}
 				}
 				else
@@ -90,7 +90,7 @@ void ShaderSet::LoadAllShaderNames(const std::string& path)
 				if (std::find(m_AvailableShaderNames.begin(), m_AvailableShaderNames.end(), folderName) == m_AvailableShaderNames.end())
 				{
 					m_AvailableShaderNames.push_back(folderName);
-					std::cout << "Loaded Shader Name : " << folderName << "\n";
+					//std::cout << "Loaded Shader Name : " << folderName << "\n";
 				}
 			}
 			

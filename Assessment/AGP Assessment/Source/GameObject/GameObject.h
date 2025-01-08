@@ -67,5 +67,6 @@ private:
 	ComponentType selectedComponentType;
 	std::vector<std::string> options = {};
 	bool showComponentOptions = false;
+	bool showEditableComponents = false;
 };
 
