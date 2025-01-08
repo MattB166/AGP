@@ -125,7 +125,7 @@ void Application::Run()
 			RunMode();
 			//draw current scene.
 			//draw scene preview.
-			SceneManager::GetActiveScene()->Update();
+			
 			SceneManager::DrawScenePreview();
 
 			ImGui::Render();

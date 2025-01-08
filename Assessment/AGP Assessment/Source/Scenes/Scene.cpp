@@ -15,6 +15,12 @@ Scene::~Scene()
 		delete m_ActiveCamera;
 		m_ActiveCamera = nullptr;
 	}
+	for (auto& cam : m_cameras)
+	{
+		delete cam;
+		cam = nullptr;
+	}
+	m_cameras.clear();
 	//clear skyboxes
 	m_skyBoxes.clear();
 	//clear gameobjects
@@ -33,13 +39,13 @@ void Scene::Initialize()
 
 void Scene::Update()
 {
-	if (m_deletionQueue.size() > 0)
+	/*if (m_deletionQueue.size() > 0)
 	{
 		m_deletionQueue.clear();
 		std::cout << "Deletion queue size: " << m_deletionQueue.size() << std::endl;
 		std::cout << "Game Objects in Scene: " << m_gameObjects.size() << std::endl;
 
-	}
+	}*/
 }
 
 void Scene::ChangeActiveSkyBox(std::shared_ptr<SkyBox> sb)
@@ -108,7 +114,7 @@ void Scene::RemoveActiveGameObject()
 	//add the object to deletion queue and remove from the scene.
 	if (m_selectedGameObject)
 	{
-		m_deletionQueue.push_back(std::move(m_gameObjects[m_selectedObjectIndex]));
+		//m_deletionQueue.push_back(std::move(m_gameObjects[m_selectedObjectIndex]));
 		m_gameObjects.erase(m_gameObjects.begin() + m_selectedObjectIndex);
 		//change active gameobject to the next one in the list.
 		CycleSelectedGameObject();
@@ -131,6 +137,7 @@ void Scene::CycleThroughSkyBoxes()
 
 void Scene::DrawStatics()
 {
+	DisplaySceneDebugWindow();
 	//if the skybox is not null, draw it.
 	if (m_ActiveSkyBox && m_ActiveCamera)
 	{
@@ -178,4 +185,19 @@ void Scene::RotateActiveCamera(float pitch, float yaw)
 	{
 		m_ActiveCamera->RotateCamera(pitch, yaw);
 	}
+}
+
+void Scene::AddCamera()
+{
+	Camera* newCam = new Camera();
+	m_cameras.push_back(newCam);
+	std::cout << "Cameras size: " << m_cameras.size() << std::endl;
+}
+
+void Scene::DisplaySceneDebugWindow()
+{
+	ImGui::Text("Scene: %s", GetName().c_str());
+	ImGui::Text("GameObjects: %d", m_gameObjects.size());
+	
+
 }
