@@ -27,6 +27,8 @@ public:
 
 	bool GetObjectFocusView() { return ObjectFocusView; }
 
+	void DisplayInfo(); 
+
 
 	///XMVECTOR GetForwardVector() { return fwd; }
 

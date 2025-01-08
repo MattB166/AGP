@@ -5,15 +5,15 @@
 Scene::Scene(const std::wstring name) : m_name(name)
 {
 	//initialize the camera.
-	m_camera = new Camera();
+	m_ActiveCamera = new Camera();
 }
 
 Scene::~Scene()
 {
-	if (m_camera)
+	if (m_ActiveCamera)
 	{
-		delete m_camera;
-		m_camera = nullptr;
+		delete m_ActiveCamera;
+		m_ActiveCamera = nullptr;
 	}
 	//clear skyboxes
 	m_skyBoxes.clear();
@@ -110,8 +110,8 @@ void Scene::RemoveActiveGameObject()
 	{
 		m_deletionQueue.push_back(std::move(m_gameObjects[m_selectedObjectIndex]));
 		m_gameObjects.erase(m_gameObjects.begin() + m_selectedObjectIndex);
-		//std::cout << "Game Objects in Scene: " << m_gameObjects.size() << std::endl;
-		//std::cout << "Gameobject Removed" << std::endl;
+		//change active gameobject to the next one in the list.
+		CycleSelectedGameObject();
 	}
 
 }
@@ -132,13 +132,13 @@ void Scene::CycleThroughSkyBoxes()
 void Scene::DrawStatics()
 {
 	//if the skybox is not null, draw it.
-	if (m_ActiveSkyBox && m_camera)
+	if (m_ActiveSkyBox && m_ActiveCamera)
 	{
 		//std::cout << "Drawing Skybox" << std::endl;
-		m_ActiveSkyBox->Draw(m_camera);
+		m_ActiveSkyBox->Draw(m_ActiveCamera);
 	}
-	XMMATRIX view = m_camera->GetViewMatrix();
-	XMMATRIX proj = m_camera->GetProjectionMatrix();
+	XMMATRIX view = m_ActiveCamera->GetViewMatrix();
+	XMMATRIX proj = m_ActiveCamera->GetProjectionMatrix();
 	
 	//for each gameobject in the scene, draw it and the skybox.
 	for (const auto& go : m_gameObjects)
@@ -165,17 +165,17 @@ void Scene::CycleSelectedGameObject()
 void Scene::MoveActiveCamera(float x, float y, float z)
 {
 	//if the camera is not null, move it.
-	if (m_camera)
+	if (m_ActiveCamera)
 	{
-		m_camera->MoveCamera(x, y, z);
+		m_ActiveCamera->MoveCamera(x, y, z);
 	}
 }
 
 void Scene::RotateActiveCamera(float pitch, float yaw)
 {
 	//if the camera is not null, rotate it.
-	if (m_camera)
+	if (m_ActiveCamera)
 	{
-		m_camera->RotateCamera(pitch, yaw);
+		m_ActiveCamera->RotateCamera(pitch, yaw);
 	}
 }

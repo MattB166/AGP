@@ -18,7 +18,7 @@ GameObject::~GameObject()
 void GameObject::Initialise()
 {
 	//position, rotation, scale
-	m_transform.pos = { 0,0,0 };
+	m_transform.pos = { 0,0,1 };
 	m_transform.rot = { 0,0,0 }; 
 	m_transform.scl = { 1,1,1 };
 
@@ -206,7 +206,7 @@ void GameObject::ShowComponentDebugWindow()
 	ImGui::DragFloat("Position Z", &m_transform.pos.z, DebugMovementSnappingValue, - 30.0f, 30.0f, "%.3f");
 	if (ImGui::Button("Reset Position"))
 	{
-		m_transform.pos = { 0,0,3 };
+		m_transform.pos = { 0,0,1 };
 	}
 
 

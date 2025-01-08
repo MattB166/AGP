@@ -72,6 +72,18 @@ void SceneManager::InitialiseActiveScene()
 	std::cout << "Scene Initialised" << std::endl;
 }
 
+void SceneManager::DeleteCurrentScene()
+{
+	if (m_scenes.empty() || m_scenes.size() == 1)
+	{
+		return;
+	}
+	auto scene = m_scenes[m_activeScene].get();
+	m_scenes.erase(m_activeScene);
+	m_sceneIterator = m_scenes.begin();
+
+}
+
 void SceneManager::SetActiveScene(const std::wstring& name)
 {
 	if (m_scenes.find(name) != m_scenes.end())

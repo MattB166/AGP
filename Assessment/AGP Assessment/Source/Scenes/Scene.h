@@ -4,6 +4,7 @@
 #include "../SkyBox/SkyBox.h"
 #include <memory>
 #include <queue>
+#include <vector>
 
 class Scene //controls all current gameobjects in the scene. 
 {
@@ -23,9 +24,10 @@ public:
 	void CycleSelectedGameObject(); //cycle through the gameobjects in the scene. 
 	GameObject* GetSelectedGameObject() { return m_selectedGameObject; } //get the selected gameobject in the scene.
 	int GetObjectCount() { return m_gameObjects.size(); } //get the number of gameobjects in the scene.
-	Camera* GetCamera() { return m_camera; } //get the camera for the scene.
+	Camera* GetCamera() { return m_ActiveCamera; } //get the camera for the scene.
 	void MoveActiveCamera(float x, float y, float z); //move the camera in the scene.
 	void RotateActiveCamera(float pitch, float yaw); //rotate the camera in the scene.
+	void AddCamera(Camera* cam); //add a camera to the scene.
 
 	std::string GetName() { return std::string(m_name.begin(), m_name.end()); } //get the name of the scene.
 	std::vector<std::shared_ptr<SkyBox>> GetSkyBoxes() { return m_skyBoxes; } //get the skyboxes in the scene.
@@ -36,7 +38,9 @@ private:
 	GameObject* m_selectedGameObject = nullptr;
 	int m_selectedObjectIndex = 0;
 
-	Camera* m_camera = nullptr; 
+	Camera* m_ActiveCamera = nullptr; 
+	std::vector<Camera*> m_cameras;
+	int m_cameraIndex = 0;
 
 	
 	std::vector<std::shared_ptr<SkyBox>> m_skyBoxes; 

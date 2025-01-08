@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "../Time/TimeClass.h"
+#include "../IMGUI/imgui.h"
 #include <iostream>
 
 Camera::Camera()
@@ -123,4 +124,10 @@ void Camera::MoveCamera(float x, float y, float z)
 
 	
 	//std::cout << "Camera Position: " << xPos << " " << yPos << " " << zPos << std::endl;
+}
+
+void Camera::DisplayInfo()
+{
+	ImGui::Text("Camera Position: %f %f %f", xPos, yPos, zPos);
+
 }

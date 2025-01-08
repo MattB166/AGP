@@ -93,7 +93,7 @@ void Application::Run()
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/CustomSpace.dds");
-	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
+	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/CustomSpace.dds");
 	//GameObject* go = new GameObject("Test Object");
 	//std::make_unique<GameObject>("Test Object");
 	/*std::shared_ptr<Model> model = AssetManager::CreateModel("Source/SavedModels/cube.obj","Cube");

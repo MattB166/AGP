@@ -19,6 +19,8 @@ public:
 
 	static void InitialiseActiveScene(); //initialise the active scene.
 
+	static void DeleteCurrentScene(); //delete a scene.
+
 	static void AddSkyBoxTextureToActiveScene(const wchar_t* texturePath); //add a skybox to the active scene.
 
 	static void RemoveSkyBoxFromActiveScene(const wchar_t* texturePath); //remove the skybox from the active scene.
