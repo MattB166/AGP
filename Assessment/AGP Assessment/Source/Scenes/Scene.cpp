@@ -101,12 +101,14 @@ void Scene::AddGameObject(std::unique_ptr<GameObject> obj)
 
 	m_gameObjects.push_back(std::move(obj));
 	count++;
-	//if there is only one gameobject, set it to the selected gameobject.
-	if (m_gameObjects.size() == 1)
-	{
-		m_selectedGameObject = m_gameObjects[0].get();
-		//std::cout << "Selected Gameobject Changed" << std::endl;
-	}
+	m_selectedObjectIndex = m_gameObjects.size() - 1;
+	m_selectedGameObject = m_gameObjects[m_selectedObjectIndex].get();
+	////if there is only one gameobject, set it to the selected gameobject.
+	//if (m_gameObjects.size() == 1)
+	//{
+	//	m_selectedGameObject = m_gameObjects[0].get();
+	//	//std::cout << "Selected Gameobject Changed" << std::endl;
+	//}
 }
 
 void Scene::RemoveActiveGameObject()
