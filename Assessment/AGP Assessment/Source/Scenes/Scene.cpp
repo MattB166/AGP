@@ -137,7 +137,7 @@ void Scene::CycleThroughSkyBoxes()
 
 void Scene::DrawStatics()
 {
-	DisplaySceneDebugWindow();
+	//DisplaySceneDebugWindow();
 	//if the skybox is not null, draw it.
 	if (m_ActiveSkyBox && m_ActiveCamera)
 	{

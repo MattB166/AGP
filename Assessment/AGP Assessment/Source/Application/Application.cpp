@@ -125,7 +125,7 @@ void Application::Run()
 			RunMode();
 			//draw current scene.
 			//draw scene preview.
-			
+			//SceneManager::GetActiveScene()->Update();
 			SceneManager::DrawScenePreview();
 
 			ImGui::Render();
@@ -188,7 +188,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 	
 	if (m_mode == Mode::EDIT)
 	{
-		
+		SceneManager::GetActiveScene()->DisplaySceneDebugWindow();
 		ImGui::Begin("Edit Mode", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
 		ImGui::Text("Current Mode: Edit Mode.");
 		ImGui::Text("Current Scene: %s", SceneManager::GetActiveSceneName().c_str());
