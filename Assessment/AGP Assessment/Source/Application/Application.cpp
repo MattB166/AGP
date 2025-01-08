@@ -182,99 +182,43 @@ void Application::RunMode()
 	
 	if (m_mode == Mode::EDIT)
 	{
-		SceneManager::GetActiveScene()->DisplaySceneDebugWindow();
 		ImGui::Begin("Edit Mode", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
 		ImGui::Text("Current Mode: Edit Mode.");
-		ImGui::Text("Current Scene: %s", SceneManager::GetActiveSceneName().c_str());
-		if (ImGui::Button("Cycle Scene"))
-		{
-			SceneManager::CycleActiveScene();
-		}
-		if (ImGui::Button("Add Skybox"))
-		{
-			ImGui::OpenPopup("Add SkyBox");
-		}
-		if (ImGui::Button("Cycle SkyBox"))
-		{
-			SceneManager::CycleSceneSkyBox();
-		}
-		if (SceneManager::GetActiveScene()->GetObjectCount() > 1)
-		{
-			if (ImGui::Button("Cycle Object"))
-			{
-				SceneManager::CycleGameObjectsInActiveScene();
-			}
-		}
 		if (ImGui::Button("Play"))
 		{
 			SwitchMode();
 		}
-		if (ImGui::Button("Add GameObject"))
+		if (ImGui::Button("Cycle Scene"))
 		{
-			ImGui::OpenPopup("New GameObject");
+			SceneManager::CycleActiveScene();
 		}
-		if (SceneManager::GetActiveScene()->GetObjectCount() > 0)
-		{
-			if (ImGui::Button("Remove GameObject"))
-			{
-				SceneManager::GetActiveScene()->RemoveActiveGameObject();
-			}
-		}
-		if (ImGui::BeginPopupModal("New GameObject"))
-		{
 		
-			static char name[128] = "GameObject";
-			static bool isReflected = false;
-			ImGui::InputText("Name", name, IM_ARRAYSIZE(name));
-			ImGui::Checkbox("Reflective", &isReflected);
-			if (ImGui::Button("Create", ImVec2(120, 0)))
-			{
-				auto go = std::make_unique<GameObject>(name,isReflected);
-				SceneManager::AddGameObjectToActiveScene(std::move(go));
-				
-				ImGui::CloseCurrentPopup();
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Cancel", ImVec2(120, 0)))
-			{
-				ImGui::CloseCurrentPopup();
-			}
-			ImGui::EndPopup();
-		}
-		if (ImGui::BeginPopupModal("Add SkyBox"))
-		{
-			//get sky box options from skybox class 
-			ImGui::Separator();
-			if (ImGui::Button("Cancel", ImVec2(120, 0)))
-			{
-				ImGui::CloseCurrentPopup();
-			}
-			ImGui::EndPopup();
-		}
 		ImGui::SetWindowPos(ImVec2(0, 0));
 		ImGui::End();
 
-
+		SceneManager::GetActiveScene()->DisplaySceneDebugWindow();
 		if (SceneManager::GetActiveScene()->GetObjectCount() > 0)
 		{
-			float x = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.x; 
-			float y = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.y;
-			float z = SceneManager::GetSelectedGameObjectInActiveScene()->GetTransform().pos.z;
+			float x = SceneManager::GetActiveScene()->GetSelectedGameObject()->GetTransform().pos.x;
+			float y = SceneManager::GetActiveScene()->GetSelectedGameObject()->GetTransform().pos.y;
+			float z = SceneManager::GetActiveScene()->GetSelectedGameObject()->GetTransform().pos.z;
 
 			ImGui::Begin("Scene Hierarchy", nullptr, ImGuiWindowFlags_NoMove);
+
+			SceneManager::DisplayActiveObjectDebugWindow();
 			
 			ImGui::Checkbox("Rotate Camera to View Object", &followSelectedObject);
 			if (followSelectedObject)
 			{
 				SceneManager::SetActiveSceneCameraTarget(x, y, z, true);
 			}
-			
-			
-			SceneManager::DisplayActiveObjectDebugWindow();
-			
-			ImGui::SetWindowPos(ImVec2(0, 180));
+
+
+
+			ImGui::SetWindowPos(ImVec2(0, 250));
 			ImGui::End();
 		}
+		
 		
 		
 

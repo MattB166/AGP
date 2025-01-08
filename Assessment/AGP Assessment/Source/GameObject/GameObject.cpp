@@ -107,7 +107,7 @@ void GameObject::Draw(XMMATRIX& view, XMMATRIX& proj)
 
 void GameObject::ShowComponentDebugWindow()
 {
-	ImGui::Text( " % s", m_name);
+	ImGui::Text("Current Object: %s", std::string(m_name.begin(), m_name.end()).c_str());
 	//logic to add the components to the debug window
 	if (ImGui::Button("Add Component"))
 	{

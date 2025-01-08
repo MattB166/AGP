@@ -196,12 +196,71 @@ void Scene::AddCamera()
 
 void Scene::DisplaySceneDebugWindow()
 {
-	ImGui::Text("Scene: %s", GetName().c_str());
-	ImGui::Text("GameObjects: %d", m_gameObjects.size());
-	ImGui::Text("Cameras: %d", m_cameras.size() + 1);
-	if (ImGui::Button("Add Camera"))
+	ImGui::Begin("Scene Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+	ImGui::Text("Current Scene: %s", std::string(m_name.begin(), m_name.end()).c_str());
+	
+	if (ImGui::Button("Add Skybox"))
 	{
-		AddCamera();
+		ImGui::OpenPopup("Add SkyBox");
 	}
+	if (ImGui::Button("Cycle SkyBox"))
+	{
+		CycleThroughSkyBoxes();
+	}
+	if (GetObjectCount() > 1)
+	{
+		if (ImGui::Button("Cycle Object"))
+		{
+			CycleSelectedGameObject();
+		}
+	}
+	
+	if (ImGui::Button("Add GameObject"))
+	{
+		ImGui::OpenPopup("New GameObject");
+	}
+	if (GetObjectCount() > 0)
+	{
+		if (ImGui::Button("Remove GameObject"))
+		{
+			RemoveActiveGameObject();
+		}
+	}
+	if (ImGui::BeginPopupModal("New GameObject"))
+	{
 
+		static char name[128] = "GameObject";
+		static bool isReflected = false;
+		ImGui::InputText("Name", name, IM_ARRAYSIZE(name));
+		ImGui::Checkbox("Reflective", &isReflected);
+		if (ImGui::Button("Create", ImVec2(120, 0)))
+		{
+			auto go = std::make_unique<GameObject>(name, isReflected);
+			AddGameObject(std::move(go));
+
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+	if (ImGui::BeginPopupModal("Add SkyBox"))
+	{
+		//get sky box options from skybox class 
+		ImGui::Separator();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+	ImGui::SetWindowPos(ImVec2(0, 100));
+	ImGui::SetWindowSize(ImVec2(200, 200));
+	ImGui::End();
+
+
+	
 }

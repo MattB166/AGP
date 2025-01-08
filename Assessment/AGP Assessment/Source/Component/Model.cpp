@@ -30,7 +30,7 @@ void Model::ShowDebugWindow()
 {
 	//std::cout << "Showing Model Debug Window" << std::endl;
 	//ImGui::Text("Model Debug Window");
-	ImGui::Text("Model : %s", m_name);
+	ImGui::Text("Current Model: %s", std::string(m_name.begin(), m_name.end()).c_str());
 }
 
 void Model::LoadAllModelNames(const std::string& path)

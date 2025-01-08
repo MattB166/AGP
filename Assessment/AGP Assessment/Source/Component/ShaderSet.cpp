@@ -36,7 +36,7 @@ void ShaderSet::Apply()
 void ShaderSet::ShowDebugWindow()
 {
 	//ImGui::Text("ShaderSet");
-	ImGui::Text("Shader : %s" , m_name);
+	ImGui::Text("Current Shader Set: %s", std::string(m_name.begin(), m_name.end()).c_str());
 }
 
 void ShaderSet::LoadAllShaderNames(const std::string& path)

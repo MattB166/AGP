@@ -47,7 +47,7 @@ void Material::ShowDebugWindow()
 {
 	//std::cout << "Showing Material Debug Window" << std::endl;
 	//ImGui::Text("Material");
-	ImGui::Text("Material : %s", m_name);
+	ImGui::Text("Current Material: %s", std::string(m_name.begin(), m_name.end()).c_str());
 }
 
 void Material::LoadAllTextureNames(const std::string& path)
