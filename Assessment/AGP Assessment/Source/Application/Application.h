@@ -7,6 +7,7 @@
 #include "../IMGUI/imgui_impl_dx11.h"
 #include "../Scenes/SceneManager.h"
 #include "../Input/KeyboardMouse.h"
+
 enum class Mode
 {
 	EDIT,
@@ -48,6 +49,8 @@ private:
 
 #pragma region IMGUI Members
 	bool followSelectedObject = false;
+	
+
    
 
 

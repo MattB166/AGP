@@ -212,7 +212,7 @@ void Renderer::RenderFrame()
 	spriteFont->DrawString(spriteBatch.get(), L"Hello, World!", DirectX::XMFLOAT2(100, 50), DirectX::Colors::ForestGreen);
 	spriteFont2->DrawString(spriteBatch.get(), L"Hello, World!", DirectX::XMFLOAT2(10, 10), DirectX::Colors::OrangeRed);
 	spriteBatch->End();
-	g_devcon->OMSetRenderTargets(1, &g_backBuffer, g_ZBuffer); ///messes up depth buffer if not set back to the back buffer 
+	//g_devcon->OMSetRenderTargets(1, &g_backBuffer, g_ZBuffer); ///messes up depth buffer if not set back to the back buffer 
 	
 		//flip the back buffer and the front buffer. display on screen
 	g_swapChain->Present(0, 0);

@@ -67,6 +67,7 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 	ImGui_ImplWin32_Init(m_window->GetHWND());
 	ImGui_ImplDX11_Init(m_renderer->GetDevice(), m_renderer->GetDeviceContext());
 	AssetManager::Initialize(m_renderer->GetDevice(), m_renderer->GetDeviceContext(),m_renderer->GetCBuffer());
+	SceneManager::Initialise();
 
 	SkyBox::LoadAllSkyBoxNames("Source/SavedSkyBoxTextures");
 	Model::LoadAllModelNames("Source/SavedModels");  
@@ -74,6 +75,9 @@ bool Application::Initialize(HINSTANCE hInstance, int nCmdShow)
 	ShaderSet::LoadAllShaderNames("CompiledShaders/StandardShader"); 
 	//do the same for textures and shaders.
 	//and skyboxes 
+	//m_spriteBatch = std::make_unique<DirectX::SpriteBatch>(m_renderer->GetDeviceContext());
+	//m_spriteFont1 = std::make_unique<DirectX::SpriteFont>(m_renderer->GetDevice(), L"Source/Fonts/matura_mt_script.spritefont");
+
 
 	mouse.SetWindow(m_window->GetHWND());
 	
@@ -93,7 +97,7 @@ void Application::Run()
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/CustomSpace.dds");
-	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/CustomSpace.dds");
+	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
 	//GameObject* go = new GameObject("Test Object");
 	//std::make_unique<GameObject>("Test Object");
 	/*std::shared_ptr<Model> model = AssetManager::CreateModel("Source/SavedModels/cube.obj","Cube");
@@ -122,13 +126,12 @@ void Application::Run()
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 
-			RunMode();
 			
 			SceneManager::DrawScenePreview();
 
+			RunMode();
 			ImGui::Render();
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
 			m_renderer->Present();
 		}
 		

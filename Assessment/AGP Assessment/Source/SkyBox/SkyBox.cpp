@@ -45,6 +45,8 @@ void SkyBox::Draw(Camera* cam)
 	m_deviceContext->OMSetDepthStencilState(m_depthWriteSolid, 1);
 	m_deviceContext->RSSetState(m_rasterizerSolid);
 
+	m_deviceContext->IASetInputLayout(m_inputLayout);
+
 }
 
 void SkyBox::LoadAllSkyBoxNames(const std::string& path)

@@ -173,7 +173,7 @@ void Renderer::Clear()
 void Renderer::Present()
 {
 	//std::cout << "Presenting" << std::endl;
-	m_deviceContext->IASetInputLayout(m_inputLayout);
+	//m_deviceContext->IASetInputLayout(m_inputLayout);
 	m_deviceContext->OMSetRenderTargets(1, &m_backBuffer, m_zBuffer);
 	m_swapChain->Present(0, 0); 
 }

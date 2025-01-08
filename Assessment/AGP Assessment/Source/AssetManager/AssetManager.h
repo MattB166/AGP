@@ -49,6 +49,10 @@ public:
 
 	//static ID3D11Buffer* GetUpdatedConstantBuffer() { return m_rendererBuffer; }
 
+	static ID3D11DeviceContext* GetDeviceContext() { return m_devcon; }
+
+	static ID3D11Device* GetDevice() { return m_dev; }
+
 
 	//retrieve file paths from the asset manager
 	static const wchar_t* GetTexturePath(const std::shared_ptr<SkyBox>& skyBox);

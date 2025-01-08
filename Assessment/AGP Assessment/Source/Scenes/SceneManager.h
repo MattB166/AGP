@@ -4,9 +4,14 @@
 #include <cwchar>
 #include <string>
 #include <unordered_map>
+#include <SpriteBatch.h>
+#include <SpriteFont.h>
+
 class SceneManager
 {
 public:
+	static void Initialise(); //initialise the scene manager.
+
 	static void AddScene(const std::wstring& name);
 
 	static Scene* GetActiveScene(); //return the active scene.
@@ -72,6 +77,10 @@ private:
 	static std::wstring m_activeScene; //current active scene name. 
 
 	static std::unordered_map<const wchar_t*, std::shared_ptr<SkyBox>> m_LoadedSkyBoxes; //list of loaded skyboxes. 
+
+	static std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;
+
+	static std::unique_ptr<DirectX::SpriteFont> m_spriteFont1;
 
 };
 

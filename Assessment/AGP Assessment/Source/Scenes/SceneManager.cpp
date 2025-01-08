@@ -7,6 +7,15 @@ std::unordered_map<std::wstring, std::unique_ptr<Scene>> SceneManager::m_scenes;
 std::wstring SceneManager::m_activeScene;
 std::unordered_map<const wchar_t*, std::shared_ptr<SkyBox>> SceneManager::m_LoadedSkyBoxes;
 std::unordered_map<std::wstring, std::unique_ptr<Scene>>::iterator SceneManager::m_sceneIterator; 
+std::unique_ptr<DirectX::SpriteBatch> SceneManager::m_spriteBatch;
+std::unique_ptr<DirectX::SpriteFont> SceneManager::m_spriteFont1;
+
+
+void SceneManager::Initialise()
+{
+	m_spriteBatch = std::make_unique<DirectX::SpriteBatch>(AssetManager::GetDeviceContext());
+	m_spriteFont1 = std::make_unique<DirectX::SpriteFont>(AssetManager::GetDevice(), L"Source/Fonts/castellar_ms_48.spritefont");
+}
 
 void SceneManager::AddScene(const std::wstring& name)
 {
@@ -290,6 +299,36 @@ void SceneManager::CleanUp()
 
 void SceneManager::DisplayDebugWindow()
 {
+	// Save the current render states
+	ID3D11DeviceContext* context = AssetManager::GetDeviceContext();
+	ID3D11RasterizerState* oldRasterizerState;
+	ID3D11BlendState* oldBlendState;
+	ID3D11DepthStencilState* oldDepthStencilState;
+	FLOAT blendFactor[4];
+	UINT sampleMask;
+	UINT stencilRef;
+
+	context->RSGetState(&oldRasterizerState);
+	context->OMGetBlendState(&oldBlendState, blendFactor, &sampleMask);
+	context->OMGetDepthStencilState(&oldDepthStencilState, &stencilRef);
+
+	
+	m_spriteBatch->Begin();
+
+	
+	m_spriteFont1->DrawString(m_spriteBatch.get(), L"AGP Assessment Scene Editor", DirectX::XMFLOAT2(150, 10), DirectX::Colors::OrangeRed);
+
+	m_spriteBatch->End();
+
+	context->RSSetState(oldRasterizerState);
+	context->OMSetBlendState(oldBlendState, blendFactor, sampleMask);
+	context->OMSetDepthStencilState(oldDepthStencilState, stencilRef);
+
+	if (oldRasterizerState) oldRasterizerState->Release();
+	if (oldBlendState) oldBlendState->Release();
+	if (oldDepthStencilState) oldDepthStencilState->Release();
+
+
 	if (ImGui::Button("Add Skybox"))
 	{
 		ImGui::OpenPopup("Add SkyBox");
