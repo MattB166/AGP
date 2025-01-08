@@ -317,6 +317,7 @@ void SceneManager::DisplayDebugWindow()
 
 	
 	m_spriteFont1->DrawString(m_spriteBatch.get(), L"AGP Assessment Scene Editor", DirectX::XMFLOAT2(200, 10), DirectX::Colors::OrangeRed);
+	m_spriteFont1->DrawString(m_spriteBatch.get(), L"Incredibly Alpha Version ", DirectX::XMFLOAT2(0, 550), DirectX::Colors::OrangeRed);
 
 	m_spriteBatch->End();
 

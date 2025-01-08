@@ -129,5 +129,25 @@ void Camera::MoveCamera(float x, float y, float z)
 void Camera::DisplayInfo()
 {
 	ImGui::Text("Camera Position: %f %f %f", xPos, yPos, zPos);
+	ImGui::Text("Camera Rotation: %f %f", pitch, yaw);
+	if (ImGui::Button("Reset Position"))
+	{
+		xPos = 0.0f;
+		yPos = 0.0f;
+		zPos = 0.0f;
+	}
+	ImGui::SliderFloat("X Position", &xPos, -100.0f, 100.0f);
+	ImGui::SliderFloat("Y Position", &yPos, -100.0f, 100.0f);
+	ImGui::SliderFloat("Z Position", &zPos, -100.0f, 100.0f);
+	ImGui::SliderFloat("FOV", &FOV, 1.0f, 179.0f);
+	ImGui::SliderFloat("Near Clip", &nearClip, 0.1f, 100.0f);
+	ImGui::SliderFloat("Far Clip", &farClip, 1.0f, 1000.0f);
+	if (ImGui::Button("Reset values"))
+	{
+		FOV = 60.0f;
+		nearClip = 0.1f;
+		farClip = 200.0f;
+	}
+
 
 }

@@ -200,7 +200,7 @@ void Scene::DisplaySceneDebugWindow()
 {
 	ImGui::Begin("Scene Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
 	ImGui::Text("Current Scene: %s", std::string(m_name.begin(), m_name.end()).c_str());
-	
+	m_ActiveCamera->DisplayInfo();
 	
 	if (ImGui::Button("Cycle SkyBox"))
 	{
