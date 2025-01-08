@@ -198,6 +198,10 @@ void Scene::DisplaySceneDebugWindow()
 {
 	ImGui::Text("Scene: %s", GetName().c_str());
 	ImGui::Text("GameObjects: %d", m_gameObjects.size());
-	
+	ImGui::Text("Cameras: %d", m_cameras.size() + 1);
+	if (ImGui::Button("Add Camera"))
+	{
+		AddCamera();
+	}
 
 }

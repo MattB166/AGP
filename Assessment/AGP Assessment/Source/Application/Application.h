@@ -32,7 +32,7 @@ public:
 	void SetupEditBindings();
 	void SetupPlayBindings();
 	void HandleInput();
-	void AddComponent(ComponentType type);
+
 
 
 
@@ -43,18 +43,12 @@ private:
 	DirectX::Keyboard keyboard;
 	DirectX::Mouse mouse;
 	Mode m_mode = Mode::EDIT;
-	Mouse::Mode m_mouseMode = Mouse::MODE_ABSOLUTE; 
-	//list/vector of scenes. 
-
-	//need a way to determine whether we are in "edit" mode or "play" mode. 
+	Mouse::Mode m_mouseMode = Mouse::MODE_ABSOLUTE;
 
 
 #pragma region IMGUI Members
 	bool followSelectedObject = false;
-    ComponentType selectedComponentType;
-	bool showComponentOptions = false;
-    std::shared_ptr<Component> component = nullptr;
-	std::vector<std::string> options = {};
+   
 
 
 #pragma	endregion

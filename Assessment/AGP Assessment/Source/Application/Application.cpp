@@ -106,7 +106,7 @@ void Application::Run()
 
 	while (WM_QUIT != msg.message)
 	{
-		//m_window->Run();
+
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
@@ -114,7 +114,7 @@ void Application::Run()
 		}
 		else
 		{
-			///Run game code here
+			
 			HandleInput();
 			m_renderer->Clear();
 
@@ -123,9 +123,7 @@ void Application::Run()
 			ImGui::NewFrame();
 
 			RunMode();
-			//draw current scene.
-			//draw scene preview.
-			//SceneManager::GetActiveScene()->Update();
+			
 			SceneManager::DrawScenePreview();
 
 			ImGui::Render();
@@ -135,12 +133,10 @@ void Application::Run()
 		}
 		
 		TimeClass::Tick();
-		//std::cout << "Delta Time: " << TimeClass::GetDeltaTime() << std::endl; 
-		//TimeClass::CalculateFrameStats();
+		
 		
 	}
-	/*delete go;
-	go = nullptr;*/
+	
 }
 
 void Application::SetMode(Mode mode)
@@ -171,9 +167,7 @@ void Application::SwitchMode()
 		SetMode(Mode::EDIT);
 		SetupModeBindings();
 	}
-	//if mode is play, hide IMGUI, if mode is edit, show IMGUI.
-	//send objects back to their original positions if mode is edit, and update behaviours if mode is play. 
-	//do this via the scene manager.
+	
 
 	if (followSelectedObject)
 	{
@@ -183,7 +177,7 @@ void Application::SwitchMode()
 
 }
 
-void Application::RunMode() //also in here run all logic for choosing objects and editing them. 
+void Application::RunMode() 
 {
 	
 	if (m_mode == Mode::EDIT)
@@ -275,7 +269,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 				SceneManager::SetActiveSceneCameraTarget(x, y, z, true);
 			}
 			
-			//ImGui::Text("Currently Selected Object:");
+			
 			SceneManager::DisplayActiveObjectDebugWindow();
 			
 			ImGui::SetWindowPos(ImVec2(0, 180));
@@ -294,14 +288,7 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 		ImGui::SetWindowPos(ImVec2(0, 0));
 		ImGui::End();
 
-		/*if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow))
-		{
-			mouse.SetMode(DirectX::Mouse::MODE_ABSOLUTE);
-		}
-		else
-		{
-			mouse.SetMode(DirectX::Mouse::MODE_RELATIVE);
-		}*/
+		
 	}
 
 	
@@ -336,17 +323,7 @@ void Application::SetupModeBindings()
 
 		if (m_mode == Mode::EDIT)
 		{
-			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::P, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
 			
-			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::C, BindingData([]() {SceneManager::CycleSceneSkyBox(); }, KeyState::Pressed));
-			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Q, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
-			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::A, BindingData([]() {SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
-			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::O, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds"); }, KeyState::Pressed));
-			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::R, BindingData([]() {SceneManager::RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds"); }, KeyState::Pressed));
-			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::S, BindingData([]() {SceneManager::CycleActiveScene(); }, KeyState::Pressed));
-			////create editable value for the snap distance. 
-			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::K, BindingData([]() {SceneManager::RotateActiveSceneCamera(10.0f, 0.0f); }, KeyState::Held));
-			//m_inputManager->BindMouseToFunction(MouseButton::Right, BindingData([]() {SceneManager::RotateActiveSceneCamera(10.0f, 0.0f); }, KeyState::Held));
 			m_inputManager->ClearMouseMovement();
 			//mouse.SetMode(DirectX::Mouse::MODE_ABSOLUTE);
 		}
@@ -357,11 +334,7 @@ void Application::SetupModeBindings()
 			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::A, BindingData([]() {SceneManager::MoveActiveSceneCamera(-0.1f, 0.0f, 0.0f); }, KeyState::Held));
 			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::W, BindingData([]() {SceneManager::MoveActiveSceneCamera(0.0f, 0.0f, 0.1f); }, KeyState::Held));
 			m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::S, BindingData([]() {SceneManager::MoveActiveSceneCamera(0.0f, 0.0f, -0.1f); }, KeyState::Held));
-			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Escape, BindingData(std::bind(&Application::ChangeMouseMode, this), KeyState::Pressed));
-			//mouse.SetMode(DirectX::Mouse::MODE_RELATIVE);
-			// Add play mode specific bindings here
-			//m_inputManager->BindKeyToFunction(DirectX::Keyboard::Keys::Escape, BindingData(std::bind(&Application::SwitchMode, this), KeyState::Pressed));
-			// Add other play mode bindings as needed
+			
 		}
 	}
 	else
@@ -375,29 +348,11 @@ void Application::HandleInput()
 	auto kbState = keyboard.GetState();
 	auto mouseState = mouse.GetState();
 
-	//std::cout << "Mouse State: " << mouseState.x << ", " << mouseState.y << std::endl;
+	
 
 	m_inputManager->ProcessKeyboardInput(kbState);
 	m_inputManager->ProcessMouseInput(mouseState);
 	
 }
 
-void Application::AddComponent(ComponentType type)
-{
-	options.clear();
-	component = AssetManager::CreateTemporaryComponentInstance(type);
-	if (component)
-	{
-		options = component->GetComponentOptions(); 
-		std::cout << "Options size" << options.size() << std::endl;
-		for (const auto& option : options)
-		{
-			std::cout << option << std::endl;
-		}
-	}
-	else
-	{
-		std::cout << "Component is null" << std::endl;
-	}
-		
-}
+
