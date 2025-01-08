@@ -14,7 +14,7 @@ std::unique_ptr<DirectX::SpriteFont> SceneManager::m_spriteFont1;
 void SceneManager::Initialise()
 {
 	m_spriteBatch = std::make_unique<DirectX::SpriteBatch>(AssetManager::GetDeviceContext());
-	m_spriteFont1 = std::make_unique<DirectX::SpriteFont>(AssetManager::GetDevice(), L"Source/Fonts/castellar_ms_48.spritefont");
+	m_spriteFont1 = std::make_unique<DirectX::SpriteFont>(AssetManager::GetDevice(), L"Source/Fonts/comic_sans_ms_16.spritefont");
 }
 
 void SceneManager::AddScene(const std::wstring& name)
@@ -316,7 +316,7 @@ void SceneManager::DisplayDebugWindow()
 	m_spriteBatch->Begin();
 
 	
-	m_spriteFont1->DrawString(m_spriteBatch.get(), L"AGP Assessment Scene Editor", DirectX::XMFLOAT2(150, 10), DirectX::Colors::OrangeRed);
+	m_spriteFont1->DrawString(m_spriteBatch.get(), L"AGP Assessment Scene Editor", DirectX::XMFLOAT2(200, 10), DirectX::Colors::OrangeRed);
 
 	m_spriteBatch->End();
 
