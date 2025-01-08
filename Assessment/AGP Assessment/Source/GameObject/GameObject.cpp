@@ -1,7 +1,7 @@
 #include "GameObject.h"
 #include "../AssetManager/AssetManager.h"
 
-GameObject::GameObject(const char* name) : m_name(name)
+GameObject::GameObject(const char* name, bool reflective) : m_name(name), m_reflectiveObject(reflective)
 {
 	Initialise();
 	AssetManager::CreateConstantBuffer(); 
@@ -18,13 +18,16 @@ GameObject::~GameObject()
 void GameObject::Initialise()
 {
 	//position, rotation, scale
-	m_transform.pos = { 0,0,3 };
+	m_transform.pos = { 0,0,0 };
 	m_transform.rot = { 0,0,0 }; 
 	m_transform.scl = { 1,1,1 };
 
 	shaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/StandardShader/VertexShader.cso", L"CompiledShaders/StandardShader/PixelShader.cso", "Basic Shader");
 	reflectiveShaderSet = AssetManager::CreateShaderSet(L"CompiledShaders/ReflectiveShader/ReflectiveVertexShader.cso", L"CompiledShaders/ReflectiveShader/ReflectivePixelShader.cso", "Reflective Shader");
-	AddComponent(reflectiveShaderSet);
+	if (m_reflectiveObject)
+		AddComponent(reflectiveShaderSet);
+	else
+		AddComponent(shaderSet);
 	std::shared_ptr<Material> mat = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp", "Box Texture"); //adding placeholder components which can be switched out.
 	AddComponent(mat);
 }
@@ -106,6 +109,95 @@ void GameObject::ShowComponentDebugWindow()
 {
 	ImGui::Text( " % s", m_name);
 	//logic to add the components to the debug window
+	if (ImGui::Button("Add Component"))
+	{
+		//selectedComponentType = ComponentType::None;
+		ImGui::OpenPopup("Add Component");
+	}
+	if (ImGui::BeginPopupModal("Add Component", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+	{
+		std::vector<ComponentType> types = Component::GetTypes();
+		types.erase(std::remove(types.begin(), types.end(), ComponentType::Shaders), types.end());
+		types.erase(std::remove(types.begin(), types.end(), ComponentType::Texture), types.end());
+		for (auto type : types)
+		{
+			std::string typeName = Component::ComponentTypeToString(type);
+			if (ImGui::Button(typeName.c_str()))
+			{
+				selectedComponentType = type;
+				std::cout << "Selected Component Type: " << typeName << std::endl;
+				showComponentOptions = true;
+
+				PreComponentAddition(type);
+				ImGui::CloseCurrentPopup();
+			}
+
+
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			showComponentOptions = false;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+	if (showComponentOptions)
+	{
+		ImGui::OpenPopup("Component Options");
+	}
+	if (ImGui::BeginPopupModal("Component Options"))
+	{
+		//show options for the selected component type.
+		for (const auto& option : options)
+		{
+			if (ImGui::Button(option.c_str()))
+			{
+				/////need different way to account for shaders. 
+				std::string fPath = temp->GetComponentFilePath(option);
+				std::shared_ptr<Component> comp = AssetManager::CreateComponentFromFilePath(fPath, selectedComponentType, option.c_str()); ////CURRENTLY FAILS HERE WITH SHADERS 
+				AddComponent(comp);
+				showComponentOptions = false;
+				ImGui::CloseCurrentPopup();
+
+			}
+		}
+
+		ImGui::Separator();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			showComponentOptions = false;
+			//options.clear();
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+	if (ImGui::Button("Edit Component"))
+	{
+		//selectedComponentType = ComponentType::None;
+		ImGui::OpenPopup("Components");
+	}
+	if (ImGui::BeginPopupModal("Components", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+	{
+		std::vector<ComponentType> types = Component::GetTypes();
+		types.erase(std::remove(types.begin(), types.end(), ComponentType::Shaders), types.end()); //dont want to manually be messing with shaders. will let behind the scenes handle it. 
+		for (auto type : types)
+		{
+			if (ImGui::Button(Component::ComponentTypeToString(type).c_str()))
+			{
+				//give options to switch component type 
+				ImGui::CloseCurrentPopup();
+			}
+		}
+		
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
 
 	ImGui::Text("Position : %f %f %f", m_transform.pos.x, m_transform.pos.y, m_transform.pos.z);
 	ImGui::SliderFloat("Position Snapping value", &DebugMovementSnappingValue, 0.05f, 1.0f);
@@ -146,42 +238,36 @@ void GameObject::ShowComponentDebugWindow()
 			component->ShowDebugWindow();
 		}
 	}
-	if (ImGui::Checkbox("Reflective Object", &m_reflectiveObject))
+	/*if (ImGui::Checkbox("Reflective Object", &m_reflectiveObject))
 	{
 		ToggleReflectiveObject();
 	}
-	
+	*/
 
-	if (ImGui::Button("Edit Component"))
-	{
-		//selectedComponentType = ComponentType::None;
-		ImGui::OpenPopup("Components");
-	}
-	if (ImGui::BeginPopupModal("Components", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
-	{
-		std::vector<ComponentType> types = Component::GetTypes();
-		types.erase(std::remove(types.begin(), types.end(), ComponentType::Shaders), types.end()); //dont want to manually be messing with shaders. will let behind the scenes handle it. 
-		for (auto type : types)
-		{
-			if (ImGui::Button(Component::ComponentTypeToString(type).c_str()))
-			{
-				//give options to switch component type 
-				ImGui::CloseCurrentPopup();
-			}
-		}
-		
-		ImGui::SameLine();
-		if (ImGui::Button("Cancel", ImVec2(120, 0)))
-		{
-			ImGui::CloseCurrentPopup();
-		}
-		ImGui::EndPopup();
-	}
 }
 
 void GameObject::ToggleReflectiveObject()
 {
 	
+}
+
+void GameObject::PreComponentAddition(ComponentType type)
+{
+	options.clear();
+	temp = AssetManager::CreateTemporaryComponentInstance(type);
+	if (temp)
+	{
+		options = temp->GetComponentOptions();
+		std::cout << "Options size" << options.size() << std::endl;
+		for (const auto& option : options)
+		{
+			std::cout << option << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "Component is null" << std::endl;
+	}
 }
 
 

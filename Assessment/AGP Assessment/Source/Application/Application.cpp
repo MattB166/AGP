@@ -93,7 +93,7 @@ void Application::Run()
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
 	SceneManager::AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/CustomSpace.dds");
-	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/CustomSpace.dds");
+	SceneManager::SetActiveSkyBoxTexture(L"Source/SavedSkyBoxTextures/skybox01.dds");
 	//GameObject* go = new GameObject("Test Object");
 	//std::make_unique<GameObject>("Test Object");
 	/*std::shared_ptr<Model> model = AssetManager::CreateModel("Source/SavedModels/cube.obj","Cube");
@@ -230,10 +230,12 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 		{
 		
 			static char name[128] = "GameObject";
+			static bool isReflected = false;
 			ImGui::InputText("Name", name, IM_ARRAYSIZE(name));
+			ImGui::Checkbox("Reflective", &isReflected);
 			if (ImGui::Button("Create", ImVec2(120, 0)))
 			{
-				auto go = std::make_unique<GameObject>(name);
+				auto go = std::make_unique<GameObject>(name,isReflected);
 				SceneManager::AddGameObjectToActiveScene(std::move(go));
 				
 				ImGui::CloseCurrentPopup();
@@ -267,90 +269,14 @@ void Application::RunMode() //also in here run all logic for choosing objects an
 
 			ImGui::Begin("Scene Hierarchy", nullptr, ImGuiWindowFlags_NoMove);
 			
-			
-			ImGui::Text("Currently Selected Object:");
-			SceneManager::DisplayActiveObjectDebugWindow();
 			ImGui::Checkbox("Rotate Camera to View Object", &followSelectedObject);
 			if (followSelectedObject)
 			{
 				SceneManager::SetActiveSceneCameraTarget(x, y, z, true);
 			}
-			/*if (ImGui::Button("Reset Position"))
-			{
-				followSelectedObject = false;
-				SceneManager::SetActiveSceneCameraTarget(0.0f, 0.0f, 0.0f, false);
-				SceneManager::ResetActiveObjectPosition();
-				SceneManager::ResetActiveSceneCamera();
-			}*/
-			//combo for adding components of type, and then choice of different options within that type, to the selected object.
-           //if object is selected, show the components of that object, and allow for adding new components to that object.
 			
-			if (ImGui::Button("Add Component"))
-			{
-				//selectedComponentType = ComponentType::None;
-				ImGui::OpenPopup("Add Component");
-			}
-			if (ImGui::BeginPopupModal("Add Component",nullptr,ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
-			{
-				std::vector<ComponentType> types = Component::GetTypes();
-				types.erase(std::remove(types.begin(), types.end(), ComponentType::Shaders), types.end());
-				types.erase(std::remove(types.begin(), types.end(), ComponentType::Texture), types.end());
-				for (auto type : types)
-				{
-					std::string typeName = Component::ComponentTypeToString(type);
-					if (ImGui::Button(typeName.c_str()))
-					{
-						selectedComponentType = type;
-						std::cout << "Selected Component Type: " << typeName << std::endl;
-						showComponentOptions = true;
-						
-						AddComponent(selectedComponentType);
-						ImGui::CloseCurrentPopup();
-					}
-					
-
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Cancel", ImVec2(120, 0)))
-				{
-					showComponentOptions = false;
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
-			}
-			if(showComponentOptions)
-			{
-				ImGui::OpenPopup("Component Options");
-			}
-			if (ImGui::BeginPopupModal("Component Options"))
-			{
-				//show options for the selected component type.
-				for (const auto& option : options)
-				{
-					if (ImGui::Button(option.c_str()))
-					{ 
-						/////need different way to account for shaders. 
-						std::string fPath = component->GetComponentFilePath(option);
-						std::shared_ptr<Component> comp = AssetManager::CreateComponentFromFilePath(fPath, selectedComponentType,option.c_str()); ////CURRENTLY FAILS HERE WITH SHADERS 
-						SceneManager::GetSelectedGameObjectInActiveScene()->AddComponent(comp);
-						showComponentOptions = false;
-						ImGui::CloseCurrentPopup();
-
-					}
-				}
-			
-				ImGui::Separator();
-				if (ImGui::Button("Cancel", ImVec2(120, 0)))
-				{
-					showComponentOptions = false;
-					//options.clear();
-					ImGui::CloseCurrentPopup();
-				}
-
-				ImGui::EndPopup();
-			}
-			//ImGui::EndPopup();
-			
+			//ImGui::Text("Currently Selected Object:");
+			SceneManager::DisplayActiveObjectDebugWindow();
 			
 			ImGui::SetWindowPos(ImVec2(0, 180));
 			ImGui::End();

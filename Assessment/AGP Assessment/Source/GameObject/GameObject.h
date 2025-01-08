@@ -23,7 +23,7 @@ struct Transform
 class GameObject
 {
 public:
-	GameObject(const char* name); //need to find way to give it default model	
+	GameObject(const char* name,bool reflective); //need to find way to give it default model	
 	~GameObject();
 	void Initialise(); //initialise the gameobject and its position, rotation and scale.
 	void AddComponent(std::shared_ptr<Component> component);
@@ -53,6 +53,7 @@ public:
 
 
 private:
+	void PreComponentAddition(ComponentType type);
 	std::string m_name; 
 	Transform m_transform;
 	CBuffer m_constantBuffer;  //only one type of cbuffer required for gameobject. shader will know what to do with it. 
@@ -63,5 +64,8 @@ private:
 	std::shared_ptr<ShaderSet> shaderSet = nullptr;
 	std::shared_ptr<ShaderSet> reflectiveShaderSet = nullptr;
 	std::shared_ptr<Component> temp = nullptr;
+	ComponentType selectedComponentType;
+	std::vector<std::string> options = {};
+	bool showComponentOptions = false;
 };
 
