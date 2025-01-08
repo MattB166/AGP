@@ -196,6 +196,7 @@ void Application::RunMode()
 		ImGui::SetWindowPos(ImVec2(0, 0));
 		ImGui::End();
 
+		SceneManager::DisplayDebugWindow();
 		SceneManager::GetActiveScene()->DisplaySceneDebugWindow();
 		if (SceneManager::GetActiveScene()->GetObjectCount() > 0)
 		{

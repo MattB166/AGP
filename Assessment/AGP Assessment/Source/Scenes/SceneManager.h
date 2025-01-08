@@ -57,6 +57,8 @@ public:
 
 	static void CleanUp(); //clean up the scene manager.
 
+	static void DisplayDebugWindow();
+
 private:
 	SceneManager() = delete;
 	~SceneManager() = delete;

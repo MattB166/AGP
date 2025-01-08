@@ -287,3 +287,67 @@ void SceneManager::CleanUp()
 	m_sceneIterator = m_scenes.end();
 	m_activeScene.clear();
 }
+
+void SceneManager::DisplayDebugWindow()
+{
+	if (ImGui::Button("Add Skybox"))
+	{
+		ImGui::OpenPopup("Add SkyBox");
+	}
+	if (ImGui::Button("Remove Skybox"))
+	{
+		ImGui::OpenPopup("Remove SkyBox");
+	}
+
+	if (ImGui::BeginPopupModal("Add SkyBox"))
+	{
+		//get sky box options from skybox class 
+		ImGui::Text("SkyBox Options");
+		if (ImGui::Button("Custom Space"))
+		{
+			AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/CustomSpace.dds");
+			ImGui::CloseCurrentPopup();
+		}
+		if (ImGui::Button("Forest"))
+		{
+			AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
+			ImGui::CloseCurrentPopup();
+		}
+		if (ImGui::Button("Mountain"))
+		{
+			AddSkyBoxTextureToActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::Separator();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+	if (ImGui::BeginPopupModal("Remove SkyBox"))
+	{
+		ImGui::Text("SkyBox Options");
+		if (ImGui::Button("Custom Space"))
+		{
+			RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/CustomSpace.dds");
+			ImGui::CloseCurrentPopup();
+		}
+		if (ImGui::Button("Forest"))
+		{
+			RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox01.dds");
+			ImGui::CloseCurrentPopup();
+		}
+		if (ImGui::Button("Mountain"))
+		{
+			RemoveSkyBoxFromActiveScene(L"Source/SavedSkyBoxTextures/skybox02.dds");
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::Separator();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+}

@@ -23,7 +23,7 @@ public:
 
 	static void LoadAllSkyBoxNames(const std::string& path);
 
-	std::vector<std::string> GetSkyBoxOptions() const { return m_AvailableSkyBoxNames; }
+	static std::vector<std::string> GetSkyBoxOptions()  { return m_AvailableSkyBoxNames; }
 
 private:
 	void InitialiseSkybox();

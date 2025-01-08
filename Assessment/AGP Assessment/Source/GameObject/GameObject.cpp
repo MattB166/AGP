@@ -28,7 +28,7 @@ void GameObject::Initialise()
 		AddComponent(reflectiveShaderSet);
 	else
 		AddComponent(shaderSet);
-	std::shared_ptr<Material> mat = AssetManager::CreateMaterial(L"Source/SavedTextures/Box.bmp", "Box Texture"); //adding placeholder components which can be switched out.
+	std::shared_ptr<Material> mat = AssetManager::CreateMaterial(L"Source/SavedTextures/brick.jpg", "Brick Texture"); //adding placeholder components which can be switched out.
 	AddComponent(mat);
 }
 

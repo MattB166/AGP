@@ -72,7 +72,7 @@ void Scene::AddSkyBoxToScene(std::shared_ptr<SkyBox> sb)
 void Scene::RemoveSkyBoxFromScene(std::shared_ptr<SkyBox> sb)
 {
 	//if there are no skyboxes, return.
-	if (m_skyBoxes.empty() || m_skyBoxes.size() < 2)
+	if (m_skyBoxes.empty() || m_skyBoxes.size() < 0)
 	{
 		return;
 	}
@@ -199,10 +199,7 @@ void Scene::DisplaySceneDebugWindow()
 	ImGui::Begin("Scene Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
 	ImGui::Text("Current Scene: %s", std::string(m_name.begin(), m_name.end()).c_str());
 	
-	if (ImGui::Button("Add Skybox"))
-	{
-		ImGui::OpenPopup("Add SkyBox");
-	}
+	
 	if (ImGui::Button("Cycle SkyBox"))
 	{
 		CycleThroughSkyBoxes();
@@ -247,16 +244,7 @@ void Scene::DisplaySceneDebugWindow()
 		}
 		ImGui::EndPopup();
 	}
-	if (ImGui::BeginPopupModal("Add SkyBox"))
-	{
-		//get sky box options from skybox class 
-		ImGui::Separator();
-		if (ImGui::Button("Cancel", ImVec2(120, 0)))
-		{
-			ImGui::CloseCurrentPopup();
-		}
-		ImGui::EndPopup();
-	}
+	
 	ImGui::SetWindowPos(ImVec2(0, 100));
 	ImGui::SetWindowSize(ImVec2(200, 200));
 	ImGui::End();
