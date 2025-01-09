@@ -221,7 +221,6 @@ void KeyboardMouse::ProcessMouseInput(const DirectX::Mouse::State& currentState)
 
 DirectX::Keyboard::Keys KeyboardMouse::GetKeyFromBinding(std::function<void()> func)
 {
-	//searches through mappings for the key that matches the function 
 	int funcID = -1;
 	for (const auto& binding : keyBindings)
 	{
